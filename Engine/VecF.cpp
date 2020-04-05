@@ -47,6 +47,11 @@ VecF& VecF::operator/=(float rhs)
 	return *this = *this / rhs;
 }
 
+VecF::operator VecI() const
+{
+	return { int(x), int(y) };
+}
+
 float VecF::GetLengthSq() const
 {
 	return x * x + y * y;
