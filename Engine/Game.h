@@ -43,6 +43,7 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	Surface surf = Surface(254, 254 / 2);
 	FrameTimer ft;
 	/********************************/
 };

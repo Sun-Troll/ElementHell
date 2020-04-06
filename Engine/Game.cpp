@@ -26,6 +26,15 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd )
 {
+	const int width = surf.GetWidth();
+	const int height = surf.GetHeight();
+	for (int y = 0; y < height; ++y)
+	{
+		for (int x = 0; x < width; ++x)
+		{
+			surf.PutPixel(x, y, { unsigned char(y * 2), unsigned char((x + (y * 2)) / 2), unsigned char(x) });
+		}
+	}
 }
 
 void Game::Go()
@@ -42,4 +51,6 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+	gfx.DrawSpriteNonChroma(gfx.ScreenWidth - surf.GetWidth(), gfx.ScreenHeight - surf.GetHeight(), surf);
+	gfx.DrawSpriteNonChroma(0, 0, surf);
 }
