@@ -47,10 +47,13 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	surf = marle;
+	marle = marle;
 }
 
 void Game::ComposeFrame()
 {
 	gfx.DrawSpriteNonChroma(gfx.ScreenWidth - surf.GetWidth(), gfx.ScreenHeight - surf.GetHeight(), surf);
 	gfx.DrawSpriteNonChroma(0, 0, surf);
+	gfx.DrawSpriteNonChroma(100, 100, marle);
 }
