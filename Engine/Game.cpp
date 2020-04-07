@@ -53,7 +53,7 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	gfx.DrawSpriteNonChroma(gfx.ScreenWidth - surf.GetWidth(), gfx.ScreenHeight - surf.GetHeight(), surf);
-	gfx.DrawSpriteNonChroma(0, 0, surf);
-	gfx.DrawSpriteNonChroma(100, 100, marle);
+	gfx.DrawSprite(gfx.ScreenWidth - surf.GetWidth(), gfx.ScreenHeight - surf.GetHeight(), surf);
+	gfx.DrawSprite(0, 0, surf);
+	gfx.DrawSprite(100, 100, marle);
 }

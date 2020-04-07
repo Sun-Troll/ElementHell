@@ -44,7 +44,7 @@ private:
 	/********************************/
 	/*  User Variables              */
 	Surface surf = Surface(254, 254 / 2);
-	Surface marle = Surface("Sprites\\PlayerTest.bmp");
+	Surface marle = Surface("Sprites\\PlayerTestEdit.bmp");
 	FrameTimer ft;
 	/********************************/
 };

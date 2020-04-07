@@ -58,7 +58,8 @@ public:
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );
 	}
 	void PutPixel( int x,int y,Color c );
-	void DrawSpriteNonChroma(int x, int y, const Surface& surf);
+	void DrawSpriteNonChroma(int xPos, int yPos, const Surface& surf);
+	void DrawSprite(int xPos, int yPos, const Surface& surf, Color chroma = Colors::Black);
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

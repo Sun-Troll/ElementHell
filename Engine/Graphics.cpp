@@ -329,6 +329,23 @@ void Graphics::DrawSpriteNonChroma(int xPos, int yPos, const Surface& surf)
 	}
 }
 
+void Graphics::DrawSprite(int xPos, int yPos, const Surface& surf, Color chroma)
+{
+	const int width = surf.GetWidth();
+	const int height = surf.GetHeight();
+	for (int y = 0; y < height; ++y)
+	{
+		for (int x = 0; x < width; ++x)
+		{
+			const Color c = surf.GetPixel(x, y);
+			if (c != chroma)
+			{
+				PutPixel(xPos + x, yPos + y, surf.GetPixel(x, y));
+			}
+		}
+	}
+}
+
 
 //////////////////////////////////////////////////
 //           Graphics Exception
