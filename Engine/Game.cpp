@@ -21,20 +21,13 @@
 #include "MainWindow.h"
 #include "Game.h"
 
-Game::Game( MainWindow& wnd )
+Game::Game(MainWindow& wnd)
 	:
-	wnd( wnd ),
-	gfx( wnd )
+	wnd(wnd),
+	gfx(wnd),
+	player0({ 200.0f, 700.0f }),
+	player1({ 300.0f, 700.0f })
 {
-	const int width = surf.GetWidth();
-	const int height = surf.GetHeight();
-	for (int y = 0; y < height; ++y)
-	{
-		for (int x = 0; x < width; ++x)
-		{
-			surf.PutPixel(x, y, { unsigned char(y * 2), unsigned char((x + (y * 2)) / 2), unsigned char(x) });
-		}
-	}
 }
 
 void Game::Go()
@@ -47,13 +40,63 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	surf = marle;
-	marle = marle;
+	float dt = ft.FrameDur();
+
+	bool left0 = false;
+	bool right0 = false;
+	bool up0 = false;
+	bool down0 = false;
+	if (wnd.kbd.KeyIsPressed('A'))
+	{
+		left0 = true;
+	}
+	if (wnd.kbd.KeyIsPressed('D'))
+	{
+		right0 = true;
+	}
+	if (wnd.kbd.KeyIsPressed('W'))
+	{
+		up0 = true;
+	}
+	if (wnd.kbd.KeyIsPressed('S'))
+	{
+		down0 = true;
+	}
+	player0.Move(left0, right0, up0, down0, dt);
+	player0.Clamp();
+
+	if (multiplayer)
+	{
+		bool left1 = false;
+		bool right1 = false;
+		bool up1 = false;
+		bool down1 = false;
+		if (wnd.kbd.KeyIsPressed(VK_NUMPAD4))
+		{
+			left1 = true;
+		}
+		if (wnd.kbd.KeyIsPressed(VK_NUMPAD6))
+		{
+			right1 = true;
+		}
+		if (wnd.kbd.KeyIsPressed(VK_NUMPAD8))
+		{
+			up1 = true;
+		}
+		if (wnd.kbd.KeyIsPressed(VK_NUMPAD5))
+		{
+			down1 = true;
+		}
+		player1.Move(left1, right1, up1, down1, dt);
+		player1.Clamp();
+	}
 }
 
 void Game::ComposeFrame()
 {
-	gfx.DrawSprite(gfx.ScreenWidth - surf.GetWidth(), gfx.ScreenHeight - surf.GetHeight(), surf);
-	gfx.DrawSprite(0, 0, surf);
-	gfx.DrawSprite(100, 100, marle);
+	player0.Draw(gfx);
+	if (multiplayer)
+	{
+		player1.Draw(gfx);
+	}
 }

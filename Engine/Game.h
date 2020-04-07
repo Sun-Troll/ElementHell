@@ -24,6 +24,7 @@
 #include "Mouse.h"
 #include "Graphics.h"
 #include "FrameTimer.h"
+#include "Player.h"
 
 class Game
 {
@@ -43,8 +44,9 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
-	Surface surf = Surface(254, 254 / 2);
-	Surface marle = Surface("Sprites\\PlayerTestEdit.bmp");
 	FrameTimer ft;
+	Player player0;
+	Player player1;
+	bool multiplayer = false;
 	/********************************/
 };
