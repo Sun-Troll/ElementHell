@@ -47,6 +47,6 @@ private:
 	FrameTimer ft;
 	Player player0;
 	Player player1;
-	bool multiplayer = false;
+	bool multiplayer = true;
 	/********************************/
 };

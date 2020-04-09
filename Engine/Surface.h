@@ -7,6 +7,7 @@
 class Surface
 {
 public:
+	Surface() = default;
 	Surface(const std::string& filename);
 	Surface(int width, int height);
 	Surface(const Surface& rhs);
