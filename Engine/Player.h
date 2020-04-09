@@ -18,7 +18,7 @@ private:
 	private:
 		VecF pos;
 		VecF vel;
-		static constexpr float maxAnimTime = 0.5f;
+		static constexpr float maxAnimTime = 0.6f;
 		float curAnimTime = 0.0f;
 	};
 public:
@@ -35,21 +35,21 @@ private:
 	float speed = 200.0f;
 	float hpMax = 1000.0f;
 	float hpCur = hpMax;
-	float maxFireTimePlayerAnim = 0.5f;
+	float maxFireTimePlayerAnim = 1.0f;
 	float curFireBasePlayerAnim = 0.0f;
-	static constexpr int nSpritesPlayer = 8;
-	static constexpr int spritePlayerWidth = 108;
-	static constexpr int spritePlayerHeight = 128;
+	static constexpr int nSpritesPlayer = 4;
+	static constexpr int spritePlayerWidth = 84;
+	static constexpr int spritePlayerHeight = 96;
 	std::vector<Surface> spritesPlayer;
 	const RectF movementRegionPlayer{ 0.0f, float(Graphics::ScreenWidth - spritePlayerWidth),
 		0.0f, float(Graphics::ScreenHeight - spritePlayerHeight) };
 
 	//BulletCenter
-	static constexpr float bulletCenterSpeed = 200.0f;
-	static constexpr int nSpritesBulletCenter = 4;
-	static constexpr int spriteBulletCenterDim = 48; // assumes same width/height
-	const RectF movementRegionBulletCenter{ float(-spriteBulletCenterDim), float(Graphics::ScreenWidth + spriteBulletCenterDim),
-		float(-spriteBulletCenterDim), float(Graphics::ScreenHeight + spriteBulletCenterDim) };
+	static constexpr float bulletCenterSpeed = 400.0f;
+	static constexpr int nSpritesBulletCenter = 2;
+	static constexpr int spriteBulletCenterDim = 12; // assumes same width/height
+	const RectF movementRegionBulletCenter{ float(-spriteBulletCenterDim), float(Graphics::ScreenWidth),
+		float(-spriteBulletCenterDim), float(Graphics::ScreenHeight) };
 	std::vector<Surface> spritesBulletCenter;
 	std::vector<BulletCenter> bulletsCenter;
 	bool isFiring = false;
