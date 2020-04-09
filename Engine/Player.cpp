@@ -21,6 +21,19 @@ Player::Player(const VecF& pos)
 		assert(spritesBulletCenter[i].GetWidth() == spriteBulletCenterDim
 			&& spritesBulletCenter[i].GetHeight() == spriteBulletCenterDim);
 	}
+	spritesBulletSide.resize(nSpritesBulletSide);
+	for (int i = 0; i < nSpritesBulletSide; ++i)
+	{
+		const std::string bitmapFile = "Sprites\\PlBulSide\\PlBulSide" + std::to_string(i) + ".bmp";
+		spritesBulletSide[i] = Surface(bitmapFile);
+		assert(spritesBulletSide[i].GetWidth() == spriteBulletSideDim
+			&& spritesBulletSide[i].GetHeight() == spriteBulletSideDim);
+	}
+
+	for (int i = 0; i < nBulletsSideFired; ++i)
+	{
+		bulletSidePosVel.emplace_back(VecF{ std::cos(pi + pi / 6 - pi * i / 3), std::sin(pi + pi / 6 - pi * i / 3) });
+	}
 }
 
 void Player::Move(bool left, bool right, bool up, bool down, float dt)
@@ -76,22 +89,45 @@ void Player::Fire(float dt)
 		bulletsCenter.emplace_back(BulletCenter{
 			{ playerCenter.x - float(spriteBulletCenterDim) / 2.0f, playerCenter.y - float(spriteBulletCenterDim) / 2.0f },
 			{ (target - playerCenter).GetNormalized() * bulletCenterSpeed } });
+
+		const VecF bulSideBasePos{ playerCenter.x - float(spriteBulletSideDim) / 2.0f,
+			playerCenter.y - float(spriteBulletSideDim) / 2.0f };
+		for (int i = 0; i < nBulletsSideFired; ++i)
+		{
+			bulletsSide.emplace_back(BulletSide{
+				{ bulSideBasePos.x + bulletSidePosVel[i].x * bulletSideSpawnDist,
+				bulSideBasePos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
+				{ bulletSidePosVel[i].x * bulletSideSpeed, bulletSidePosVel[i].y * bulletSideSpeed } });
+		}
 	}
 }
 
-void Player::UpdateCenterBullets(float dt)
+void Player::UpdateBullets(float dt)
 {
 	for (auto& bc : bulletsCenter)
 	{
 		bc.Move(dt);
 		bc.Animate(dt);
 	}
+	for (auto& bs : bulletsSide)
+	{
+		bs.Move(dt);
+		bs.Animate(dt);
+	}
 
 	for (int i = 0; i < bulletsCenter.size(); ++i)
 	{
-		if (bulletsCenter[i].Clamp(movementRegionBulletCenter)) //change this to real value after cliping sprite draw in
+		if (bulletsCenter[i].Clamp(movementRegionBulletCenter))
 		{
 			PopCenterBullet(i);
+			--i;
+		}
+	}
+	for (int i = 0; i < bulletsSide.size(); ++i)
+	{
+		if (bulletsSide[i].Clamp(movementRegionBulletSide))
+		{
+			PopSideBullet(i);
 			--i;
 		}
 	}
@@ -103,17 +139,27 @@ void Player::PopCenterBullet(int i)
 	bulletsCenter.pop_back();
 }
 
+void Player::PopSideBullet(int i)
+{
+	std::swap(bulletsSide[i], bulletsSide.back());
+	bulletsSide.pop_back();
+}
+
 void Player::Draw(Graphics& gfx) const
 {
 	const int iSpritePlayer = int(curFireBasePlayerAnim * nSpritesPlayer / maxFireTimePlayerAnim);
 	gfx.DrawSprite(int(pos.x), int(pos.y), spritesPlayer[iSpritePlayer]);
 }
 
-void Player::DrawBulletsCenter(Graphics& gfx) const
+void Player::DrawBullets(Graphics& gfx) const
 {
 	for (const auto& bc : bulletsCenter)
 	{
 		bc.Draw(spritesBulletCenter, gfx);
+	}
+	for (const auto& bs : bulletsSide)
+	{
+		bs.Draw(spritesBulletSide, gfx);
 	}
 }
 
@@ -163,4 +209,52 @@ void Player::BulletCenter::Draw(const std::vector<Surface>& sprites, Graphics& g
 {
 	const int iBulletCenter = int(curAnimTime * nSpritesBulletCenter / maxAnimTime);
 	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iBulletCenter], gfx.GetGameRect());
+}
+
+Player::BulletSide::BulletSide(const VecF& pos, const VecF& vel)
+	:
+	pos(pos),
+	vel(vel)
+{
+}
+
+void Player::BulletSide::Move(float dt)
+{
+	pos += vel * dt;
+}
+
+void Player::BulletSide::Animate(float dt)
+{
+	curAnimTime += dt;
+	while (curAnimTime >= maxAnimTime)
+	{
+		curAnimTime -= maxAnimTime;
+	}
+}
+
+bool Player::BulletSide::Clamp(const RectF& bulletSideRegion)
+{
+	if (pos.x < bulletSideRegion.left)
+	{
+		return true;
+	}
+	else if (pos.x > bulletSideRegion.right)
+	{
+		return true;
+	}
+	if (pos.y < bulletSideRegion.top)
+	{
+		return true;
+	}
+	else if (pos.y > bulletSideRegion.bottom)
+	{
+		return true;
+	}
+	return false;
+}
+
+void Player::BulletSide::Draw(const std::vector<Surface>& sprites, Graphics & gfx) const
+{
+	const int iBulletSide = int(curAnimTime * nSpritesBulletSide / maxAnimTime);
+	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iBulletSide], gfx.GetGameRect());
 }

@@ -69,7 +69,7 @@ void Game::UpdateModel()
 		player0.Move(left0, right0, up0, down0, dt);
 		player0.Clamp();
 		player0.Fire(dt);
-		player0.UpdateCenterBullets(dt);
+		player0.UpdateBullets(dt);
 
 		if (multiplayer)
 		{
@@ -96,18 +96,19 @@ void Game::UpdateModel()
 			player1.Move(left1, right1, up1, down1, dt);
 			player1.Clamp();
 			player1.Fire(dt);
-			player1.UpdateCenterBullets(dt);
+			player1.UpdateBullets(dt);
 		}
 	}
 }
 
 void Game::ComposeFrame()
 {
-	player0.DrawBulletsCenter(gfx);
+	player0.DrawBullets(gfx);
 	player0.Draw(gfx);
+	player0.DrawBullets(gfx); // remove this !!!!!!!!!!!!!!!!!!!!!!!!
 	if (multiplayer)
 	{
-		player1.DrawBulletsCenter(gfx);
+		player1.DrawBullets(gfx);
 		player1.Draw(gfx);
 	}
 }

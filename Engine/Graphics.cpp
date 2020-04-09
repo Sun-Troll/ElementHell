@@ -254,7 +254,7 @@ Graphics::~Graphics()
 
 RectI Graphics::GetGameRect()
 {
-	return RectI(0, ScreenWidth, 0, ScreenHeight);
+	return RectI(0, ScreenWidth, 0, 900);
 }
 
 void Graphics::EndFrame()
