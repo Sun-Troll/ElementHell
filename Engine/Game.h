@@ -48,5 +48,6 @@ private:
 	Player player0;
 	Player player1;
 	bool multiplayer = true;
+	int nSubrames = 12;
 	/********************************/
 };

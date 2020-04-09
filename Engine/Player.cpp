@@ -89,7 +89,7 @@ void Player::UpdateCenterBullets(float dt)
 
 	for (int i = 0; i < bulletsCenter.size(); ++i)
 	{
-		if (bulletsCenter[i].Clamp(movementRegionPlayer)) //change this to real value after cliping sprite draw in
+		if (bulletsCenter[i].Clamp(movementRegionBulletCenter)) //change this to real value after cliping sprite draw in
 		{
 			PopCenterBullet(i);
 			--i;
@@ -162,6 +162,5 @@ bool Player::BulletCenter::Clamp(const RectF& bulletCenterRegion)
 void Player::BulletCenter::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
 {
 	const int iBulletCenter = int(curAnimTime * nSpritesBulletCenter / maxAnimTime);
-	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iBulletCenter]);
-	//gfx.DrawSprite(int(pos.x), int(pos.y), sprites[0]);
+	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iBulletCenter], gfx.GetGameRect());
 }

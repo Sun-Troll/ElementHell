@@ -41,59 +41,63 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	float dt = ft.FrameDur();
+	const float FrameTime = ft.FrameDur();
+	float dt = FrameTime / nSubrames;
 
-	bool left0 = false;
-	bool right0 = false;
-	bool up0 = false;
-	bool down0 = false;
-	if (wnd.kbd.KeyIsPressed('A'))
+	for (int n = 0; n < nSubrames; ++n)
 	{
-		left0 = true;
-	}
-	if (wnd.kbd.KeyIsPressed('D'))
-	{
-		right0 = true;
-	}
-	if (wnd.kbd.KeyIsPressed('W'))
-	{
-		up0 = true;
-	}
-	if (wnd.kbd.KeyIsPressed('S'))
-	{
-		down0 = true;
-	}
-	player0.Move(left0, right0, up0, down0, dt);
-	player0.Clamp();
-	player0.Fire(dt);
-	player0.UpdateCenterBullets(dt);
+		bool left0 = false;
+		bool right0 = false;
+		bool up0 = false;
+		bool down0 = false;
+		if (wnd.kbd.KeyIsPressed('A'))
+		{
+			left0 = true;
+		}
+		if (wnd.kbd.KeyIsPressed('D'))
+		{
+			right0 = true;
+		}
+		if (wnd.kbd.KeyIsPressed('W'))
+		{
+			up0 = true;
+		}
+		if (wnd.kbd.KeyIsPressed('S'))
+		{
+			down0 = true;
+		}
+		player0.Move(left0, right0, up0, down0, dt);
+		player0.Clamp();
+		player0.Fire(dt);
+		player0.UpdateCenterBullets(dt);
 
-	if (multiplayer)
-	{
-		bool left1 = false;
-		bool right1 = false;
-		bool up1 = false;
-		bool down1 = false;
-		if (wnd.kbd.KeyIsPressed(VK_NUMPAD4))
+		if (multiplayer)
 		{
-			left1 = true;
+			bool left1 = false;
+			bool right1 = false;
+			bool up1 = false;
+			bool down1 = false;
+			if (wnd.kbd.KeyIsPressed(VK_NUMPAD4))
+			{
+				left1 = true;
+			}
+			if (wnd.kbd.KeyIsPressed(VK_NUMPAD6))
+			{
+				right1 = true;
+			}
+			if (wnd.kbd.KeyIsPressed(VK_NUMPAD8))
+			{
+				up1 = true;
+			}
+			if (wnd.kbd.KeyIsPressed(VK_NUMPAD5))
+			{
+				down1 = true;
+			}
+			player1.Move(left1, right1, up1, down1, dt);
+			player1.Clamp();
+			player1.Fire(dt);
+			player1.UpdateCenterBullets(dt);
 		}
-		if (wnd.kbd.KeyIsPressed(VK_NUMPAD6))
-		{
-			right1 = true;
-		}
-		if (wnd.kbd.KeyIsPressed(VK_NUMPAD8))
-		{
-			up1 = true;
-		}
-		if (wnd.kbd.KeyIsPressed(VK_NUMPAD5))
-		{
-			down1 = true;
-		}
-		player1.Move(left1, right1, up1, down1, dt);
-		player1.Clamp();
-		player1.Fire(dt);
-		player1.UpdateCenterBullets(dt);
 	}
 }
 

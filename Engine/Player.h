@@ -35,7 +35,7 @@ private:
 	float speed = 200.0f;
 	float hpMax = 1000.0f;
 	float hpCur = hpMax;
-	float maxFireTimePlayerAnim = 1.0f;
+	float maxFireTimePlayerAnim = 0.5f;
 	float curFireBasePlayerAnim = 0.0f;
 	static constexpr int nSpritesPlayer = 4;
 	static constexpr int spritePlayerWidth = 84;
@@ -53,4 +53,6 @@ private:
 	std::vector<Surface> spritesBulletCenter;
 	std::vector<BulletCenter> bulletsCenter;
 	bool isFiring = false;
+
+	//BulletSide
 };

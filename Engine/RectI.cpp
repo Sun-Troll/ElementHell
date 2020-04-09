@@ -20,3 +20,13 @@ RectI::RectI(const VecI& leftTop, int width, int height)
 	RectI(leftTop, { leftTop.x + width, leftTop.y + height })
 {
 }
+
+int RectI::GetWidth() const
+{
+	return right - left;
+}
+
+int RectI::GetHeight() const
+{
+	return bottom - top;
+}

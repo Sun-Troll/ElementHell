@@ -60,6 +60,7 @@ public:
 	void PutPixel( int x,int y,Color c );
 	void DrawSpriteNonChroma(int xPos, int yPos, const Surface& surf);
 	void DrawSprite(int xPos, int yPos, const Surface& surf, Color chroma = Colors::White);
+	void DrawSprite(int xPos, int yPos, const Surface& surf, const RectI& drawRegion, Color chroma = Colors::White);
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;
@@ -78,4 +79,5 @@ private:
 public:
 	static constexpr int ScreenWidth = 540;
 	static constexpr int ScreenHeight = 960;
+	static RectI GetGameRect();
 };
