@@ -25,6 +25,7 @@
 #include "Graphics.h"
 #include "FrameTimer.h"
 #include "Player.h"
+#include "HUD.h"
 
 class Game
 {
@@ -45,6 +46,7 @@ private:
 	/********************************/
 	/*  User Variables              */
 	FrameTimer ft;
+	HUD hud;
 	Player player0;
 	Player player1;
 	bool multiplayer = true;

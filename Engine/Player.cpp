@@ -145,6 +145,16 @@ void Player::PopSideBullet(int i)
 	bulletsSide.pop_back();
 }
 
+float Player::GetHpMax() const
+{
+	return hpMax;
+}
+
+float Player::GetHpCur() const
+{
+	return hpCur;
+}
+
 void Player::Draw(Graphics& gfx) const
 {
 	const int iSpritePlayer = int(curFireBasePlayerAnim * nSpritesPlayer / maxFireTimePlayerAnim);

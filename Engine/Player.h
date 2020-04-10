@@ -43,6 +43,8 @@ public:
 	void UpdateBullets(float dt);
 	void PopCenterBullet(int i);
 	void PopSideBullet(int i);
+	float GetHpMax() const;
+	float GetHpCur() const;
 	void Draw(Graphics& gfx) const;
 	void DrawBullets(Graphics& gfx) const;
 private:
@@ -57,7 +59,7 @@ private:
 	static constexpr int spritePlayerHeight = 96;
 	std::vector<Surface> spritesPlayer;
 	const RectF movementRegionPlayer{ 0.0f, float(Graphics::ScreenWidth - spritePlayerWidth),
-		0.0f, float(Graphics::ScreenHeight - spritePlayerHeight) };
+		0.0f, float(Graphics::GameHeight - spritePlayerHeight) };
 	static constexpr float pi = 3.141592741f;
 
 	//BulletCenter
@@ -65,7 +67,7 @@ private:
 	static constexpr int nSpritesBulletCenter = 2;
 	static constexpr int spriteBulletCenterDim = 12; // assumes same width/height
 	const RectF movementRegionBulletCenter{ float(-spriteBulletCenterDim), float(Graphics::ScreenWidth),
-		float(-spriteBulletCenterDim), float(Graphics::ScreenHeight) };
+		float(-spriteBulletCenterDim), float(Graphics::GameHeight) };
 	std::vector<Surface> spritesBulletCenter;
 	std::vector<BulletCenter> bulletsCenter;
 	bool isFiring = false;
@@ -77,7 +79,7 @@ private:
 	static constexpr int spriteBulletSideDim = 8; // assumes same width/height
 	static constexpr int nBulletsSideFired = 6;
 	const RectF movementRegionBulletSide{ float(-spriteBulletSideDim), float(Graphics::ScreenWidth),
-		float(-spriteBulletSideDim), float(Graphics::ScreenHeight) };
+		float(-spriteBulletSideDim), float(Graphics::GameHeight) };
 	std::vector<Surface> spritesBulletSide;
 	std::vector<BulletSide> bulletsSide;
 	std::vector<VecF> bulletSidePosVel;

@@ -103,9 +103,9 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+	hud.Draw(player0.GetHpMax(), player0.GetHpCur(), gfx);
 	player0.DrawBullets(gfx);
 	player0.Draw(gfx);
-	player0.DrawBullets(gfx); // remove this !!!!!!!!!!!!!!!!!!!!!!!!
 	if (multiplayer)
 	{
 		player1.DrawBullets(gfx);
