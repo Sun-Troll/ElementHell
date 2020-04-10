@@ -26,6 +26,7 @@
 #include "FrameTimer.h"
 #include "Player.h"
 #include "HUD.h"
+#include "Earth0a.h"
 
 class Game
 {
@@ -49,6 +50,8 @@ private:
 	HUD hud;
 	Player player0;
 	Player player1;
+	std::vector<Earth0a> enemiesTest;
+	bool enemyTestSpawned = false;
 	bool multiplayer = true;
 	int nSubrames = 12;
 	/********************************/

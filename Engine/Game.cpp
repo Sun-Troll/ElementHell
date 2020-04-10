@@ -99,6 +99,11 @@ void Game::UpdateModel()
 			player1.UpdateBullets(dt);
 		}
 	}
+	if (!enemyTestSpawned)
+	{
+		enemiesTest.emplace_back(Earth0a{ { 200.0f, 100.0f }, { 1.0f, 2.0f } });
+		enemyTestSpawned = true;
+	}
 }
 
 void Game::ComposeFrame()
@@ -110,5 +115,9 @@ void Game::ComposeFrame()
 	{
 		player1.DrawBullets(gfx);
 		player1.Draw(gfx);
+	}
+	for (const auto& e : enemiesTest)
+	{
+		e.Draw(gfx);
 	}
 }
