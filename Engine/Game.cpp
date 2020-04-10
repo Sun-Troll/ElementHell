@@ -20,6 +20,7 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include <cassert>
 
 Game::Game(MainWindow& wnd)
 	:
@@ -28,6 +29,14 @@ Game::Game(MainWindow& wnd)
 	player0({ 200.0f, 700.0f }),
 	player1({ 300.0f, 700.0f })
 {
+	spritesEarth0a.resize(Earth0a::nSpritesEarth0a);
+	for (int i = 0; i < Earth0a::nSpritesEarth0a; ++i)
+	{
+		const std::string bitmapFile = "Sprites\\Enemies\\Earth0a\\Earth0a" + std::to_string(i) + ".bmp";
+		spritesEarth0a[i] = Surface(bitmapFile);
+		assert(spritesEarth0a[i].GetWidth() == Earth0a::spriteEarth0aWidth
+			&& spritesEarth0a[i].GetHeight() == Earth0a::spriteEarth0aHeight);
+	}
 	ft.FrameDur();
 }
 
@@ -98,11 +107,27 @@ void Game::UpdateModel()
 			player1.Fire(dt);
 			player1.UpdateBullets(dt);
 		}
-	}
-	if (!enemyTestSpawned)
-	{
-		enemiesTest.emplace_back(Earth0a{ { 200.0f, 100.0f }, { 1.0f, 2.0f } });
-		enemyTestSpawned = true;
+		// move enemy updates to level
+		if (enemiesTest.empty())
+		{
+			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.right, 100.0f }, { -2.0f, 1.0f } });
+		}
+		else
+		{
+			for (auto& e : enemiesTest)
+			{
+				e.Move(dt);
+			}
+			for (int i = 0; i < enemiesTest.size(); ++i)
+			{
+				if (enemiesTest[i].Clamp(movementRegionEarth0a))
+				{
+					std::swap(enemiesTest[i], enemiesTest.back());
+					enemiesTest.pop_back();
+					--i;
+				}
+			}
+		}
 	}
 }
 
@@ -118,6 +143,6 @@ void Game::ComposeFrame()
 	}
 	for (const auto& e : enemiesTest)
 	{
-		e.Draw(gfx);
+		e.Draw(spritesEarth0a, gfx);
 	}
 }

@@ -51,7 +51,9 @@ private:
 	Player player0;
 	Player player1;
 	std::vector<Earth0a> enemiesTest;
-	bool enemyTestSpawned = false;
+	std::vector<Surface> spritesEarth0a;
+	const RectF movementRegionEarth0a{ float(-Earth0a::spriteEarth0aWidth), float(Graphics::ScreenWidth),
+		float(-Earth0a::spriteEarth0aHeight), float(Graphics::GameHeight) };
 	bool multiplayer = true;
 	int nSubrames = 12;
 	/********************************/
