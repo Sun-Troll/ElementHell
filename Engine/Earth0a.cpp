@@ -34,7 +34,38 @@ bool Earth0a::Clamp(const RectF& movementRegionEarth0a)
 	return false;
 }
 
+void Earth0a::Fire(float dt)
+{
+	if (RectF(pos, spriteEarth0aWidth, spriteEarth0aHeight).isContained(Graphics::GetGameRectF()))
+	{
+		const VecF earth0aCenter{ pos.x + float(spriteEarth0aWidth) / 2.0f, pos.y + float(spriteEarth0aHeight) / 2.0f };
+		curFireBaseEarth0aAnim += dt;
+		while (curFireBaseEarth0aAnim >= maxFireTimeEarth0aAnim)
+		{
+			curFireBaseEarth0aAnim -= maxFireTimeEarth0aAnim;
+			/*bulletsCenter.emplace_back(BulletCenter{
+				{ playerCenter.x - float(spriteBulletCenterDim) / 2.0f, playerCenter.y - float(spriteBulletCenterDim) / 2.0f },
+				{ (target - playerCenter).GetNormalized() * bulletCenterSpeed } });
+
+			const VecF bulSideBasePos{ playerCenter.x - float(spriteBulletSideDim) / 2.0f,
+				playerCenter.y - float(spriteBulletSideDim) / 2.0f };
+			for (int i = 0; i < nBulletsSideFired; ++i)
+			{
+				bulletsSide.emplace_back(BulletSide{
+					{ bulSideBasePos.x + bulletSidePosVel[i].x * bulletSideSpawnDist,
+					bulSideBasePos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
+					{ bulletSidePosVel[i].x * bulletSideSpeed, bulletSidePosVel[i].y * bulletSideSpeed } });
+			}*/
+		}
+	}
+	else
+	{
+		curFireBaseEarth0aAnim = 0.0f;
+	}
+}
+
 void Earth0a::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
 {
-	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[0], gfx.GetGameRect());
+	const int iEarth0a = int(curFireBaseEarth0aAnim * nSpritesEarth0a / maxFireTimeEarth0aAnim);
+	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iEarth0a], gfx.GetGameRect());
 }

@@ -117,6 +117,7 @@ void Game::UpdateModel()
 			for (auto& e : enemiesTest)
 			{
 				e.Move(dt);
+				e.Fire(dt);
 			}
 			for (int i = 0; i < enemiesTest.size(); ++i)
 			{

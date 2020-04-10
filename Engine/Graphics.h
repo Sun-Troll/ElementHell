@@ -25,6 +25,7 @@
 #include "ChiliException.h"
 #include "Colors.h"
 #include "Surface.h"
+#include "RectF.h"
 
 class Graphics
 {
@@ -82,4 +83,5 @@ public:
 	static constexpr int ScreenHeight = 960;
 	static constexpr int GameHeight = 900;
 	static RectI GetGameRect();
+	static RectF GetGameRectF();
 };

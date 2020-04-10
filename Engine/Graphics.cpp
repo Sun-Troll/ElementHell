@@ -257,6 +257,11 @@ RectI Graphics::GetGameRect()
 	return RectI(0, ScreenWidth, 0, 900);
 }
 
+RectF Graphics::GetGameRectF()
+{
+	return RectF(0.0f, float(ScreenWidth), 0.0f, 900.0f);
+}
+
 void Graphics::EndFrame()
 {
 	HRESULT hr;
