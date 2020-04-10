@@ -38,24 +38,15 @@ void Earth0a::Fire(float dt)
 {
 	if (RectF(pos, spriteEarth0aWidth, spriteEarth0aHeight).isContained(Graphics::GetGameRectF()))
 	{
-		const VecF earth0aCenter{ pos.x + float(spriteEarth0aWidth) / 2.0f, pos.y + float(spriteEarth0aHeight) / 2.0f };
+		const VecF earth0aCenter{ pos.x + float(spriteEarth0aWidth) / 2.0f,
+			pos.y + float(spriteBulletDim) / 2.0f  + 3.0f};
 		curFireBaseEarth0aAnim += dt;
 		while (curFireBaseEarth0aAnim >= maxFireTimeEarth0aAnim)
 		{
 			curFireBaseEarth0aAnim -= maxFireTimeEarth0aAnim;
-			/*bulletsCenter.emplace_back(BulletCenter{
-				{ playerCenter.x - float(spriteBulletCenterDim) / 2.0f, playerCenter.y - float(spriteBulletCenterDim) / 2.0f },
-				{ (target - playerCenter).GetNormalized() * bulletCenterSpeed } });
-
-			const VecF bulSideBasePos{ playerCenter.x - float(spriteBulletSideDim) / 2.0f,
-				playerCenter.y - float(spriteBulletSideDim) / 2.0f };
-			for (int i = 0; i < nBulletsSideFired; ++i)
-			{
-				bulletsSide.emplace_back(BulletSide{
-					{ bulSideBasePos.x + bulletSidePosVel[i].x * bulletSideSpawnDist,
-					bulSideBasePos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
-					{ bulletSidePosVel[i].x * bulletSideSpeed, bulletSidePosVel[i].y * bulletSideSpeed } });
-			}*/
+			bullets.emplace_back(Bullet{
+				{ earth0aCenter.x - float(spriteBulletDim) / 2.0f, earth0aCenter.y - float(spriteBulletDim) / 2.0f },
+				VecF{ vel.x, vel.y + bulletSpeed } });
 		}
 	}
 	else
@@ -64,8 +55,93 @@ void Earth0a::Fire(float dt)
 	}
 }
 
+void Earth0a::UpdateBullets(const RectF& movementRegionBullet, float dt)
+{
+	for (auto& bc : bullets)
+	{
+		bc.Move(dt);
+		bc.Animate(dt);
+	}
+
+	for (int i = 0; i < bullets.size(); ++i)
+	{
+		if (bullets[i].Clamp(movementRegionBullet))
+		{
+			PopBullet(i);
+			--i;
+		}
+	}
+}
+
+void Earth0a::PopBullet(int i)
+{
+	std::swap(bullets[i], bullets.back());
+	bullets.pop_back();
+}
+
+bool Earth0a::BulletsEmpty() const
+{
+	return bullets.size() == 0;
+}
+
 void Earth0a::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
 {
 	const int iEarth0a = int(curFireBaseEarth0aAnim * nSpritesEarth0a / maxFireTimeEarth0aAnim);
 	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iEarth0a], gfx.GetGameRect());
+}
+
+void Earth0a::DrawBullets(const std::vector<Surface>& spritesBullet, Graphics& gfx) const
+{
+	for (const auto& bc : bullets)
+	{
+		bc.Draw(spritesBullet, gfx);
+	}
+}
+
+Earth0a::Bullet::Bullet(const VecF& pos, const VecF& vel)
+	:
+	pos(pos),
+	vel(vel)
+{
+}
+
+void Earth0a::Bullet::Move(float dt)
+{
+	pos += vel * dt;
+}
+
+void Earth0a::Bullet::Animate(float dt)
+{
+	curAnimTime += dt;
+	while (curAnimTime >= maxAnimTime)
+	{
+		curAnimTime -= maxAnimTime;
+	}
+}
+
+bool Earth0a::Bullet::Clamp(const RectF& bulletRegion)
+{
+	if (pos.x < bulletRegion.left)
+	{
+		return true;
+	}
+	else if (pos.x > bulletRegion.right)
+	{
+		return true;
+	}
+	if (pos.y < bulletRegion.top)
+	{
+		return true;
+	}
+	else if (pos.y > bulletRegion.bottom)
+	{
+		return true;
+	}
+	return false;
+}
+
+void Earth0a::Bullet::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
+{
+	const int iBullet = int(curAnimTime * nSpritesBullet / maxAnimTime);
+	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iBullet], gfx.GetGameRect());
 }
