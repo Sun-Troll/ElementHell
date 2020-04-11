@@ -129,6 +129,11 @@ void Game::UpdateModel()
 				e.Move(dt);
 				e.Fire(dt);
 				e.UpdateBullets(movementRegionEarth0aBullet, dt);
+				e.ColidePlayer(player0);
+				if (multiplayer)
+				{
+					e.ColidePlayer(player1);
+				}
 			}
 			for (int i = 0; i < enemiesTest.size(); ++i)
 			{

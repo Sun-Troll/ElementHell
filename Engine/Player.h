@@ -2,6 +2,7 @@
 
 #include "Graphics.h"
 #include "RectF.h"
+#include "CircF.h"
 #include <vector>
 
 class Player
@@ -13,7 +14,7 @@ private:
 		BulletCenter(const VecF& pos, const VecF& vel);
 		void Move(float dt);
 		void Animate(float dt);
-		bool Clamp(const RectF& bulletCenterRegion);
+		bool Clamp(const RectF& bulletCenterRegion) const;
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
 	private:
 		VecF pos;
@@ -27,7 +28,7 @@ private:
 		BulletSide(const VecF& pos, const VecF& vel);
 		void Move(float dt);
 		void Animate(float dt);
-		bool Clamp(const RectF& bulletSideRegion);
+		bool Clamp(const RectF& bulletSideRegion) const;
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
 	private:
 		VecF pos;
@@ -45,6 +46,8 @@ public:
 	void PopSideBullet(int i);
 	float GetHpMax() const;
 	float GetHpCur() const;
+	void Damaged(float damage);
+	CircF GetCircF() const;
 	void Draw(Graphics& gfx) const;
 	void DrawBullets(Graphics& gfx) const;
 private:
@@ -52,8 +55,11 @@ private:
 	float speed = 200.0f;
 	float hpMax = 1000.0f;
 	float hpCur = hpMax;
+	static constexpr float radius = 5.0f;
 	float maxFireTimePlayerAnim = 0.5f;
 	float curFireBasePlayerAnim = 0.0f;
+	static constexpr float drawDamageTimeMax = 0.2f;
+	float drawDamageTimeCur = drawDamageTimeMax;
 	static constexpr int nSpritesPlayer = 4;
 	static constexpr int spritePlayerWidth = 84;
 	static constexpr int spritePlayerHeight = 96;

@@ -11,13 +11,16 @@ private:
 		Bullet(const VecF& pos, const VecF& vel);
 		void Move(float dt);
 		void Animate(float dt);
-		bool Clamp(const RectF& bulletRegion);
+		bool Clamp(const RectF& bulletRegion) const;
+		bool PlayerHit(const CircF& pCirc) const;
+		CircF GetCircF() const;
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
 	private:
 		VecF pos;
 		VecF vel;
 		static constexpr float maxAnimTime = 1.0f;
 		float curAnimTime = 0.0f;
+		static constexpr float radius = 7.0f;
 	};
 public:
 	Earth0a(const VecF& pos, const VecF& vel);
@@ -25,6 +28,7 @@ public:
 	bool Clamp(const RectF& movementRegionEarth0a);
 	void Fire(float dt);
 	void UpdateBullets(const RectF& movementRegionBullet, float dt);
+	void ColidePlayer(Player& player);
 	void PopBullet(int i);
 	bool BulletsEmpty() const;
 	void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
@@ -48,6 +52,7 @@ public:
 // bullets
 private:
 	static constexpr float bulletSpeed = 100.0f;
+	static constexpr float bulletDamage = 100.0f;
 	//static constexpr int nSpritesBulletCenter = 4;
 	//static constexpr int spriteBulletCenterDim = 32; // assumes same width/height
 	std::vector<Bullet> bullets;

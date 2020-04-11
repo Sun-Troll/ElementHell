@@ -80,18 +80,18 @@ void Player::Clamp()
 
 void Player::Fire(float dt)
 {
-	const VecF playerCenter{ pos.x + float(spritePlayerWidth) / 2.0f, pos.y + float(spritePlayerHeight) / 2.0f };
+	const VecF playerCenter{ pos.x + float(spritePlayerWidth) * 0.5f, pos.y + float(spritePlayerHeight) * 0.5f };
 	const VecF target{ playerCenter.x, playerCenter.y - 500.0f };
 	curFireBasePlayerAnim += dt;
 	while (curFireBasePlayerAnim >= maxFireTimePlayerAnim)
 	{
 		curFireBasePlayerAnim -= maxFireTimePlayerAnim;
 		bulletsCenter.emplace_back(BulletCenter{
-			{ playerCenter.x - float(spriteBulletCenterDim) / 2.0f, playerCenter.y - float(spriteBulletCenterDim) / 2.0f },
+			{ playerCenter.x - float(spriteBulletCenterDim) * 0.5f, playerCenter.y - float(spriteBulletCenterDim) * 0.5f },
 			{ (target - playerCenter).GetNormalized() * bulletCenterSpeed } });
 
-		const VecF bulSideBasePos{ playerCenter.x - float(spriteBulletSideDim) / 2.0f,
-			playerCenter.y - float(spriteBulletSideDim) / 2.0f };
+		const VecF bulSideBasePos{ playerCenter.x - float(spriteBulletSideDim) * 0.5f,
+			playerCenter.y - float(spriteBulletSideDim) * 0.5f };
 		for (int i = 0; i < nBulletsSideFired; ++i)
 		{
 			bulletsSide.emplace_back(BulletSide{
@@ -99,6 +99,10 @@ void Player::Fire(float dt)
 				bulSideBasePos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
 				{ bulletSidePosVel[i].x * bulletSideSpeed, bulletSidePosVel[i].y * bulletSideSpeed } });
 		}
+	}
+	if (drawDamageTimeCur <= drawDamageTimeMax)
+	{
+		drawDamageTimeCur += dt;
 	}
 }
 
@@ -155,10 +159,28 @@ float Player::GetHpCur() const
 	return hpCur;
 }
 
+void Player::Damaged(float damage)
+{
+	hpCur -= damage;
+	drawDamageTimeCur = 0.0f;
+}
+
+CircF Player::GetCircF() const
+{
+	return CircF({pos.x + spritePlayerWidth * 0.5f, pos.y + spritePlayerHeight * 0.5f }, radius);
+}
+
 void Player::Draw(Graphics& gfx) const
 {
 	const int iSpritePlayer = int(curFireBasePlayerAnim * nSpritesPlayer / maxFireTimePlayerAnim);
-	gfx.DrawSprite(int(pos.x), int(pos.y), spritesPlayer[iSpritePlayer]);
+	if (drawDamageTimeCur <= drawDamageTimeMax)
+	{
+		gfx.DrawSprite(int(pos.x), int(pos.y), Colors::Red, spritesPlayer[iSpritePlayer]);
+	}
+	else
+	{
+		gfx.DrawSprite(int(pos.x), int(pos.y), spritesPlayer[iSpritePlayer]);
+	}
 }
 
 void Player::DrawBullets(Graphics& gfx) const
@@ -194,7 +216,7 @@ void Player::BulletCenter::Animate(float dt)
 	}
 }
 
-bool Player::BulletCenter::Clamp(const RectF& bulletCenterRegion)
+bool Player::BulletCenter::Clamp(const RectF& bulletCenterRegion) const
 {
 	if (pos.x < bulletCenterRegion.left)
 	{
@@ -242,7 +264,7 @@ void Player::BulletSide::Animate(float dt)
 	}
 }
 
-bool Player::BulletSide::Clamp(const RectF& bulletSideRegion)
+bool Player::BulletSide::Clamp(const RectF& bulletSideRegion) const
 {
 	if (pos.x < bulletSideRegion.left)
 	{

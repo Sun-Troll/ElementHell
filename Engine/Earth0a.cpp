@@ -73,6 +73,19 @@ void Earth0a::UpdateBullets(const RectF& movementRegionBullet, float dt)
 	}
 }
 
+void Earth0a::ColidePlayer(Player& player)
+{
+	for (int i = 0; i < bullets.size(); ++i)
+	{
+		if (bullets[i].PlayerHit(player.GetCircF()))
+		{
+			PopBullet(i);
+			player.Damaged(bulletDamage);
+			--i;
+		}
+	}
+}
+
 void Earth0a::PopBullet(int i)
 {
 	std::swap(bullets[i], bullets.back());
@@ -119,7 +132,7 @@ void Earth0a::Bullet::Animate(float dt)
 	}
 }
 
-bool Earth0a::Bullet::Clamp(const RectF& bulletRegion)
+bool Earth0a::Bullet::Clamp(const RectF& bulletRegion) const
 {
 	if (pos.x < bulletRegion.left)
 	{
@@ -138,6 +151,17 @@ bool Earth0a::Bullet::Clamp(const RectF& bulletRegion)
 		return true;
 	}
 	return false;
+}
+
+bool Earth0a::Bullet::PlayerHit(const CircF& pCirc) const
+{
+	return GetCircF().Coliding(pCirc);
+}
+
+CircF Earth0a::Bullet::GetCircF() const
+{
+	const float halfDim = spriteBulletDim * 0.5f;
+	return CircF({ pos.x + halfDim, pos.y + halfDim }, radius);
 }
 
 void Earth0a::Bullet::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const

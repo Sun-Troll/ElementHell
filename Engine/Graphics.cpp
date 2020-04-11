@@ -369,6 +369,23 @@ void Graphics::DrawSprite(int xPos, int yPos, const Surface& surf, Color chroma)
 	}
 }
 
+void Graphics::DrawSprite(int xPos, int yPos, Color substitute, const Surface & surf, Color chroma)
+{
+	const int width = surf.GetWidth();
+	const int height = surf.GetHeight();
+	for (int y = 0; y < height; ++y)
+	{
+		for (int x = 0; x < width; ++x)
+		{
+			const Color c = surf.GetPixel(x, y);
+			if (c != chroma)
+			{
+				PutPixel(xPos + x, yPos + y, substitute);
+			}
+		}
+	}
+}
+
 void Graphics::DrawSprite(int xPos, int yPos, const Surface& surf, const RectI& drawRegion, Color chroma)
 {
 	RectI sRect = surf.GetRect();
