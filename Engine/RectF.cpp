@@ -20,3 +20,9 @@ RectF::RectF(const VecF& leftTop, float width, float height)
 	RectF(leftTop, { leftTop.x + width, leftTop.y + height })
 {
 }
+
+bool RectF::isContained(const RectF& container) const
+{
+	return left > container.left && right < container.right
+		&& top > container.top && bottom < container.bottom;
+}

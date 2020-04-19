@@ -13,7 +13,7 @@ public:
 	VecF& operator*=(float rhs);
 	VecF operator/(float rhs) const;
 	VecF& operator/=(float rhs);
-	operator VecI() const;
+	explicit operator VecI() const;
 	float GetLengthSq() const;
 	float GetLength() const;
 	VecF GetNormalized() const;

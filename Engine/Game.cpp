@@ -20,6 +20,7 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include <cassert>
 
 Game::Game(MainWindow& wnd)
 	:
@@ -28,7 +29,25 @@ Game::Game(MainWindow& wnd)
 	player0({ 200.0f, 700.0f }),
 	player1({ 300.0f, 700.0f })
 {
+	// move to level
+	spritesEarth0a.resize(Earth0a::nSpritesEarth0a);
+	for (int i = 0; i < Earth0a::nSpritesEarth0a; ++i)
+	{
+		const std::string bitmapFile = "Sprites\\Enemies\\Earth0a\\Earth0a" + std::to_string(i) + ".bmp";
+		spritesEarth0a[i] = Surface(bitmapFile);
+		assert(spritesEarth0a[i].GetWidth() == Earth0a::spriteEarth0aWidth
+			&& spritesEarth0a[i].GetHeight() == Earth0a::spriteEarth0aHeight);
+	}
 	ft.FrameDur();
+	spritesBullet.resize(Earth0a::nSpritesBullet);
+	for (int i = 0; i < Earth0a::nSpritesBullet; ++i)
+	{
+		const std::string bitmapFile = "Sprites\\Enemies\\Earth0aBul\\Earth0aBul" + std::to_string(i) + ".bmp";
+		spritesBullet[i] = Surface(bitmapFile);
+		assert(spritesBullet[i].GetWidth() == Earth0a::spriteBulletDim
+			&& spritesBullet[i].GetHeight() == Earth0a::spriteBulletDim);
+	}
+	// move ends here
 }
 
 void Game::Go()
@@ -98,6 +117,49 @@ void Game::UpdateModel()
 			player1.Fire(dt);
 			player1.UpdateBullets(dt);
 		}
+		// move enemy updates to level
+		if (enemiesTest.size() < 6)
+		{
+			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.right, 100.0f }, { -2.0f, 1.0f } });
+			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.left, 100.0f }, { 2.0f, 1.0f } });
+			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.right, 500.0f }, { -3.0f, -2.0f } });
+			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.left, 500.0f }, { 3.0f, -2.0f } });
+			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.right, 200.0f }, { -2.0f, 0.0f } });
+			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.left, 200.0f }, { 2.0f, 0.0f } });
+		}
+		else
+		{
+			for (auto& e : enemiesTest)
+			{
+				e.Move(dt);
+				e.Fire(dt);
+				e.UpdateBullets(movementRegionEarth0aBullet, dt);
+				e.HitPlayer(player0);
+				e.GetHit(player0, dt);
+				if (multiplayer)
+				{
+					e.HitPlayer(player1);
+					e.GetHit(player1, dt);
+				}
+			}
+			for (int i = 0; i < enemiesTest.size(); ++i)
+			{
+				if (enemiesTest[i].Clamp(movementRegionEarth0a) && enemiesTest[i].BulletsEmpty())
+				{
+					std::swap(enemiesTest[i], enemiesTest.back());
+					enemiesTest.pop_back();
+					--i;
+				}
+				else if (enemiesTest[i].IsDead())
+				{
+					std::swap(enemiesTest[i], enemiesTest.back());
+					enemiesTest.pop_back();
+					--i;
+				}
+			}
+		}
+		// move ends here
+
 	}
 }
 
@@ -110,5 +172,10 @@ void Game::ComposeFrame()
 	{
 		player1.DrawBullets(gfx);
 		player1.Draw(gfx);
+	}
+	for (const auto& e : enemiesTest)
+	{
+		e.Draw(spritesEarth0a, gfx);
+		e.DrawBullets(spritesBullet, gfx);
 	}
 }

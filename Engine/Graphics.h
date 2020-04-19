@@ -25,6 +25,7 @@
 #include "ChiliException.h"
 #include "Colors.h"
 #include "Surface.h"
+#include "RectF.h"
 
 class Graphics
 {
@@ -61,7 +62,9 @@ public:
 	void DrawSpriteNonChroma(int xPos, int yPos, const Surface& surf);
 	void DrawHudBar(int xPos, int yPos, int xStop, const Surface& surf);
 	void DrawSprite(int xPos, int yPos, const Surface& surf, Color chroma = Colors::White);
+	void DrawSprite(int xPos, int yPos, Color substitute, const Surface& surf, Color chroma = Colors::White);
 	void DrawSprite(int xPos, int yPos, const Surface& surf, const RectI& drawRegion, Color chroma = Colors::White);
+	void DrawSprite(int xPos, int yPos, Color substitute, const Surface& surf, const RectI& drawRegion, Color chroma = Colors::White);
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;
@@ -82,4 +85,5 @@ public:
 	static constexpr int ScreenHeight = 960;
 	static constexpr int GameHeight = 900;
 	static RectI GetGameRect();
+	static RectF GetGameRectF();
 };
