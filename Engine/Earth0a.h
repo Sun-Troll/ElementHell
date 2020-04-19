@@ -39,11 +39,11 @@ private:
 	static constexpr float speed = 50.0f;
 	VecF pos;
 	VecF vel;
-	static constexpr float hpMax = 200.0f;
+	static constexpr float hpMax = 100.0f;
 	float hpCur = hpMax;
 	static constexpr float maxFireTimeEarth0aAnim = 1.8f;
 	float curFireBaseEarth0aAnim = 0.0f;
-	static constexpr float drawDamageTimeMax = 0.4f;
+	static constexpr float drawDamageTimeMax = 0.1f;
 	float drawDamageTimeCur = drawDamageTimeMax;
 	//static constexpr int nSpritesEarth0a = 6;
 	//static constexpr int spriteEarth0aWidth = 64;
@@ -57,7 +57,7 @@ public:
 // bullets
 private:
 	static constexpr float bulletSpeed = 100.0f;
-	static constexpr float bulletDamage = 100.0f;
+	static constexpr float bulletDamage = 50.0f;
 	//static constexpr int nSpritesBulletCenter = 4;
 	//static constexpr int spriteBulletCenterDim = 32; // assumes same width/height
 	std::vector<Bullet> bullets;

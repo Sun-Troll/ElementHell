@@ -118,9 +118,14 @@ void Game::UpdateModel()
 			player1.UpdateBullets(dt);
 		}
 		// move enemy updates to level
-		if (enemiesTest.empty())
+		if (enemiesTest.size() < 6)
 		{
 			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.right, 100.0f }, { -2.0f, 1.0f } });
+			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.left, 100.0f }, { 2.0f, 1.0f } });
+			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.right, 500.0f }, { -3.0f, -2.0f } });
+			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.left, 500.0f }, { 3.0f, -2.0f } });
+			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.right, 200.0f }, { -2.0f, 0.0f } });
+			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.left, 200.0f }, { 2.0f, 0.0f } });
 		}
 		else
 		{
@@ -154,6 +159,7 @@ void Game::UpdateModel()
 			}
 		}
 		// move ends here
+
 	}
 }
 

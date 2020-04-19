@@ -189,6 +189,11 @@ float Player::GetHpCur() const
 	return hpCur;
 }
 
+bool Player::IsAlive() const
+{
+	return hpCur > 0.0f;
+}
+
 void Player::Damaged(float damage)
 {
 	hpCur -= damage;

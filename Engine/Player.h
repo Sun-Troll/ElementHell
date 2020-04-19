@@ -54,6 +54,7 @@ public:
 	void PopSideBullet(int i);
 	float GetHpMax() const;
 	float GetHpCur() const;
+	bool IsAlive() const;
 	void Damaged(float damage);
 	CircF GetCircF() const;
 	void Draw(Graphics& gfx) const;
@@ -78,7 +79,7 @@ private:
 
 	//BulletCenter
 	float bulletCenterDPS = 100.0f;
-	static constexpr float bulletCenterSpeed = 500.0f;
+	static constexpr float bulletCenterSpeed = 400.0f;
 	static constexpr int nSpritesBulletCenter = 2;
 	static constexpr int spriteBulletCenterDim = 12; // assumes same width/height
 	static constexpr float bulletCenterRadius = float(spriteBulletCenterDim) / 2.0f;
@@ -89,8 +90,8 @@ private:
 	bool isFiring = false;
 
 	//BulletSide
-	float bulletSideDamage = 40.0f;
-	static constexpr float bulletSideSpeed = 500.0f;
+	float bulletSideDamage = 10.0f;
+	static constexpr float bulletSideSpeed = 600.0f;
 	static constexpr float bulletSideSpawnDist = 40.0f;
 	static constexpr int nSpritesBulletSide = 2;
 	static constexpr int spriteBulletSideDim = 8; // assumes same width/height
