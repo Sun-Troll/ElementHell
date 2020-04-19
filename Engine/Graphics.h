@@ -64,6 +64,7 @@ public:
 	void DrawSprite(int xPos, int yPos, const Surface& surf, Color chroma = Colors::White);
 	void DrawSprite(int xPos, int yPos, Color substitute, const Surface& surf, Color chroma = Colors::White);
 	void DrawSprite(int xPos, int yPos, const Surface& surf, const RectI& drawRegion, Color chroma = Colors::White);
+	void DrawSprite(int xPos, int yPos, Color substitute, const Surface& surf, const RectI& drawRegion, Color chroma = Colors::White);
 	~Graphics();
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;

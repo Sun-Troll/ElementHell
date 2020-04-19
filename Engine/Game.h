@@ -59,7 +59,7 @@ private:
 	const RectF movementRegionEarth0aBullet{ float(-Earth0a::spriteBulletDim), float(Graphics::ScreenWidth),
 		float(-Earth0a::spriteBulletDim), float(Graphics::GameHeight) };
 	// move end here
-	bool multiplayer = true;
+	bool multiplayer = false;
 	int nSubrames = 12;
 	/********************************/
 };

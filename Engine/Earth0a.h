@@ -28,7 +28,9 @@ public:
 	bool Clamp(const RectF& movementRegionEarth0a);
 	void Fire(float dt);
 	void UpdateBullets(const RectF& movementRegionBullet, float dt);
-	void ColidePlayer(Player& player);
+	void HitPlayer(Player& player);
+	void GetHit(Player& player, float dt);
+	bool IsDead();
 	void PopBullet(int i);
 	bool BulletsEmpty() const;
 	void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
@@ -41,9 +43,12 @@ private:
 	float hpCur = hpMax;
 	static constexpr float maxFireTimeEarth0aAnim = 1.8f;
 	float curFireBaseEarth0aAnim = 0.0f;
+	static constexpr float drawDamageTimeMax = 0.4f;
+	float drawDamageTimeCur = drawDamageTimeMax;
 	//static constexpr int nSpritesEarth0a = 6;
 	//static constexpr int spriteEarth0aWidth = 64;
 	//static constexpr int spriteEarth0aHeight = 54;
+	static constexpr float earth0Radius = 32.0f + 4.0f;
 	static constexpr float pi = 3.141592741f;
 public:
 	static constexpr int nSpritesEarth0a = 6;

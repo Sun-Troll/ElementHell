@@ -39,7 +39,7 @@ void Earth0a::Fire(float dt)
 	if (RectF(pos, spriteEarth0aWidth, spriteEarth0aHeight).isContained(Graphics::GetGameRectF()))
 	{
 		const VecF earth0aCenter{ pos.x + float(spriteEarth0aWidth) / 2.0f,
-			pos.y + float(spriteBulletDim) / 2.0f  + 3.0f};
+			pos.y + float(spriteBulletDim) / 2.0f + 3.0f };
 		curFireBaseEarth0aAnim += dt;
 		while (curFireBaseEarth0aAnim >= maxFireTimeEarth0aAnim)
 		{
@@ -52,6 +52,10 @@ void Earth0a::Fire(float dt)
 	else
 	{
 		curFireBaseEarth0aAnim = 0.0f;
+	}
+	if (drawDamageTimeCur <= drawDamageTimeMax)
+	{
+		drawDamageTimeCur += dt;
 	}
 }
 
@@ -73,7 +77,7 @@ void Earth0a::UpdateBullets(const RectF& movementRegionBullet, float dt)
 	}
 }
 
-void Earth0a::ColidePlayer(Player& player)
+void Earth0a::HitPlayer(Player& player)
 {
 	for (int i = 0; i < bullets.size(); ++i)
 	{
@@ -84,6 +88,36 @@ void Earth0a::ColidePlayer(Player& player)
 			--i;
 		}
 	}
+}
+
+void Earth0a::GetHit(Player& player, float dt)
+{
+	const CircF hitBoxEarth0 = { {pos.x + float(spriteEarth0aWidth) / 2.0f,
+			pos.y + float(spriteBulletDim) / 2.0f + 3.0f}, earth0Radius };
+	const float centerBulletDamage = player.GetCenterBulletDPS() * dt;
+	for (int i = 0; i < player.GetCenterBulletN(); ++i)
+	{
+		if (hitBoxEarth0.Coliding(player.GetCenterBulletCircF(i)))
+		{
+			hpCur -= centerBulletDamage;
+			drawDamageTimeCur = 0.0f;
+		}
+	}
+	for (int i = 0; i < player.GetSideBulletN(); ++i)
+	{
+		if (hitBoxEarth0.Coliding(player.GetSideBulletCircF(i)))
+		{
+			hpCur -= player.GetSideBulletDamage();
+			player.PopSideBullet(i);
+			--i;
+			drawDamageTimeCur = 0.0f;
+		}
+	}
+}
+
+bool Earth0a::IsDead()
+{
+	return hpCur <= 0.0f;
 }
 
 void Earth0a::PopBullet(int i)
@@ -100,7 +134,14 @@ bool Earth0a::BulletsEmpty() const
 void Earth0a::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
 {
 	const int iEarth0a = int(curFireBaseEarth0aAnim * nSpritesEarth0a / maxFireTimeEarth0aAnim);
-	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iEarth0a], gfx.GetGameRect());
+	if (drawDamageTimeCur <= drawDamageTimeMax)
+	{
+		gfx.DrawSprite(int(pos.x), int(pos.y), Colors::Red, sprites[iEarth0a], gfx.GetGameRect());
+	}
+	else
+	{
+		gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iEarth0a], gfx.GetGameRect());
+	}
 }
 
 void Earth0a::DrawBullets(const std::vector<Surface>& spritesBullet, Graphics& gfx) const

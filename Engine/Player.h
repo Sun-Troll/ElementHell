@@ -16,6 +16,7 @@ private:
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletCenterRegion) const;
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		CircF GetCircF() const;
 	private:
 		VecF pos;
 		VecF vel;
@@ -30,6 +31,7 @@ private:
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletSideRegion) const;
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		CircF GetCircF() const;
 	private:
 		VecF pos;
 		VecF vel;
@@ -42,7 +44,13 @@ public:
 	void Clamp();
 	void Fire(float dt);
 	void UpdateBullets(float dt);
+	int GetCenterBulletN() const;
+	CircF GetCenterBulletCircF(int i) const;
+	float GetCenterBulletDPS() const;
 	void PopCenterBullet(int i);
+	int GetSideBulletN() const;
+	CircF GetSideBulletCircF(int i) const;
+	float GetSideBulletDamage() const;
 	void PopSideBullet(int i);
 	float GetHpMax() const;
 	float GetHpCur() const;
@@ -69,9 +77,11 @@ private:
 	static constexpr float pi = 3.141592741f;
 
 	//BulletCenter
+	float bulletCenterDPS = 100.0f;
 	static constexpr float bulletCenterSpeed = 500.0f;
 	static constexpr int nSpritesBulletCenter = 2;
 	static constexpr int spriteBulletCenterDim = 12; // assumes same width/height
+	static constexpr float bulletCenterRadius = float(spriteBulletCenterDim) / 2.0f;
 	const RectF movementRegionBulletCenter{ float(-spriteBulletCenterDim), float(Graphics::ScreenWidth),
 		float(-spriteBulletCenterDim), float(Graphics::GameHeight) };
 	std::vector<Surface> spritesBulletCenter;
@@ -79,11 +89,13 @@ private:
 	bool isFiring = false;
 
 	//BulletSide
+	float bulletSideDamage = 40.0f;
 	static constexpr float bulletSideSpeed = 500.0f;
 	static constexpr float bulletSideSpawnDist = 40.0f;
 	static constexpr int nSpritesBulletSide = 2;
 	static constexpr int spriteBulletSideDim = 8; // assumes same width/height
 	static constexpr int nBulletsSideFired = 6;
+	static constexpr float bulletSideRadius = float(spriteBulletSideDim) / 2.0f;
 	const RectF movementRegionBulletSide{ float(-spriteBulletSideDim), float(Graphics::ScreenWidth),
 		float(-spriteBulletSideDim), float(Graphics::GameHeight) };
 	std::vector<Surface> spritesBulletSide;

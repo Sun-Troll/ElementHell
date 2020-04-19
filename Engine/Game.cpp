@@ -129,15 +129,23 @@ void Game::UpdateModel()
 				e.Move(dt);
 				e.Fire(dt);
 				e.UpdateBullets(movementRegionEarth0aBullet, dt);
-				e.ColidePlayer(player0);
+				e.HitPlayer(player0);
+				e.GetHit(player0, dt);
 				if (multiplayer)
 				{
-					e.ColidePlayer(player1);
+					e.HitPlayer(player1);
+					e.GetHit(player1, dt);
 				}
 			}
 			for (int i = 0; i < enemiesTest.size(); ++i)
 			{
 				if (enemiesTest[i].Clamp(movementRegionEarth0a) && enemiesTest[i].BulletsEmpty())
+				{
+					std::swap(enemiesTest[i], enemiesTest.back());
+					enemiesTest.pop_back();
+					--i;
+				}
+				else if (enemiesTest[i].IsDead())
 				{
 					std::swap(enemiesTest[i], enemiesTest.back());
 					enemiesTest.pop_back();

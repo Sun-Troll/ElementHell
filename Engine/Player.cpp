@@ -137,10 +137,40 @@ void Player::UpdateBullets(float dt)
 	}
 }
 
+int Player::GetCenterBulletN() const
+{
+	return int(bulletsCenter.size());
+}
+
+CircF Player::GetCenterBulletCircF(int i) const
+{
+	return bulletsCenter[i].GetCircF();
+}
+
+float Player::GetCenterBulletDPS() const
+{
+	return bulletCenterDPS;
+}
+
 void Player::PopCenterBullet(int i)
 {
 	std::swap(bulletsCenter[i], bulletsCenter.back());
 	bulletsCenter.pop_back();
+}
+
+int Player::GetSideBulletN() const
+{
+	return int(bulletsSide.size());
+}
+
+CircF Player::GetSideBulletCircF(int i) const
+{
+	return bulletsSide[i].GetCircF();
+}
+
+float Player::GetSideBulletDamage() const
+{
+	return bulletSideDamage;
 }
 
 void Player::PopSideBullet(int i)
@@ -243,6 +273,11 @@ void Player::BulletCenter::Draw(const std::vector<Surface>& sprites, Graphics& g
 	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iBulletCenter], gfx.GetGameRect());
 }
 
+CircF Player::BulletCenter::GetCircF() const
+{
+	return CircF({pos.x + bulletCenterRadius, pos.y + bulletCenterRadius}, bulletCenterRadius);
+}
+
 Player::BulletSide::BulletSide(const VecF& pos, const VecF& vel)
 	:
 	pos(pos),
@@ -289,4 +324,9 @@ void Player::BulletSide::Draw(const std::vector<Surface>& sprites, Graphics & gf
 {
 	const int iBulletSide = int(curAnimTime * nSpritesBulletSide / maxAnimTime);
 	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iBulletSide], gfx.GetGameRect());
+}
+
+CircF Player::BulletSide::GetCircF() const
+{
+	return CircF({ pos.x + bulletSideRadius, pos.y + bulletSideRadius }, bulletSideRadius);
 }
