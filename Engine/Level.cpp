@@ -42,114 +42,133 @@ void Level::SpawnEarth0(float dt)
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 150.0f }, { -10.0f, 10.0f } });
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.left, 150.0f }, { 10.0f, 10.0f } });
 		}
+		break;
 	case 2:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -10.0f, 0.0f } });
 		}
+		break;
 	case 3:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 150.0f }, { -10.0f, 0.0f } });
 		}
+		break;
 	case 4:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 200.0f }, { -10.0f, 0.0f } });
 		}
+		break;
 	case 5:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 250.0f }, { -10.0f, 0.0f } });
 		}
+		break;
 	case 6:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 300.0f }, { -10.0f, 0.0f } });
 		}
+		break;
 	case 7:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 350.0f }, { -10.0f, 0.0f } });
 		}
+		break;
 	case 8:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 400.0f }, { -10.0f, 0.0f } });
 		}
+		break;
 	case 9:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 450.0f }, { -10.0f, 0.0f } });
 		}
+		break;
 	case 10:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 500.0f }, { -10.0f, 0.0f } });
 		}
+		break;
 	case 11:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.left, 500.0f }, { 10.0f, 0.0f } });
 		}
+		break;
 	case 12:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.left, 450.0f }, { 10.0f, 0.0f } });
 		}
+		break;
 	case 13:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.left, 400.0f }, { 10.0f, 0.0f } });
 		}
+		break;
 	case 14:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.left, 350.0f }, { 10.0f, 0.0f } });
 		}
+		break;
 	case 15:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.left, 300.0f }, { 10.0f, 0.0f } });
 		}
+		break;
 	case 16:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.left, 250.0f }, { 10.0f, 0.0f } });
 		}
+		break;
 	case 17:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.left, 200.0f }, { 10.0f, 0.0f } });
 		}
+		break;
 	case 18:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.left, 150.0f }, { 10.0f, 0.0f } });
 		}
+		break;
 	case 19:
 		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.left, 100.0f }, { 10.0f, 0.0f } });
 		}
+		break;
 	case 20:
 		if (spawnTimer > 14.0f)
 		{
@@ -159,6 +178,7 @@ void Level::SpawnEarth0(float dt)
 			enEarth0a.emplace_back(Earth0a{ { 320.0f - float(Earth0a::spriteEarth0aWidth / 2), movRegEarth0a.top }, { 0.0f, 10.0f } });
 			enEarth0a.emplace_back(Earth0a{ { 420.0f - float(Earth0a::spriteEarth0aWidth / 2), movRegEarth0a.top }, { 0.0f, 10.0f } });
 		}
+		break;
 	case 21:
 		if (spawnTimer > 19.0f)
 		{
@@ -168,6 +188,7 @@ void Level::SpawnEarth0(float dt)
 			enEarth0a.emplace_back(Earth0a{ { 320.0f - float(Earth0a::spriteEarth0aWidth / 2), movRegEarth0a.bottom }, { 0.0f, -10.0f } });
 			enEarth0a.emplace_back(Earth0a{ { 420.0f - float(Earth0a::spriteEarth0aWidth / 2), movRegEarth0a.bottom }, { 0.0f, -10.0f } });
 		}
+		break;
 	default:
 		break;
 	}
