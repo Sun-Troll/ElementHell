@@ -18,9 +18,9 @@ public:
 private:
 	void ad();
 private:
-	float timer = 0.0f;
 	int curSpawn = 0;
 	float spawnTimer = 0.0f;
+	float timer = 0.0f;
 	float score = 0.0f;
 	LvlType curLvl = LvlType::MainMenu;
 

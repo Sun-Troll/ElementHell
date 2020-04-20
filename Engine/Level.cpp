@@ -36,7 +36,7 @@ void Level::SpawnEarth0(float dt)
 		}
 		break;
 	case 1:
-		if (spawnTimer > 4.0f)
+		if (spawnTimer > 3.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 150.0f }, { -10.0f, 10.0f } });
@@ -44,7 +44,7 @@ void Level::SpawnEarth0(float dt)
 		}
 		break;
 	case 2:
-		if (spawnTimer > 2.0f)
+		if (spawnTimer > 4.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -10.0f, 0.0f } });
@@ -180,7 +180,7 @@ void Level::SpawnEarth0(float dt)
 		}
 		break;
 	case 21:
-		if (spawnTimer > 19.0f)
+		if (spawnTimer > 8.3f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { 120.0f - float(Earth0a::spriteEarth0aWidth / 2), movRegEarth0a.bottom }, { 0.0f, -10.0f } });
