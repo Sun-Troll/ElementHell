@@ -29,8 +29,9 @@ Game::Game(MainWindow& wnd)
 	player0({ 200.0f, 700.0f }),
 	player1({ 300.0f, 700.0f })
 {
+	level.push_back(Level());
 	// move to level
-	spritesEarth0a.resize(Earth0a::nSpritesEarth0a);
+	/*spritesEarth0a.resize(Earth0a::nSpritesEarth0a);
 	for (int i = 0; i < Earth0a::nSpritesEarth0a; ++i)
 	{
 		const std::string bitmapFile = "Sprites\\Enemies\\Earth0a\\Earth0a" + std::to_string(i) + ".bmp";
@@ -46,7 +47,7 @@ Game::Game(MainWindow& wnd)
 		spritesBullet[i] = Surface(bitmapFile);
 		assert(spritesBullet[i].GetWidth() == Earth0a::spriteBulletDim
 			&& spritesBullet[i].GetHeight() == Earth0a::spriteBulletDim);
-	}
+	}*/
 	// move ends here
 }
 
@@ -60,8 +61,14 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	const float FrameTime = ft.FrameDur();
-	float dt = FrameTime / nSubrames;
+	const float frameTime = ft.FrameDur();
+	float dt = frameTime / nSubrames;
+
+	if (wnd.kbd.KeyIsPressed(VK_RETURN) && !testEarth0LvlStarted)
+	{
+		testEarth0LvlStarted = true;
+		level.front().StartEarth0();
+	}
 
 	for (int n = 0; n < nSubrames; ++n)
 	{
@@ -117,8 +124,14 @@ void Game::UpdateModel()
 			player1.Fire(dt);
 			player1.UpdateBullets(dt);
 		}
+
+		if (testEarth0LvlStarted)
+		{
+			level.front().SpawnEarth0(dt);
+			level.front().UpdateEarth0(player0, player1, multiplayer, dt);
+		}
 		// move enemy updates to level
-		if (enemiesTest.size() < 6)
+		/*if (enemiesTest.size() < 6)
 		{
 			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.right, 100.0f }, { -2.0f, 1.0f } });
 			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.left, 100.0f }, { 2.0f, 1.0f } });
@@ -157,7 +170,7 @@ void Game::UpdateModel()
 					--i;
 				}
 			}
-		}
+		}*/
 		// move ends here
 
 	}
@@ -173,9 +186,15 @@ void Game::ComposeFrame()
 		player1.DrawBullets(gfx);
 		player1.Draw(gfx);
 	}
-	for (const auto& e : enemiesTest)
+	if (testEarth0LvlStarted)
+	{
+		level.front().DrawEarth0(gfx);
+	}
+	// move enemy draw to level
+	/*for (const auto& e : enemiesTest)
 	{
 		e.Draw(spritesEarth0a, gfx);
 		e.DrawBullets(spritesBullet, gfx);
-	}
+	}*/
+	// move ends here
 }
