@@ -12,8 +12,11 @@ public:
 	};
 public:
 	void StartEarth0();
+	void SpawnEarth0(float dt);
 	void UpdateEarth0(Player& player0, Player& player1, bool multiplayer, float dt);
 	void DrawEarth0(Graphics& gfx) const;
+private:
+	void ad();
 private:
 	float timer = 0.0f;
 	int curSpawn = 0;
@@ -26,11 +29,11 @@ private:
 	//Earth
 
 	//Earth0A stats
-	std::vector<Earth0a> enemiesEarth0a;
+	std::vector<Earth0a> enEarth0a;
 	std::vector<Surface> spritesEarth0a;
-	const RectF movementRegionEarth0a{ float(-Earth0a::spriteEarth0aWidth), float(Graphics::ScreenWidth),
+	const RectF movRegEarth0a{ float(-Earth0a::spriteEarth0aWidth), float(Graphics::ScreenWidth),
 		float(-Earth0a::spriteEarth0aHeight), float(Graphics::GameHeight) };
 	std::vector<Surface> spritesBullet;
-	const RectF movementRegionEarth0aBullet{ float(-Earth0a::spriteBulletDim), float(Graphics::ScreenWidth),
+	const RectF movRegEarth0aBullet{ float(-Earth0a::spriteBulletDim), float(Graphics::ScreenWidth),
 		float(-Earth0a::spriteBulletDim), float(Graphics::GameHeight) };
 };

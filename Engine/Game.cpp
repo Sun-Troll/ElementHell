@@ -127,6 +127,7 @@ void Game::UpdateModel()
 
 		if (testEarth0LvlStarted)
 		{
+			level.front().SpawnEarth0(dt);
 			level.front().UpdateEarth0(player0, player1, multiplayer, dt);
 		}
 		// move enemy updates to level
