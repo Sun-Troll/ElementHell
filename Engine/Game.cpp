@@ -30,25 +30,6 @@ Game::Game(MainWindow& wnd)
 	player1({ 300.0f, 700.0f })
 {
 	level.push_back(Level());
-	// move to level
-	/*spritesEarth0a.resize(Earth0a::nSpritesEarth0a);
-	for (int i = 0; i < Earth0a::nSpritesEarth0a; ++i)
-	{
-		const std::string bitmapFile = "Sprites\\Enemies\\Earth0a\\Earth0a" + std::to_string(i) + ".bmp";
-		spritesEarth0a[i] = Surface(bitmapFile);
-		assert(spritesEarth0a[i].GetWidth() == Earth0a::spriteEarth0aWidth
-			&& spritesEarth0a[i].GetHeight() == Earth0a::spriteEarth0aHeight);
-	}
-	ft.FrameDur();
-	spritesBullet.resize(Earth0a::nSpritesBullet);
-	for (int i = 0; i < Earth0a::nSpritesBullet; ++i)
-	{
-		const std::string bitmapFile = "Sprites\\Enemies\\Earth0aBul\\Earth0aBul" + std::to_string(i) + ".bmp";
-		spritesBullet[i] = Surface(bitmapFile);
-		assert(spritesBullet[i].GetWidth() == Earth0a::spriteBulletDim
-			&& spritesBullet[i].GetHeight() == Earth0a::spriteBulletDim);
-	}*/
-	// move ends here
 }
 
 void Game::Go()
@@ -61,140 +42,134 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	const float frameTime = ft.FrameDur();
-	float dt = frameTime / nSubrames;
-
-	if (wnd.kbd.KeyIsPressed(VK_RETURN) && !testEarth0LvlStarted)
+	if (menu.GetState() == Menu::State::Level)
 	{
-		testEarth0LvlStarted = true;
-		level.front().StartEarth0();
+		const float frameTime = ft.FrameDur();
+		float dt = frameTime / nSubrames;
+
+		if (wnd.kbd.KeyIsPressed(VK_RETURN) && !testEarth0LvlStarted)
+		{
+			testEarth0LvlStarted = true;
+			level.front().StartEarth0();
+		}
+
+		for (int n = 0; n < nSubrames; ++n)
+		{
+			bool left0 = false;
+			bool right0 = false;
+			bool up0 = false;
+			bool down0 = false;
+			if (wnd.kbd.KeyIsPressed('A'))
+			{
+				left0 = true;
+			}
+			if (wnd.kbd.KeyIsPressed('D'))
+			{
+				right0 = true;
+			}
+			if (wnd.kbd.KeyIsPressed('W'))
+			{
+				up0 = true;
+			}
+			if (wnd.kbd.KeyIsPressed('S'))
+			{
+				down0 = true;
+			}
+			player0.Move(left0, right0, up0, down0, dt);
+			player0.Clamp();
+			player0.Fire(dt);
+			player0.UpdateBullets(dt);
+
+			if (multiplayer)
+			{
+				bool left1 = false;
+				bool right1 = false;
+				bool up1 = false;
+				bool down1 = false;
+				if (wnd.kbd.KeyIsPressed(VK_NUMPAD4))
+				{
+					left1 = true;
+				}
+				if (wnd.kbd.KeyIsPressed(VK_NUMPAD6))
+				{
+					right1 = true;
+				}
+				if (wnd.kbd.KeyIsPressed(VK_NUMPAD8))
+				{
+					up1 = true;
+				}
+				if (wnd.kbd.KeyIsPressed(VK_NUMPAD5))
+				{
+					down1 = true;
+				}
+				player1.Move(left1, right1, up1, down1, dt);
+				player1.Clamp();
+				player1.Fire(dt);
+				player1.UpdateBullets(dt);
+			}
+
+			if (testEarth0LvlStarted)
+			{
+				level.front().SpawnEarth0(dt);
+				level.front().UpdateEarth0(player0, player1, multiplayer, dt);
+			}
+		}
 	}
-
-	for (int n = 0; n < nSubrames; ++n)
+	else
 	{
-		bool left0 = false;
-		bool right0 = false;
-		bool up0 = false;
-		bool down0 = false;
-		if (wnd.kbd.KeyIsPressed('A'))
+		bool up = false;
+		bool down = false;
+		bool confirm = false;
+		while (!wnd.kbd.KeyIsEmpty())
 		{
-			left0 = true;
+			const Keyboard::Event e = wnd.kbd.ReadKey();
+			if (e.IsRelease())
+			{
+				if (e.GetCode() == 'W')
+				{
+					up = true;
+				}
+				if (e.GetCode() == 'S')
+				{
+					down = true;
+				}
+				if (e.GetCode() == VK_RETURN)
+				{
+					confirm = true;
+				}
+			}
 		}
-		if (wnd.kbd.KeyIsPressed('D'))
+		/*if (wnd.kbd.KeyIsPressed('W'))
 		{
-			right0 = true;
-		}
-		if (wnd.kbd.KeyIsPressed('W'))
-		{
-			up0 = true;
+			up = true;
 		}
 		if (wnd.kbd.KeyIsPressed('S'))
 		{
-			down0 = true;
-		}
-		player0.Move(left0, right0, up0, down0, dt);
-		player0.Clamp();
-		player0.Fire(dt);
-		player0.UpdateBullets(dt);
-
-		if (multiplayer)
-		{
-			bool left1 = false;
-			bool right1 = false;
-			bool up1 = false;
-			bool down1 = false;
-			if (wnd.kbd.KeyIsPressed(VK_NUMPAD4))
-			{
-				left1 = true;
-			}
-			if (wnd.kbd.KeyIsPressed(VK_NUMPAD6))
-			{
-				right1 = true;
-			}
-			if (wnd.kbd.KeyIsPressed(VK_NUMPAD8))
-			{
-				up1 = true;
-			}
-			if (wnd.kbd.KeyIsPressed(VK_NUMPAD5))
-			{
-				down1 = true;
-			}
-			player1.Move(left1, right1, up1, down1, dt);
-			player1.Clamp();
-			player1.Fire(dt);
-			player1.UpdateBullets(dt);
-		}
-
-		if (testEarth0LvlStarted)
-		{
-			level.front().SpawnEarth0(dt);
-			level.front().UpdateEarth0(player0, player1, multiplayer, dt);
-		}
-		// move enemy updates to level
-		/*if (enemiesTest.size() < 6)
-		{
-			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.right, 100.0f }, { -2.0f, 1.0f } });
-			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.left, 100.0f }, { 2.0f, 1.0f } });
-			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.right, 500.0f }, { -3.0f, -2.0f } });
-			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.left, 500.0f }, { 3.0f, -2.0f } });
-			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.right, 200.0f }, { -2.0f, 0.0f } });
-			enemiesTest.emplace_back(Earth0a{ { movementRegionEarth0a.left, 200.0f }, { 2.0f, 0.0f } });
-		}
-		else
-		{
-			for (auto& e : enemiesTest)
-			{
-				e.Move(dt);
-				e.Fire(dt);
-				e.UpdateBullets(movementRegionEarth0aBullet, dt);
-				e.HitPlayer(player0);
-				e.GetHit(player0, dt);
-				if (multiplayer)
-				{
-					e.HitPlayer(player1);
-					e.GetHit(player1, dt);
-				}
-			}
-			for (int i = 0; i < enemiesTest.size(); ++i)
-			{
-				if (enemiesTest[i].Clamp(movementRegionEarth0a) && enemiesTest[i].BulletsEmpty())
-				{
-					std::swap(enemiesTest[i], enemiesTest.back());
-					enemiesTest.pop_back();
-					--i;
-				}
-				else if (enemiesTest[i].IsDead())
-				{
-					std::swap(enemiesTest[i], enemiesTest.back());
-					enemiesTest.pop_back();
-					--i;
-				}
-			}
+			down = true;
 		}*/
-		// move ends here
-
+		menu.Select(up, down, confirm);
 	}
 }
 
 void Game::ComposeFrame()
 {
-	hud.Draw(player0.GetHpMax(), player0.GetHpCur(), gfx);
-	player0.DrawBullets(gfx);
-	player0.Draw(gfx);
-	if (multiplayer)
+	if (menu.GetState() == Menu::State::Level)
 	{
-		player1.DrawBullets(gfx);
-		player1.Draw(gfx);
+		hud.Draw(player0.GetHpMax(), player0.GetHpCur(), gfx);
+		player0.DrawBullets(gfx);
+		player0.Draw(gfx);
+		if (multiplayer)
+		{
+			player1.DrawBullets(gfx);
+			player1.Draw(gfx);
+		}
+		if (testEarth0LvlStarted)
+		{
+			level.front().DrawEarth0(gfx);
+		}
 	}
-	if (testEarth0LvlStarted)
+	else
 	{
-		level.front().DrawEarth0(gfx);
+		menu.Draw(gfx);
 	}
-	// move enemy draw to level
-	/*for (const auto& e : enemiesTest)
-	{
-		e.Draw(spritesEarth0a, gfx);
-		e.DrawBullets(spritesBullet, gfx);
-	}*/
-	// move ends here
 }

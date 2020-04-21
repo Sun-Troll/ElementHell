@@ -27,6 +27,7 @@
 #include "Player.h"
 #include "HUD.h"
 #include "Level.h"
+#include "Menu.h"
 
 class Game
 {
@@ -47,20 +48,12 @@ private:
 	/********************************/
 	/*  User Variables              */
 	FrameTimer ft;
+	Menu menu;
 	HUD hud;
 	Player player0;
 	Player player1;
 	std::vector<Level> level;
 	bool testEarth0LvlStarted = false;
-	// move to level
-	/*std::vector<Earth0a> enemiesTest;
-	std::vector<Surface> spritesEarth0a;
-	const RectF movementRegionEarth0a{ float(-Earth0a::spriteEarth0aWidth), float(Graphics::ScreenWidth),
-		float(-Earth0a::spriteEarth0aHeight), float(Graphics::GameHeight) };
-	std::vector<Surface> spritesBullet;
-	const RectF movementRegionEarth0aBullet{ float(-Earth0a::spriteBulletDim), float(Graphics::ScreenWidth),
-		float(-Earth0a::spriteBulletDim), float(Graphics::GameHeight) };*/
-	// move end here
 	bool multiplayer = false;
 	int nSubrames = 12;
 	/********************************/
