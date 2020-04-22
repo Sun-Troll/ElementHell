@@ -115,7 +115,7 @@ void Earth0a::GetHit(Player& player, float dt)
 	}
 }
 
-bool Earth0a::IsDead()
+bool Earth0a::IsDead() const
 {
 	return hpCur <= 0.0f;
 }

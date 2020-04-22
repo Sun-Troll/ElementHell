@@ -30,7 +30,7 @@ public:
 	void UpdateBullets(const RectF& movementRegionBullet, float dt);
 	void HitPlayer(Player& player);
 	void GetHit(Player& player, float dt);
-	bool IsDead();
+	bool IsDead() const;
 	void PopBullet(int i);
 	bool BulletsEmpty() const;
 	void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
@@ -61,7 +61,6 @@ private:
 	//static constexpr int nSpritesBulletCenter = 4;
 	//static constexpr int spriteBulletCenterDim = 32; // assumes same width/height
 	std::vector<Bullet> bullets;
-	bool isFiring = false;
 public:
 	static constexpr int nSpritesBullet = 4;
 	static constexpr int spriteBulletDim = 32; // assumes same width/height
