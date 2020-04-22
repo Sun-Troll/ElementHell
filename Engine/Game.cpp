@@ -119,6 +119,8 @@ void Game::UpdateModel()
 	{
 		bool up = false;
 		bool down = false;
+		bool left = false;
+		bool right = false;
 		bool confirm = false;
 		while (!wnd.kbd.KeyIsEmpty())
 		{
@@ -133,21 +135,21 @@ void Game::UpdateModel()
 				{
 					down = true;
 				}
+				if (e.GetCode() == 'A' || e.GetCode() == VK_LEFT)
+				{
+					left = true;
+				}
+				if (e.GetCode() == 'D' || e.GetCode() == VK_RIGHT)
+				{
+					right = true;
+				}
 				if (e.GetCode() == VK_SPACE || e.GetCode() == VK_RETURN)
 				{
 					confirm = true;
 				}
 			}
 		}
-		/*if (wnd.kbd.KeyIsPressed('W'))
-		{
-			up = true;
-		}
-		if (wnd.kbd.KeyIsPressed('S'))
-		{
-			down = true;
-		}*/
-		menu.Select(up, down, confirm);
+		menu.Select(up, down, left, right, confirm);
 	}
 }
 

@@ -18,8 +18,20 @@ public:
 		QuitGame,
 		End
 	};
+	enum class SelectionHub
+	{
+		Earth,
+		Ice,
+		TestBullshit00,
+		TestBullshit01,
+		TestBullshit02,
+		Stats,
+		Save,
+		TestBullshit10,
+		End
+	};
 public:
-	void Select(bool up, bool down, bool confirm);
+	void Select(bool up, bool down, bool left, bool right, bool confirm);
 	State GetState() const;
 	void Draw(Graphics& gfx) const;
 private:
@@ -29,4 +41,5 @@ private:
 	const Surface hubHigh = Surface("Sprites\\Menus\\HubMenu\\HubMenuHigh.bmp");
 	State curState = State::Main;
 	SelectionMain curSelectMain = SelectionMain::NewGame;
+	SelectionHub curSelectHub = SelectionHub::Earth;
 };
