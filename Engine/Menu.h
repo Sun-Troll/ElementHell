@@ -23,8 +23,10 @@ public:
 	State GetState() const;
 	void Draw(Graphics& gfx) const;
 private:
-	const Surface back = Surface("Sprites\\Menus\\MainMenu\\MainMenuBack.bmp");
-	const Surface high = Surface("Sprites\\Menus\\MainMenu\\MainMenuHigh.bmp");
+	const Surface mainBack = Surface("Sprites\\Menus\\MainMenu\\MainMenuBack.bmp");
+	const Surface mainHigh = Surface("Sprites\\Menus\\MainMenu\\MainMenuHigh.bmp");
+	const Surface hubBack = Surface("Sprites\\Menus\\HubMenu\\HubMenuBack.bmp");
+	const Surface hubHigh = Surface("Sprites\\Menus\\HubMenu\\HubMenuHigh.bmp");
 	State curState = State::Main;
 	SelectionMain curSelectMain = SelectionMain::NewGame;
 };

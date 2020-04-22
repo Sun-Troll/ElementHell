@@ -43,7 +43,7 @@ void Menu::Draw(Graphics& gfx) const
 {
 	if (curState == State::Main)
 	{
-		gfx.DrawSpriteNonChroma(0, 0, back);
-		gfx.DrawSprite(100, 230 + int(curSelectMain) * 200, high);
+		gfx.DrawSpriteNonChroma(0, 0, mainBack);
+		gfx.DrawSprite(100, 230 + int(curSelectMain) * 200, mainHigh);
 	}
 }

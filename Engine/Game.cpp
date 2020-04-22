@@ -125,15 +125,15 @@ void Game::UpdateModel()
 			const Keyboard::Event e = wnd.kbd.ReadKey();
 			if (e.IsRelease())
 			{
-				if (e.GetCode() == 'W')
+				if (e.GetCode() == 'W' || e.GetCode() == VK_UP)
 				{
 					up = true;
 				}
-				if (e.GetCode() == 'S')
+				if (e.GetCode() == 'S' || e.GetCode() == VK_DOWN)
 				{
 					down = true;
 				}
-				if (e.GetCode() == VK_RETURN)
+				if (e.GetCode() == VK_SPACE || e.GetCode() == VK_RETURN)
 				{
 					confirm = true;
 				}
