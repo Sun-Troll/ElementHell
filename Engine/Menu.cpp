@@ -136,6 +136,6 @@ void Menu::Draw(Graphics& gfx) const
 	else if (curState == State::StatsUp)
 	{
 		gfx.DrawSpriteNonChroma(0, 0, statsBack);
-		gfx.DrawSprite(20, 30 + int(curSelectStats) * 100, statsHigh);
+		gfx.DrawSprite(20, 130 + int(curSelectStats) * 100, statsHigh);
 	}
 }
