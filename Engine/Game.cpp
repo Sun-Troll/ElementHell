@@ -122,6 +122,7 @@ void Game::UpdateModel()
 		bool left = false;
 		bool right = false;
 		bool confirm = false;
+		bool back = false;
 		while (!wnd.kbd.KeyIsEmpty())
 		{
 			const Keyboard::Event e = wnd.kbd.ReadKey();
@@ -147,9 +148,13 @@ void Game::UpdateModel()
 				{
 					confirm = true;
 				}
+				if (e.GetCode() == VK_ESCAPE || e.GetCode() == VK_BACK)
+				{
+					back = true;
+				}
 			}
 		}
-		menu.Select(up, down, left, right, confirm);
+		menu.Select(up, down, left, right, confirm, back);
 	}
 }
 

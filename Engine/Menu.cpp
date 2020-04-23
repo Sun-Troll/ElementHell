@@ -1,6 +1,7 @@
 #include "Menu.h"
+#include <fstream>
 
-void Menu::Select(bool up, bool down, bool left, bool right, bool confirm)
+void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool back)
 {
 	if (curState == State::Main)
 	{
@@ -83,6 +84,10 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm)
 			else if (curSelectHub == SelectionHub::Stats)
 			{
 				curState = State::StatsUp;
+			}
+			else if (curSelectHub == SelectionHub::Save)
+			{
+				curState = State::Save;
 			}
 		}
 	}
@@ -186,9 +191,44 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm)
 				}
 			}
 		}
-		if (confirm)
+		if (back)
 		{
 			curState = State::Hub;
+		}
+	}
+	else if (curState == State::Save || curState == State::Load)
+	{
+		int x = 4;
+		if (up)
+		{
+			int temp = int(curSelectSaveLoad);
+			--temp;
+			if (temp < 0)
+			{
+				temp = int(SelectionSaveLoad::End) - 1;
+			}
+			curSelectSaveLoad = SelectionSaveLoad(temp);
+		}
+		if (down)
+		{
+			int temp = int(curSelectSaveLoad);
+			++temp;
+			if (temp >= int(SelectionSaveLoad::End))
+			{
+				temp = 0;
+			}
+			curSelectSaveLoad = SelectionSaveLoad(temp);
+		}
+		if (back)
+		{
+			if (curState == State::Save)
+			{
+				curState = State::Hub;
+			}
+			else if (curState == State::Load)
+			{
+				curState = State::Main;
+			}
 		}
 	}
 }
@@ -203,18 +243,18 @@ void Menu::Draw(Graphics& gfx) const
 	if (curState == State::Main)
 	{
 		gfx.DrawSpriteNonChroma(0, 0, mainBack);
-		gfx.DrawSprite(100, 230 + int(curSelectMain) * 200, mainHigh);
+		gfx.DrawSprite(100, 230 + int(curSelectMain) * 200, HighL);
 	}
 	else if (curState == State::Hub)
 	{
 		gfx.DrawSpriteNonChroma(0, 0, hubBack);
 		gfx.DrawSprite(20 + int(curSelectHub) / int(SelectionHub::Stats) * 300,
-			30 + int(curSelectHub) % int(SelectionHub::Stats) * 100, hubHigh);
+			30 + int(curSelectHub) % int(SelectionHub::Stats) * 100, HighS);
 	}
 	else if (curState == State::StatsUp)
 	{
 		gfx.DrawSpriteNonChroma(0, 0, statsBack);
-		gfx.DrawSprite(20, 130 + int(curSelectStats) * 100, statsHigh);
+		gfx.DrawSprite(20, 130 + int(curSelectStats) * 100, HighS);
 		for (int n = 0; n < stats0.points; ++n)
 		{
 			gfx.DrawSpriteNonChroma(225 + n % 12 * 25, 30 + n / 12 * 30, statsPoint);
@@ -235,5 +275,17 @@ void Menu::Draw(Graphics& gfx) const
 		{
 			gfx.DrawSpriteNonChroma(230 + n * 60, 430, statsUpgr);
 		}
+	}
+	else if (curState == State::Save || curState == State::Load)
+	{
+		if (curState == State::Save)
+		{
+			gfx.DrawSpriteNonChroma(0, 0, safeBack);
+		}
+		else if (curState == State::Load)
+		{
+			//gfx.DrawSpriteNonChroma(0, 0, loadBack);
+		}
+		gfx.DrawSprite(100, 130 + int(curSelectSaveLoad) * 200, HighL);
 	}
 }
