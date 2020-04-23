@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Graphics.h"
+#include "Stats.h"
 
 class Menu
 {
@@ -51,8 +52,11 @@ private:
 	const Surface statsBack = Surface("Sprites\\Menus\\StatsMenu\\StatsMenuBack.bmp");
 	const Surface statsHigh = Surface("Sprites\\Menus\\StatsMenu\\StatsMenuHigh.bmp");
 	const Surface statsUpgr = Surface("Sprites\\Menus\\StatsMenu\\StatsMenuUpgr.bmp");
+	const Surface statsPoint = Surface("Sprites\\Menus\\StatsMenu\\StatsMenuPoint.bmp");
 	State curState = State::Main;
 	SelectionMain curSelectMain = SelectionMain::NewGame;
 	SelectionHub curSelectHub = SelectionHub::Earth;
 	SelectionStats curSelectStats = SelectionStats::Hp;
+	Stats stats0;
+	Stats stats1;
 };
