@@ -80,6 +80,37 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm)
 			{
 				curState = State::Level;
 			}
+			else if (curSelectHub == SelectionHub::Stats)
+			{
+				curState = State::StatsUp;
+			}
+		}
+	}
+	else if (curState == State::StatsUp)
+	{
+		if (up)
+		{
+			int temp = int(curSelectStats);
+			--temp;
+			if (temp < 0)
+			{
+				temp = int(SelectionStats::End) - 1;
+			}
+			curSelectStats = SelectionStats(temp);
+		}
+		if (down)
+		{
+			int temp = int(curSelectStats);
+			++temp;
+			if (temp >= int(SelectionStats::End))
+			{
+				temp = 0;
+			}
+			curSelectStats = SelectionStats(temp);
+		}
+		if (confirm)
+		{
+			curState = State::Hub;
 		}
 	}
 }
@@ -96,10 +127,15 @@ void Menu::Draw(Graphics& gfx) const
 		gfx.DrawSpriteNonChroma(0, 0, mainBack);
 		gfx.DrawSprite(100, 230 + int(curSelectMain) * 200, mainHigh);
 	}
-	if (curState == State::Hub)
+	else if (curState == State::Hub)
 	{
 		gfx.DrawSpriteNonChroma(0, 0, hubBack);
 		gfx.DrawSprite(20 + int(curSelectHub) / int(SelectionHub::Stats) * 300,
 			30 + int(curSelectHub) % int(SelectionHub::Stats) * 100, hubHigh);
+	}
+	else if (curState == State::StatsUp)
+	{
+		gfx.DrawSpriteNonChroma(0, 0, statsBack);
+		gfx.DrawSprite(20, 30 + int(curSelectStats) * 100, statsHigh);
 	}
 }

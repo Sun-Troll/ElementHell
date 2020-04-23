@@ -62,10 +62,12 @@ public:
 private:
 	VecF pos;
 	float speed = 200.0f;
-	float hpMax = 1000.0f;
+	static constexpr float hpBase = 1000.0f;
+	float hpMax = hpBase;
 	float hpCur = hpMax;
 	static constexpr float radius = 5.0f;
-	float maxFireTimePlayerAnim = 0.5f;
+	static constexpr float baseFireTimePlayerAnim = 0.5f;
+	float maxFireTimePlayerAnim = baseFireTimePlayerAnim;
 	float curFireBasePlayerAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.2f;
 	float drawDamageTimeCur = drawDamageTimeMax;
@@ -78,7 +80,8 @@ private:
 	static constexpr float pi = 3.141592741f;
 
 	//BulletCenter
-	float bulletCenterDPS = 100.0f;
+	static constexpr float baseBulletCenterDPS = 100.0f;
+	float bulletCenterDPS = baseBulletCenterDPS;
 	static constexpr float bulletCenterSpeed = 400.0f;
 	static constexpr int nSpritesBulletCenter = 2;
 	static constexpr int spriteBulletCenterDim = 12; // assumes same width/height
@@ -90,7 +93,8 @@ private:
 	bool isFiring = false;
 
 	//BulletSide
-	float bulletSideDamage = 10.0f;
+	static constexpr float baseBulletSideDamage = 10.0f;
+	float bulletSideDamage = baseBulletSideDamage;
 	static constexpr float bulletSideSpeed = 600.0f;
 	static constexpr float bulletSideSpawnDist = 40.0f;
 	static constexpr int nSpritesBulletSide = 2;
