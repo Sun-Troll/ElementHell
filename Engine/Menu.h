@@ -71,4 +71,5 @@ private:
 	SelectionSaveLoad curSelectSaveLoad = SelectionSaveLoad::Slot1;
 	Stats stats0;
 	Stats stats1;
+	Stats statsTemp;
 };

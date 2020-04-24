@@ -87,6 +87,7 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 			}
 			else if (curSelectHub == SelectionHub::Stats)
 			{
+				statsTemp = stats0;
 				curState = State::StatsUp;
 			}
 			else if (curSelectHub == SelectionHub::Save)
@@ -119,36 +120,36 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 		}
 		if (left)
 		{
-			if (stats0.points < 24)
+			if (statsTemp.points < 24)
 			{
 				switch (curSelectStats)
 				{
 				case Menu::SelectionStats::Hp:
-					if (stats0.hp > 0)
+					if (statsTemp.hp > 0)
 					{
-						--stats0.hp;
-						++stats0.points;
+						--statsTemp.hp;
+						++statsTemp.points;
 					}
 					break;
 				case Menu::SelectionStats::Rpm:
-					if (stats0.rpm > 0)
+					if (statsTemp.rpm > 0)
 					{
-						--stats0.rpm;
-						++stats0.points;
+						--statsTemp.rpm;
+						++statsTemp.points;
 					}
 					break;
 				case Menu::SelectionStats::DmgCent:
-					if (stats0.dmgCent > 0)
+					if (statsTemp.dmgCent > 0)
 					{
-						--stats0.dmgCent;
-						++stats0.points;
+						--statsTemp.dmgCent;
+						++statsTemp.points;
 					}
 					break;
 				case Menu::SelectionStats::DmgSide:
-					if (stats0.dmgSide > 0)
+					if (statsTemp.dmgSide > 0)
 					{
-						--stats0.dmgSide;
-						++stats0.points;
+						--statsTemp.dmgSide;
+						++statsTemp.points;
 					}
 					break;
 				default:
@@ -158,36 +159,36 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 		}
 		if (right)
 		{
-			if (stats0.points > 0)
+			if (statsTemp.points > 0)
 			{
 				switch (curSelectStats)
 				{
 				case Menu::SelectionStats::Hp:
-					if (stats0.hp < 5)
+					if (statsTemp.hp < 5)
 					{
-						++stats0.hp;
-						--stats0.points;
+						++statsTemp.hp;
+						--statsTemp.points;
 					}
 					break;
 				case Menu::SelectionStats::Rpm:
-					if (stats0.rpm < 5)
+					if (statsTemp.rpm < 5)
 					{
-						++stats0.rpm;
-						--stats0.points;
+						++statsTemp.rpm;
+						--statsTemp.points;
 					}
 					break;
 				case Menu::SelectionStats::DmgCent:
-					if (stats0.dmgCent < 5)
+					if (statsTemp.dmgCent < 5)
 					{
-						++stats0.dmgCent;
-						--stats0.points;
+						++statsTemp.dmgCent;
+						--statsTemp.points;
 					}
 					break;
 				case Menu::SelectionStats::DmgSide:
-					if (stats0.dmgSide < 5)
+					if (statsTemp.dmgSide < 5)
 					{
-						++stats0.dmgSide;
-						--stats0.points;
+						++statsTemp.dmgSide;
+						--statsTemp.points;
 					}
 					break;
 				default:
@@ -197,6 +198,11 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 		}
 		if (back)
 		{
+			curState = State::Hub;
+		}
+		if (confirm)
+		{
+			stats0 = statsTemp;
 			curState = State::Hub;
 		}
 	}
@@ -276,23 +282,23 @@ void Menu::Draw(Graphics& gfx) const
 	{
 		gfx.DrawSpriteNonChroma(0, 0, statsBack);
 		gfx.DrawSprite(20, 130 + int(curSelectStats) * 100, HighS);
-		for (int n = 0; n < stats0.points; ++n)
+		for (int n = 0; n < statsTemp.points; ++n)
 		{
 			gfx.DrawSpriteNonChroma(225 + n % 12 * 25, 30 + n / 12 * 30, statsPoint);
 		}
-		for (int n = 0; n < stats0.hp; ++n)
+		for (int n = 0; n < statsTemp.hp; ++n)
 		{
 			gfx.DrawSpriteNonChroma(230 + n * 60, 130, statsUpgr);
 		}
-		for (int n = 0; n < stats0.rpm; ++n)
+		for (int n = 0; n < statsTemp.rpm; ++n)
 		{
 			gfx.DrawSpriteNonChroma(230 + n * 60, 230, statsUpgr);
 		}
-		for (int n = 0; n < stats0.dmgCent; ++n)
+		for (int n = 0; n < statsTemp.dmgCent; ++n)
 		{
 			gfx.DrawSpriteNonChroma(230 + n * 60, 330, statsUpgr);
 		}
-		for (int n = 0; n < stats0.dmgSide; ++n)
+		for (int n = 0; n < statsTemp.dmgSide; ++n)
 		{
 			gfx.DrawSpriteNonChroma(230 + n * 60, 430, statsUpgr);
 		}
