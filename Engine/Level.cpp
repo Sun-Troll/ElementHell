@@ -204,26 +204,32 @@ void Level::UpdateEarth0(Player& player0, Player& player1, bool multiplayer, flo
 	timer += dt;
 	for (auto& e : enEarth0a)
 	{
-		e.Move(dt);
-		e.Fire(dt);
+		if (!e.IsDead())
+		{
+			e.Move(dt);
+			e.Fire(dt);
+			e.GetHit(player0, dt);
+			if (multiplayer)
+			{
+				e.GetHit(player1, dt);
+			}
+		}
 		e.UpdateBullets(movRegEarth0aBullet, dt);
 		e.HitPlayer(player0);
-		e.GetHit(player0, dt);
 		if (multiplayer)
 		{
 			e.HitPlayer(player1);
-			e.GetHit(player1, dt);
 		}
 	}
 	for (int i = 0; i < enEarth0a.size(); ++i)
 	{
-		if (enEarth0a[i].Clamp(movRegEarth0a) && enEarth0a[i].BulletsEmpty())
+		if (enEarth0a[i].IsDead() && enEarth0a[i].BulletsEmpty())
 		{
 			std::swap(enEarth0a[i], enEarth0a.back());
 			enEarth0a.pop_back();
 			--i;
 		}
-		else if (enEarth0a[i].IsDead())
+		else if (enEarth0a[i].Clamp(movRegEarth0a) && enEarth0a[i].BulletsEmpty())
 		{
 			std::swap(enEarth0a[i], enEarth0a.back());
 			enEarth0a.pop_back();
@@ -236,7 +242,10 @@ void Level::DrawEarth0(Graphics& gfx) const
 {
 	for (const auto& e : enEarth0a)
 	{
-		e.Draw(spritesEarth0a, gfx);
+		if (!e.IsDead())
+		{
+			e.Draw(spritesEarth0a, gfx);
+		}
 		e.DrawBullets(spritesBullet, gfx);
 	}
 }

@@ -117,11 +117,18 @@ void Game::UpdateModel()
 	}
 	else
 	{
-		bool up = false;
-		bool down = false;
-		bool left = false;
-		bool right = false;
-		bool confirm = false;
+		bool up0 = false;
+		bool down0 = false;
+		bool left0 = false;
+		bool right0 = false;
+		bool confirm0 = false;
+		bool back0 = false;
+		bool up1 = false;
+		bool down1 = false;
+		bool left1 = false;
+		bool right1 = false;
+		bool confirm1 = false;
+		bool back1 = false;
 		while (!wnd.kbd.KeyIsEmpty())
 		{
 			const Keyboard::Event e = wnd.kbd.ReadKey();
@@ -129,27 +136,62 @@ void Game::UpdateModel()
 			{
 				if (e.GetCode() == 'W' || e.GetCode() == VK_UP)
 				{
-					up = true;
+					up0 = true;
 				}
 				if (e.GetCode() == 'S' || e.GetCode() == VK_DOWN)
 				{
-					down = true;
+					down0 = true;
 				}
 				if (e.GetCode() == 'A' || e.GetCode() == VK_LEFT)
 				{
-					left = true;
+					left0 = true;
 				}
 				if (e.GetCode() == 'D' || e.GetCode() == VK_RIGHT)
 				{
-					right = true;
+					right0 = true;
 				}
 				if (e.GetCode() == VK_SPACE || e.GetCode() == VK_RETURN)
 				{
-					confirm = true;
+					confirm0 = true;
+				}
+				if (e.GetCode() == 'Q' || e.GetCode() == VK_ESCAPE || e.GetCode() == VK_BACK)
+				{
+					back0 = true;
+				}
+				if (multiplayer)
+				{
+					if (e.GetCode() == VK_NUMPAD8)
+					{
+						up1 = true;
+					}
+					if (e.GetCode() == VK_NUMPAD5)
+					{
+						down1 = true;
+					}
+					if (e.GetCode() == VK_NUMPAD4)
+					{
+						left1 = true;
+					}
+					if (e.GetCode() == VK_NUMPAD6)
+					{
+						right1 = true;
+					}
+					if (e.GetCode() == VK_NUMPAD0)
+					{
+						confirm1 = true;
+					}
+					if (e.GetCode() == VK_NUMPAD7)
+					{
+						back1 = true;
+					}
 				}
 			}
 		}
-		menu.Select(up, down, left, right, confirm);
+		menu.Select(up0, down0, left0, right0, confirm0, back0);
+		if (multiplayer)
+		{
+			menu.SelectMultiplayer(up1, down1, left1, right1, confirm1, back1);
+		}
 	}
 }
 
