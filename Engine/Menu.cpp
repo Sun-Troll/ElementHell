@@ -31,6 +31,10 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 			{
 				curState = State::Hub;
 			}
+			else if (curSelectMain == SelectionMain::LoadGame)
+			{
+				curState = State::Load;
+			}
 		}
 	}
 	else if (curState == State::Hub)
@@ -284,7 +288,7 @@ void Menu::Draw(Graphics& gfx) const
 		}
 		else if (curState == State::Load)
 		{
-			//gfx.DrawSpriteNonChroma(0, 0, loadBack);
+			gfx.DrawSpriteNonChroma(0, 0, loadBack);
 		}
 		gfx.DrawSprite(100, 130 + int(curSelectSaveLoad) * 200, HighL);
 	}

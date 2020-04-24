@@ -63,6 +63,7 @@ private:
 	const Surface statsUpgr = Surface("Sprites\\Menus\\StatsMenu\\StatsMenuUpgr.bmp");
 	const Surface statsPoint = Surface("Sprites\\Menus\\StatsMenu\\StatsMenuPoint.bmp");
 	const Surface safeBack = Surface("Sprites\\Menus\\SaveMenu\\SaveMenuBack.bmp");
+	const Surface loadBack = Surface("Sprites\\Menus\\LoadMenu\\LoadMenuBack.bmp");
 	State curState = State::Main;
 	SelectionMain curSelectMain = SelectionMain::NewGame;
 	SelectionHub curSelectHub = SelectionHub::Earth;
