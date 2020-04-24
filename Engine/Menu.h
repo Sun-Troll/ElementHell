@@ -52,6 +52,7 @@ public:
 	};
 public:
 	void Select(bool up, bool down, bool left, bool right, bool confirm, bool back);
+	void SelectMultiplayer(bool up, bool down, bool left, bool right, bool confirm, bool back);
 	State GetState() const;
 	void Draw(Graphics& gfx) const;
 private:
@@ -69,6 +70,7 @@ private:
 	SelectionHub curSelectHub = SelectionHub::Earth;
 	SelectionStats curSelectStats = SelectionStats::Hp;
 	SelectionSaveLoad curSelectSaveLoad = SelectionSaveLoad::Slot1;
+	bool secondStatsUp = false;
 	Stats stats0;
 	Stats stats1;
 	Stats statsTemp;

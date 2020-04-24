@@ -1,10 +1,12 @@
 #include "Menu.h"
+#include <cassert>
 #include <fstream>
 
 void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool back)
 {
 	if (curState == State::Main)
 	{
+		assert(!secondStatsUp);
 		if (up)
 		{
 			int temp = int(curSelectMain);
@@ -39,6 +41,7 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 	}
 	else if (curState == State::Hub)
 	{
+		assert(!secondStatsUp);
 		if (up)
 		{
 			int temp = int(curSelectHub);
@@ -96,8 +99,9 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 			}
 		}
 	}
-	else if (curState == State::StatsUp)
+	else if (curState == State::StatsUp && !secondStatsUp)
 	{
+		assert(!secondStatsUp);
 		if (up)
 		{
 			int temp = int(curSelectStats);
@@ -208,7 +212,7 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 	}
 	else if (curState == State::Save || curState == State::Load)
 	{
-		int x = 4;
+		assert(!secondStatsUp);
 		if (up)
 		{
 			int temp = int(curSelectSaveLoad);
@@ -247,15 +251,146 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 				const std::string filename = "Saves\\save" + std::to_string(int(curSelectSaveLoad)) + ".dat";
 				std::ofstream saveFile(filename, std::ios::binary);
 				saveFile.write(reinterpret_cast<char*>(&stats0), sizeof(stats0));
+				saveFile.write(reinterpret_cast<char*>(&stats1), sizeof(stats1));
 				curState = State::Hub;
 			}
 			else if (curState == State::Load)
 			{
 				const std::string filename = "Saves\\save" + std::to_string(int(curSelectSaveLoad)) + ".dat";
 				std::ifstream loadFile(filename, std::ios::binary);
-				loadFile.read(reinterpret_cast<char*>(&stats0), sizeof(stats0));
-				curState = State::Hub;
+				if (loadFile)
+				{
+					loadFile.read(reinterpret_cast<char*>(&stats0), sizeof(stats0));
+					loadFile.read(reinterpret_cast<char*>(&stats1), sizeof(stats1));
+					curState = State::Hub;
+				}
 			}
+		}
+	}
+}
+
+void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool confirm, bool back)
+{
+	if (curState == State::Hub)
+	{
+		assert(!secondStatsUp);
+		if (confirm && curSelectHub == SelectionHub::Stats)
+		{
+			secondStatsUp = true;
+			statsTemp = stats1;
+			curState = State::StatsUp;
+		}
+	}
+	else if (secondStatsUp)
+	{
+		if (up)
+		{
+			int temp = int(curSelectStats);
+			--temp;
+			if (temp < 0)
+			{
+				temp = int(SelectionStats::End) - 1;
+			}
+			curSelectStats = SelectionStats(temp);
+		}
+		if (down)
+		{
+			int temp = int(curSelectStats);
+			++temp;
+			if (temp >= int(SelectionStats::End))
+			{
+				temp = 0;
+			}
+			curSelectStats = SelectionStats(temp);
+		}
+		if (left)
+		{
+			if (statsTemp.points < 24)
+			{
+				switch (curSelectStats)
+				{
+				case Menu::SelectionStats::Hp:
+					if (statsTemp.hp > 0)
+					{
+						--statsTemp.hp;
+						++statsTemp.points;
+					}
+					break;
+				case Menu::SelectionStats::Rpm:
+					if (statsTemp.rpm > 0)
+					{
+						--statsTemp.rpm;
+						++statsTemp.points;
+					}
+					break;
+				case Menu::SelectionStats::DmgCent:
+					if (statsTemp.dmgCent > 0)
+					{
+						--statsTemp.dmgCent;
+						++statsTemp.points;
+					}
+					break;
+				case Menu::SelectionStats::DmgSide:
+					if (statsTemp.dmgSide > 0)
+					{
+						--statsTemp.dmgSide;
+						++statsTemp.points;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		if (right)
+		{
+			if (statsTemp.points > 0)
+			{
+				switch (curSelectStats)
+				{
+				case Menu::SelectionStats::Hp:
+					if (statsTemp.hp < 5)
+					{
+						++statsTemp.hp;
+						--statsTemp.points;
+					}
+					break;
+				case Menu::SelectionStats::Rpm:
+					if (statsTemp.rpm < 5)
+					{
+						++statsTemp.rpm;
+						--statsTemp.points;
+					}
+					break;
+				case Menu::SelectionStats::DmgCent:
+					if (statsTemp.dmgCent < 5)
+					{
+						++statsTemp.dmgCent;
+						--statsTemp.points;
+					}
+					break;
+				case Menu::SelectionStats::DmgSide:
+					if (statsTemp.dmgSide < 5)
+					{
+						++statsTemp.dmgSide;
+						--statsTemp.points;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		if (back)
+		{
+			secondStatsUp = false;
+			curState = State::Hub;
+		}
+		if (confirm)
+		{
+			secondStatsUp = false;
+			stats1 = statsTemp;
+			curState = State::Hub;
 		}
 	}
 }
