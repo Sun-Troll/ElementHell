@@ -234,6 +234,23 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 				curState = State::Main;
 			}
 		}
+		if (confirm)
+		{
+			if (curState == State::Save)
+			{
+				const std::string filename = "Saves\\save" + std::to_string(int(curSelectSaveLoad)) + ".dat";
+				std::ofstream saveFile(filename, std::ios::binary);
+				saveFile.write(reinterpret_cast<char*>(&stats0), sizeof(stats0));
+				curState = State::Hub;
+			}
+			else if (curState == State::Load)
+			{
+				const std::string filename = "Saves\\save" + std::to_string(int(curSelectSaveLoad)) + ".dat";
+				std::ifstream loadFile(filename, std::ios::binary);
+				loadFile.read(reinterpret_cast<char*>(&stats0), sizeof(stats0));
+				curState = State::Hub;
+			}
+		}
 	}
 }
 
