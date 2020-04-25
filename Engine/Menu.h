@@ -2,6 +2,7 @@
 
 #include "Graphics.h"
 #include "Stats.h"
+#include "SoundEffect.h"
 
 class Menu
 {
@@ -67,6 +68,14 @@ private:
 	const Surface statsPoint = Surface("Sprites\\Menus\\StatsMenu\\StatsMenuPoint.bmp");
 	const Surface safeBack = Surface("Sprites\\Menus\\SaveMenu\\SaveMenuBack.bmp");
 	const Surface loadBack = Surface("Sprites\\Menus\\LoadMenu\\LoadMenuBack.bmp");
+	Sound statUp = Sound(L"Sounds\\Menu\\StatUp.wav");
+	Sound statDown = Sound(L"Sounds\\Menu\\StatDown.wav");
+	Sound upDown = Sound(L"Sounds\\Menu\\UpDown.wav");
+	Sound loadFail = Sound(L"Sounds\\Menu\\LoadFail.wav");
+	Sound confirmS = Sound(L"Sounds\\Menu\\Confirm.wav");
+	Sound cancel = Sound(L"Sounds\\Menu\\Cancel.wav");
+	Sound startGame = Sound(L"Sounds\\Menu\\StartGame.wav");
+	Sound startLevel = Sound(L"Sounds\\Menu\\StartLevel.wav");
 	State curState = State::Main;
 	SelectionMain curSelectMain = SelectionMain::NewGame;
 	SelectionHub curSelectHub = SelectionHub::Earth;
