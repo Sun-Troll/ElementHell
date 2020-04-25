@@ -26,10 +26,9 @@ Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
-	player0({ 200.0f, 700.0f }),
-	player1({ 300.0f, 700.0f })
+	player0(spawnPosP0),
+	player1(spawnPosP1)
 {
-	level.push_back(Level());
 }
 
 void Game::Go()
@@ -47,71 +46,91 @@ void Game::UpdateModel()
 		const float frameTime = ft.FrameDur();
 		float dt = frameTime / nSubrames;
 
-		if (wnd.kbd.KeyIsPressed(VK_RETURN) && !testEarth0LvlStarted)
+		if (level.empty()) // change based on cur lvl
 		{
-			testEarth0LvlStarted = true;
+			assert(level.empty());
+			player0.Respawn(spawnPosP0, menu.GetStats(false));
+			player1.Respawn(spawnPosP1, menu.GetStats(true));
+			level.push_back(Level());
 			level.front().StartEarth0();
 		}
 
-		for (int n = 0; n < nSubrames; ++n)
+		else if (!level.front().GetFailed())
 		{
-			bool left0 = false;
-			bool right0 = false;
-			bool up0 = false;
-			bool down0 = false;
-			if (wnd.kbd.KeyIsPressed('A'))
+			assert(level.size() == 1);
+			for (int n = 0; n < nSubrames; ++n)
 			{
-				left0 = true;
-			}
-			if (wnd.kbd.KeyIsPressed('D'))
-			{
-				right0 = true;
-			}
-			if (wnd.kbd.KeyIsPressed('W'))
-			{
-				up0 = true;
-			}
-			if (wnd.kbd.KeyIsPressed('S'))
-			{
-				down0 = true;
-			}
-			player0.Move(left0, right0, up0, down0, dt);
-			player0.Clamp();
-			player0.Fire(dt);
-			player0.UpdateBullets(dt);
+				bool left0 = false;
+				bool right0 = false;
+				bool up0 = false;
+				bool down0 = false;
+				if (wnd.kbd.KeyIsPressed('A'))
+				{
+					left0 = true;
+				}
+				if (wnd.kbd.KeyIsPressed('D'))
+				{
+					right0 = true;
+				}
+				if (wnd.kbd.KeyIsPressed('W'))
+				{
+					up0 = true;
+				}
+				if (wnd.kbd.KeyIsPressed('S'))
+				{
+					down0 = true;
+				}
+				player0.Move(left0, right0, up0, down0, dt);
+				player0.Clamp();
+				player0.Fire(dt);
+				player0.UpdateBullets(dt);
 
-			if (multiplayer)
-			{
-				bool left1 = false;
-				bool right1 = false;
-				bool up1 = false;
-				bool down1 = false;
-				if (wnd.kbd.KeyIsPressed(VK_NUMPAD4))
+				if (multiplayer)
 				{
-					left1 = true;
+					bool left1 = false;
+					bool right1 = false;
+					bool up1 = false;
+					bool down1 = false;
+					if (wnd.kbd.KeyIsPressed(VK_NUMPAD4))
+					{
+						left1 = true;
+					}
+					if (wnd.kbd.KeyIsPressed(VK_NUMPAD6))
+					{
+						right1 = true;
+					}
+					if (wnd.kbd.KeyIsPressed(VK_NUMPAD8))
+					{
+						up1 = true;
+					}
+					if (wnd.kbd.KeyIsPressed(VK_NUMPAD5))
+					{
+						down1 = true;
+					}
+					player1.Move(left1, right1, up1, down1, dt);
+					player1.Clamp();
+					player1.Fire(dt);
+					player1.UpdateBullets(dt);
 				}
-				if (wnd.kbd.KeyIsPressed(VK_NUMPAD6))
-				{
-					right1 = true;
-				}
-				if (wnd.kbd.KeyIsPressed(VK_NUMPAD8))
-				{
-					up1 = true;
-				}
-				if (wnd.kbd.KeyIsPressed(VK_NUMPAD5))
-				{
-					down1 = true;
-				}
-				player1.Move(left1, right1, up1, down1, dt);
-				player1.Clamp();
-				player1.Fire(dt);
-				player1.UpdateBullets(dt);
-			}
 
-			if (testEarth0LvlStarted)
+				if (true) // change based on cur lvl
+				{
+					level.front().SpawnEarth0(dt);
+					level.front().UpdateEarth0(player0, player1, multiplayer, dt);
+				}
+				if (level.front().SetFailed(player0, player1, multiplayer))
+				{
+					break;
+				}
+			}
+		}
+		else
+		{
+			if (wnd.kbd.KeyIsPressed(VK_RETURN) || wnd.kbd.KeyIsPressed(VK_ESCAPE) || wnd.kbd.KeyIsPressed(VK_BACK))
 			{
-				level.front().SpawnEarth0(dt);
-				level.front().UpdateEarth0(player0, player1, multiplayer, dt);
+				level.pop_back();
+				assert(level.empty());
+				menu.LvlQuit();
 			}
 		}
 	}
@@ -207,8 +226,9 @@ void Game::ComposeFrame()
 			player1.DrawBullets(gfx);
 			player1.Draw(gfx);
 		}
-		if (testEarth0LvlStarted)
+		if (!level.empty()) // change based on cur lvl
 		{
+			assert(level.size() == 1);
 			level.front().DrawEarth0(gfx);
 		}
 	}

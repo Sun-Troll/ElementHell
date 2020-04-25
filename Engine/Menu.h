@@ -53,8 +53,10 @@ public:
 public:
 	void Select(bool up, bool down, bool left, bool right, bool confirm, bool back);
 	void SelectMultiplayer(bool up, bool down, bool left, bool right, bool confirm, bool back);
+	void LvlQuit();
 	State GetState() const;
 	void Draw(Graphics& gfx) const;
+	const Stats& GetStats(bool secondP) const;
 private:
 	const Surface HighL = Surface("Sprites\\Menus\\HighMenu\\MenuHighL.bmp");
 	const Surface HighS = Surface("Sprites\\Menus\\HighMenu\\MenuHighS.bmp");

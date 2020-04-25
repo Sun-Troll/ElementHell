@@ -395,6 +395,12 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 	}
 }
 
+void Menu::LvlQuit()
+{
+	assert(curState == State::Level);
+	curState = State::Hub;
+}
+
 Menu::State Menu::GetState() const
 {
 	return curState;
@@ -449,5 +455,17 @@ void Menu::Draw(Graphics& gfx) const
 			gfx.DrawSpriteNonChroma(0, 0, loadBack);
 		}
 		gfx.DrawSprite(100, 130 + int(curSelectSaveLoad) * 200, HighL);
+	}
+}
+
+const Stats& Menu::GetStats(bool secondP) const
+{
+	if (secondP)
+	{
+		return stats1;
+	}
+	else
+	{
+		return stats0;
 	}
 }
