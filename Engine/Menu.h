@@ -2,6 +2,7 @@
 
 #include "Graphics.h"
 #include "Stats.h"
+#include "SoundEffect.h"
 
 class Menu
 {
@@ -53,8 +54,10 @@ public:
 public:
 	void Select(bool up, bool down, bool left, bool right, bool confirm, bool back);
 	void SelectMultiplayer(bool up, bool down, bool left, bool right, bool confirm, bool back);
+	void LvlQuit();
 	State GetState() const;
 	void Draw(Graphics& gfx) const;
+	const Stats& GetStats(bool secondP) const;
 private:
 	const Surface HighL = Surface("Sprites\\Menus\\HighMenu\\MenuHighL.bmp");
 	const Surface HighS = Surface("Sprites\\Menus\\HighMenu\\MenuHighS.bmp");
@@ -65,6 +68,14 @@ private:
 	const Surface statsPoint = Surface("Sprites\\Menus\\StatsMenu\\StatsMenuPoint.bmp");
 	const Surface safeBack = Surface("Sprites\\Menus\\SaveMenu\\SaveMenuBack.bmp");
 	const Surface loadBack = Surface("Sprites\\Menus\\LoadMenu\\LoadMenuBack.bmp");
+	Sound statUp = Sound(L"Sounds\\Menu\\StatUp.wav");
+	Sound statDown = Sound(L"Sounds\\Menu\\StatDown.wav");
+	Sound upDown = Sound(L"Sounds\\Menu\\UpDown.wav");
+	Sound loadFail = Sound(L"Sounds\\Menu\\LoadFail.wav");
+	Sound confirmS = Sound(L"Sounds\\Menu\\Confirm.wav");
+	Sound cancel = Sound(L"Sounds\\Menu\\Cancel.wav");
+	Sound startGame = Sound(L"Sounds\\Menu\\StartGame.wav");
+	Sound startLevel = Sound(L"Sounds\\Menu\\StartLevel.wav");
 	State curState = State::Main;
 	SelectionMain curSelectMain = SelectionMain::NewGame;
 	SelectionHub curSelectHub = SelectionHub::Earth;

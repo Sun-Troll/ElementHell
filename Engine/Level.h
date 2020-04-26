@@ -15,6 +15,9 @@ public:
 	void SpawnEarth0(float dt);
 	void UpdateEarth0(Player& player0, Player& player1, bool multiplayer, float dt);
 	void DrawEarth0(Graphics& gfx) const;
+	bool IsStarted() const;
+	bool SetFailed(const Player& player0, const Player& player1, bool multiplayer);
+	bool GetFailed() const;
 private:
 	void ad();
 private:
@@ -23,6 +26,8 @@ private:
 	float timer = 0.0f;
 	float score = 0.0f;
 	LvlType curLvl = LvlType::MainMenu;
+	bool started = false;
+	bool failed = false;
 
 	// Enemies
 

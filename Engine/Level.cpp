@@ -3,6 +3,8 @@
 
 void Level::StartEarth0()
 {
+	assert(!started);
+	assert(!failed);
 	timer = 0.0f;
 	score = 0.0f;
 	spritesEarth0a.resize(Earth0a::nSpritesEarth0a);
@@ -21,6 +23,7 @@ void Level::StartEarth0()
 		assert(spritesBullet[i].GetWidth() == Earth0a::spriteBulletDim
 			&& spritesBullet[i].GetHeight() == Earth0a::spriteBulletDim);
 	}
+	started = true;
 }
 
 void Level::SpawnEarth0(float dt)
@@ -248,6 +251,29 @@ void Level::DrawEarth0(Graphics& gfx) const
 		}
 		e.DrawBullets(spritesBullet, gfx);
 	}
+}
+
+bool Level::IsStarted() const
+{
+	return started;
+}
+
+bool Level::SetFailed(const Player& player0, const Player& player1, bool multiplayer)
+{
+	if (multiplayer)
+	{
+		failed = player0.GetHpCur() <= 0.0f && player1.GetHpCur() <= 0.0f;
+	}
+	else
+	{
+		failed = player0.GetHpCur() <= 0.0f;
+	}
+	return failed;
+}
+
+bool Level::GetFailed() const
+{
+	return failed;
 }
 
 void Level::ad()

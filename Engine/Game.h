@@ -50,10 +50,11 @@ private:
 	FrameTimer ft;
 	Menu menu;
 	HUD hud;
+	const VecF spawnPosP0{ 200.0f, 700.0f };
+	const VecF spawnPosP1{ 300.0f, 700.0f };
 	Player player0;
 	Player player1;
 	std::vector<Level> level;
-	bool testEarth0LvlStarted = false;
 	bool multiplayer = false;
 	int nSubrames = 12;
 	/********************************/

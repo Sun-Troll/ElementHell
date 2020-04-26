@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "RectF.h"
 #include "CircF.h"
+#include "Stats.h"
 #include <vector>
 
 class Player
@@ -40,6 +41,7 @@ private:
 	};
 public:
 	Player(const VecF& pos);
+	void Respawn(const VecF& pos_in, const Stats& stats);
 	void Move(bool left, bool right, bool up, bool down, float dt);
 	void Clamp();
 	void Fire(float dt);
@@ -66,11 +68,11 @@ private:
 	float hpMax = hpBase;
 	float hpCur = hpMax;
 	static constexpr float radius = 5.0f;
-	static constexpr float baseFireTimePlayerAnim = 0.5f;
+	static constexpr float baseFireTimePlayerAnim = 0.6f;
 	float maxFireTimePlayerAnim = baseFireTimePlayerAnim;
 	float curFireBasePlayerAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.2f;
-	float drawDamageTimeCur = drawDamageTimeMax;
+	float drawDamageTimeCur = drawDamageTimeMax + 1.0f;
 	static constexpr int nSpritesPlayer = 4;
 	static constexpr int spritePlayerWidth = 84;
 	static constexpr int spritePlayerHeight = 96;

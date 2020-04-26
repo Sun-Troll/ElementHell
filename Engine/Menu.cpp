@@ -4,6 +4,10 @@
 
 void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool back)
 {
+	if ((up || down) && !secondStatsUp)
+	{
+		upDown.Play();
+	}
 	if (curState == State::Main)
 	{
 		assert(!secondStatsUp);
@@ -32,16 +36,22 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 			if (curSelectMain == SelectionMain::NewGame)
 			{
 				curState = State::Hub;
+				startGame.Play();
 			}
 			else if (curSelectMain == SelectionMain::LoadGame)
 			{
 				curState = State::Load;
+				confirmS.Play();
 			}
 		}
 	}
 	else if (curState == State::Hub)
 	{
 		assert(!secondStatsUp);
+		if (left || right)
+		{
+			upDown.Play();
+		}
 		if (up)
 		{
 			int temp = int(curSelectHub);
@@ -87,15 +97,18 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 			if (curSelectHub == SelectionHub::Earth)
 			{
 				curState = State::Level;
+				startLevel.Play();
 			}
 			else if (curSelectHub == SelectionHub::Stats)
 			{
 				statsTemp = stats0;
 				curState = State::StatsUp;
+				confirmS.Play();
 			}
 			else if (curSelectHub == SelectionHub::Save)
 			{
 				curState = State::Save;
+				confirmS.Play();
 			}
 		}
 	}
@@ -133,6 +146,7 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 					{
 						--statsTemp.hp;
 						++statsTemp.points;
+						statDown.Play();
 					}
 					break;
 				case Menu::SelectionStats::Rpm:
@@ -140,6 +154,7 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 					{
 						--statsTemp.rpm;
 						++statsTemp.points;
+						statDown.Play();
 					}
 					break;
 				case Menu::SelectionStats::DmgCent:
@@ -147,6 +162,7 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 					{
 						--statsTemp.dmgCent;
 						++statsTemp.points;
+						statDown.Play();
 					}
 					break;
 				case Menu::SelectionStats::DmgSide:
@@ -154,6 +170,7 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 					{
 						--statsTemp.dmgSide;
 						++statsTemp.points;
+						statDown.Play();
 					}
 					break;
 				default:
@@ -172,6 +189,7 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 					{
 						++statsTemp.hp;
 						--statsTemp.points;
+						statUp.Play();
 					}
 					break;
 				case Menu::SelectionStats::Rpm:
@@ -179,6 +197,7 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 					{
 						++statsTemp.rpm;
 						--statsTemp.points;
+						statUp.Play();
 					}
 					break;
 				case Menu::SelectionStats::DmgCent:
@@ -186,6 +205,7 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 					{
 						++statsTemp.dmgCent;
 						--statsTemp.points;
+						statUp.Play();
 					}
 					break;
 				case Menu::SelectionStats::DmgSide:
@@ -193,6 +213,7 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 					{
 						++statsTemp.dmgSide;
 						--statsTemp.points;
+						statUp.Play();
 					}
 					break;
 				default:
@@ -203,11 +224,13 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 		if (back)
 		{
 			curState = State::Hub;
+			cancel.Play();
 		}
 		if (confirm)
 		{
 			stats0 = statsTemp;
 			curState = State::Hub;
+			confirmS.Play();
 		}
 	}
 	else if (curState == State::Save || curState == State::Load)
@@ -243,6 +266,7 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 			{
 				curState = State::Main;
 			}
+			cancel.Play();
 		}
 		if (confirm)
 		{
@@ -253,6 +277,7 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 				saveFile.write(reinterpret_cast<char*>(&stats0), sizeof(stats0));
 				saveFile.write(reinterpret_cast<char*>(&stats1), sizeof(stats1));
 				curState = State::Hub;
+				confirmS.Play();
 			}
 			else if (curState == State::Load)
 			{
@@ -263,6 +288,11 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 					loadFile.read(reinterpret_cast<char*>(&stats0), sizeof(stats0));
 					loadFile.read(reinterpret_cast<char*>(&stats1), sizeof(stats1));
 					curState = State::Hub;
+					startGame.Play();
+				}
+				else
+				{
+					loadFail.Play();
 				}
 			}
 		}
@@ -271,6 +301,10 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 
 void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool confirm, bool back)
 {
+	if ((up || down) && secondStatsUp)
+	{
+		upDown.Play();
+	}
 	if (curState == State::Hub)
 	{
 		assert(!secondStatsUp);
@@ -279,6 +313,7 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 			secondStatsUp = true;
 			statsTemp = stats1;
 			curState = State::StatsUp;
+			confirmS.Play();
 		}
 	}
 	else if (secondStatsUp)
@@ -314,6 +349,7 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 					{
 						--statsTemp.hp;
 						++statsTemp.points;
+						statDown.Play();
 					}
 					break;
 				case Menu::SelectionStats::Rpm:
@@ -321,6 +357,7 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 					{
 						--statsTemp.rpm;
 						++statsTemp.points;
+						statDown.Play();
 					}
 					break;
 				case Menu::SelectionStats::DmgCent:
@@ -328,6 +365,7 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 					{
 						--statsTemp.dmgCent;
 						++statsTemp.points;
+						statDown.Play();
 					}
 					break;
 				case Menu::SelectionStats::DmgSide:
@@ -335,6 +373,7 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 					{
 						--statsTemp.dmgSide;
 						++statsTemp.points;
+						statDown.Play();
 					}
 					break;
 				default:
@@ -353,6 +392,7 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 					{
 						++statsTemp.hp;
 						--statsTemp.points;
+						statUp.Play();
 					}
 					break;
 				case Menu::SelectionStats::Rpm:
@@ -360,6 +400,7 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 					{
 						++statsTemp.rpm;
 						--statsTemp.points;
+						statUp.Play();
 					}
 					break;
 				case Menu::SelectionStats::DmgCent:
@@ -367,6 +408,7 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 					{
 						++statsTemp.dmgCent;
 						--statsTemp.points;
+						statUp.Play();
 					}
 					break;
 				case Menu::SelectionStats::DmgSide:
@@ -374,6 +416,7 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 					{
 						++statsTemp.dmgSide;
 						--statsTemp.points;
+						statUp.Play();
 					}
 					break;
 				default:
@@ -385,14 +428,22 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 		{
 			secondStatsUp = false;
 			curState = State::Hub;
+			cancel.Play();
 		}
 		if (confirm)
 		{
 			secondStatsUp = false;
 			stats1 = statsTemp;
 			curState = State::Hub;
+			confirmS.Play();
 		}
 	}
+}
+
+void Menu::LvlQuit()
+{
+	assert(curState == State::Level);
+	curState = State::Hub;
 }
 
 Menu::State Menu::GetState() const
@@ -449,5 +500,17 @@ void Menu::Draw(Graphics& gfx) const
 			gfx.DrawSpriteNonChroma(0, 0, loadBack);
 		}
 		gfx.DrawSprite(100, 130 + int(curSelectSaveLoad) * 200, HighL);
+	}
+}
+
+const Stats& Menu::GetStats(bool secondP) const
+{
+	if (secondP)
+	{
+		return stats1;
+	}
+	else
+	{
+		return stats0;
 	}
 }

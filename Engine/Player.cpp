@@ -36,6 +36,20 @@ Player::Player(const VecF& pos)
 	}
 }
 
+void Player::Respawn(const VecF& pos_in, const Stats& stats)
+{
+	drawDamageTimeCur = drawDamageTimeMax + 1.0f;
+	pos = pos_in;
+	hpMax = hpBase * float(stats.hp + 1);
+	hpCur = hpMax;
+	maxFireTimePlayerAnim = baseFireTimePlayerAnim / float(stats.rpm + 1);
+	curFireBasePlayerAnim = 0.0f;
+	bulletCenterDPS = baseBulletCenterDPS * float(stats.dmgCent + 1);
+	bulletsCenter.clear();
+	bulletSideDamage = baseBulletSideDamage * float(stats.dmgSide + 1);
+	bulletsSide.clear();
+}
+
 void Player::Move(bool left, bool right, bool up, bool down, float dt)
 {
 	VecF dir{ 0.0f, 0.0f };
