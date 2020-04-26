@@ -126,7 +126,7 @@ void Game::UpdateModel()
 		}
 		else
 		{
-			if (wnd.kbd.KeyIsPressed(VK_RETURN) || wnd.kbd.KeyIsPressed(VK_ESCAPE) || wnd.kbd.KeyIsPressed(VK_BACK))
+			if (wnd.kbd.KeyIsPressed(VK_ESCAPE) || wnd.kbd.KeyIsPressed(VK_BACK))
 			{
 				level.pop_back();
 				assert(level.empty());

@@ -72,7 +72,7 @@ private:
 	float maxFireTimePlayerAnim = baseFireTimePlayerAnim;
 	float curFireBasePlayerAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.2f;
-	float drawDamageTimeCur = drawDamageTimeMax;
+	float drawDamageTimeCur = drawDamageTimeMax + 1.0f;
 	static constexpr int nSpritesPlayer = 4;
 	static constexpr int spritePlayerWidth = 84;
 	static constexpr int spritePlayerHeight = 96;

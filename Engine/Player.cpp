@@ -38,6 +38,7 @@ Player::Player(const VecF& pos)
 
 void Player::Respawn(const VecF& pos_in, const Stats& stats)
 {
+	drawDamageTimeCur = drawDamageTimeMax + 1.0f;
 	pos = pos_in;
 	hpMax = hpBase * float(stats.hp + 1);
 	hpCur = hpMax;
