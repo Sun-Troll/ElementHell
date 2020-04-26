@@ -131,6 +131,7 @@ void Game::UpdateModel()
 				level.pop_back();
 				assert(level.empty());
 				menu.LvlQuit();
+				wnd.kbd.Flush();
 			}
 		}
 	}
