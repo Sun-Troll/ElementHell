@@ -20,7 +20,7 @@ private:
 		VecF vel;
 		static constexpr float maxAnimTime = 1.1f;
 		float curAnimTime = 0.0f;
-		static constexpr float radius = 7.0f;
+		static constexpr float radius = 11.0f;
 	};
 public:
 	Earth0b(const VecF& pos, const VecF& vel);
