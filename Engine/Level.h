@@ -51,4 +51,7 @@ private:
 	std::vector<Surface> spritesEarth0bBulletCent;
 	const RectF movRegEarth0bBulletCent{ float(-Earth0b::spriteBulletCentEDim), float(Graphics::ScreenWidth),
 		float(-Earth0b::spriteBulletCentEDim), float(Graphics::GameHeight) };
+	std::vector<Surface> spritesEarth0bBulletSide;
+	const RectF movRegEarth0bBulletSide{ float(-Earth0b::spriteBulletSideEDim), float(Graphics::ScreenWidth),
+		float(-Earth0b::spriteBulletSideEDim), float(Graphics::GameHeight) };
 };

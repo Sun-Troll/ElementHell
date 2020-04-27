@@ -43,6 +43,14 @@ void Level::StartEarth0()
 		assert(spritesEarth0bBulletCent[i].GetWidth() == Earth0b::spriteBulletCentEDim
 			&& spritesEarth0bBulletCent[i].GetHeight() == Earth0b::spriteBulletCentEDim);
 	}
+	spritesEarth0bBulletSide.resize(Earth0b::nSpritesBulletSideE);
+	for (int i = 0; i < Earth0b::nSpritesBulletSideE; ++i)
+	{
+		const std::string bitmapFile = "Sprites\\Enemies\\Earth0bBul\\Earth0bBulS" + std::to_string(i) + ".bmp";
+		spritesEarth0bBulletSide[i] = Surface(bitmapFile);
+		assert(spritesEarth0bBulletSide[i].GetWidth() == Earth0b::spriteBulletSideEDim
+			&& spritesEarth0bBulletSide[i].GetHeight() == Earth0b::spriteBulletSideEDim);
+	}
 
 	started = true;
 }
@@ -289,7 +297,7 @@ void Level::UpdateEarth0(Player& player0, Player& player1, bool multiplayer, flo
 				e.GetHit(player1, dt);
 			}
 		}
-		e.UpdateBullets(movRegEarth0bBulletCent, dt);
+		e.UpdateBullets(movRegEarth0bBulletCent, movRegEarth0bBulletSide, dt);
 		e.HitPlayer(player0);
 		if (multiplayer)
 		{
@@ -332,7 +340,7 @@ void Level::DrawEarth0(Graphics& gfx) const
 		{
 			e.Draw(spritesEarth0b, gfx);
 		}
-		e.DrawBullets(spritesEarth0bBulletCent, gfx);
+		e.DrawBullets(spritesEarth0bBulletCent, spritesEarth0bBulletSide, gfx);
 	}
 }
 
