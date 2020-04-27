@@ -7,6 +7,8 @@ void Level::StartEarth0()
 	assert(!failed);
 	timer = 0.0f;
 	score = 0.0f;
+
+	// Earth0a
 	spritesEarth0a.resize(Earth0a::nSpritesEarth0a);
 	for (int i = 0; i < Earth0a::nSpritesEarth0a; ++i)
 	{
@@ -15,14 +17,33 @@ void Level::StartEarth0()
 		assert(spritesEarth0a[i].GetWidth() == Earth0a::spriteEarth0aWidth
 			&& spritesEarth0a[i].GetHeight() == Earth0a::spriteEarth0aHeight);
 	}
-	spritesBullet.resize(Earth0a::nSpritesBullet);
+	spritesEarth0aBullet.resize(Earth0a::nSpritesBullet);
 	for (int i = 0; i < Earth0a::nSpritesBullet; ++i)
 	{
 		const std::string bitmapFile = "Sprites\\Enemies\\Earth0aBul\\Earth0aBul" + std::to_string(i) + ".bmp";
-		spritesBullet[i] = Surface(bitmapFile);
-		assert(spritesBullet[i].GetWidth() == Earth0a::spriteBulletDim
-			&& spritesBullet[i].GetHeight() == Earth0a::spriteBulletDim);
+		spritesEarth0aBullet[i] = Surface(bitmapFile);
+		assert(spritesEarth0aBullet[i].GetWidth() == Earth0a::spriteBulletDim
+			&& spritesEarth0aBullet[i].GetHeight() == Earth0a::spriteBulletDim);
 	}
+
+	// Earth0b
+	spritesEarth0b.resize(Earth0b::nSpritesEarth0b);
+	for (int i = 0; i < Earth0b::nSpritesEarth0b; ++i)
+	{
+		const std::string bitmapFile = "Sprites\\Enemies\\Earth0b\\Earth0b" + std::to_string(i) + ".bmp";
+		spritesEarth0b[i] = Surface(bitmapFile);
+		assert(spritesEarth0b[i].GetWidth() == Earth0b::spriteEarth0bWidth
+			&& spritesEarth0b[i].GetHeight() == Earth0b::spriteEarth0bHeight);
+	}
+	spritesEarth0bBulletCent.resize(Earth0b::nSpritesBulletCentE);
+	for (int i = 0; i < Earth0b::nSpritesBulletCentE; ++i)
+	{
+		const std::string bitmapFile = "Sprites\\Enemies\\Earth0bBul\\Earth0bBulL" + std::to_string(i) + ".bmp";
+		spritesEarth0bBulletCent[i] = Surface(bitmapFile);
+		assert(spritesEarth0bBulletCent[i].GetWidth() == Earth0b::spriteBulletCentEDim
+			&& spritesEarth0bBulletCent[i].GetHeight() == Earth0b::spriteBulletCentEDim);
+	}
+
 	started = true;
 }
 
@@ -192,6 +213,20 @@ void Level::SpawnEarth0(float dt)
 			enEarth0a.emplace_back(Earth0a{ { 420.0f - float(Earth0a::spriteEarth0aWidth / 2), movRegEarth0a.bottom }, { 0.0f, -10.0f } });
 		}
 		break;
+	case 22:
+		if (spawnTimer > 9.0f)
+		{
+			ad();
+			enEarth0b.emplace_back(Earth0b{ { movRegEarth0b.left,  movRegEarth0b.top }, { 10.0f, 20.0f } });
+		}
+		break;
+	case 23:
+		if (spawnTimer > 5.0f)
+		{
+			ad();
+			enEarth0b.emplace_back(Earth0b{ { movRegEarth0b.right,  movRegEarth0b.top }, { -10.0f, 20.0f } });
+		}
+		break;
 	default:
 		break;
 	}
@@ -205,6 +240,7 @@ void Level::UpdateEarth0(Player& player0, Player& player1, bool multiplayer, flo
 		player0.Damaged(10);
 	}*/
 	timer += dt;
+	// Earth0a
 	for (auto& e : enEarth0a)
 	{
 		if (!e.IsDead())
@@ -239,17 +275,64 @@ void Level::UpdateEarth0(Player& player0, Player& player1, bool multiplayer, flo
 			--i;
 		}
 	}
+
+	// Earth0b
+	for (auto& e : enEarth0b)
+	{
+		if (!e.IsDead())
+		{
+			e.Move(dt);
+			e.Fire(dt);
+			e.GetHit(player0, dt);
+			if (multiplayer)
+			{
+				e.GetHit(player1, dt);
+			}
+		}
+		e.UpdateBullets(movRegEarth0bBulletCent, dt);
+		e.HitPlayer(player0);
+		if (multiplayer)
+		{
+			e.HitPlayer(player1);
+		}
+	}
+	for (int i = 0; i < enEarth0b.size(); ++i)
+	{
+		if (enEarth0b[i].IsDead() && enEarth0b[i].BulletsEmpty())
+		{
+			std::swap(enEarth0b[i], enEarth0b.back());
+			enEarth0b.pop_back();
+			--i;
+		}
+		else if (enEarth0b[i].Clamp(movRegEarth0b) && enEarth0b[i].BulletsEmpty())
+		{
+			std::swap(enEarth0b[i], enEarth0b.back());
+			enEarth0b.pop_back();
+			--i;
+		}
+	}
 }
 
 void Level::DrawEarth0(Graphics& gfx) const
 {
+	// Earth0a
 	for (const auto& e : enEarth0a)
 	{
 		if (!e.IsDead())
 		{
 			e.Draw(spritesEarth0a, gfx);
 		}
-		e.DrawBullets(spritesBullet, gfx);
+		e.DrawBullets(spritesEarth0aBullet, gfx);
+	}
+
+	// Earth0b
+	for (const auto& e : enEarth0b)
+	{
+		if (!e.IsDead())
+		{
+			e.Draw(spritesEarth0b, gfx);
+		}
+		e.DrawBullets(spritesEarth0bBulletCent, gfx);
 	}
 }
 
