@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Earth0a.h"
+#include "Earth0b.h"
 
 class Level
 {

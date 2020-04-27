@@ -48,7 +48,7 @@ private:
 	//static constexpr int nSpritesEarth0a = 6;
 	//static constexpr int spriteEarth0aWidth = 64;
 	//static constexpr int spriteEarth0aHeight = 54;
-	static constexpr float earth0Radius = 32.0f + 4.0f;
+	static constexpr float earth0aRadius = 32.0f + 4.0f;
 	static constexpr float pi = 3.141592741f;
 public:
 	static constexpr int nSpritesEarth0a = 6;
