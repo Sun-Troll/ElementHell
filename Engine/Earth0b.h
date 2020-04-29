@@ -43,7 +43,7 @@ public:
 	Earth0b(const VecF& pos, const VecF& vel);
 	void Move(float dt);
 	bool Clamp(const RectF& movementRegionEarth0b);
-	void Fire(float dt);
+	void Fire(const Player& player0, const Player& player1, bool multiplayer, float dt);
 	void UpdateBullets(const RectF& movRegBulCentE, const RectF& movRegBulSideE, float dt);
 	void HitPlayer(Player& player);
 	void GetHit(Player& player, float dt);
