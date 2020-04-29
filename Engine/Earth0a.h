@@ -18,7 +18,7 @@ private:
 	private:
 		VecF pos;
 		VecF vel;
-		static constexpr float maxAnimTime = 1.0f;
+		static constexpr float maxAnimTime = 1.1f;
 		float curAnimTime = 0.0f;
 		static constexpr float radius = 7.0f;
 	};
@@ -41,14 +41,14 @@ private:
 	VecF vel;
 	static constexpr float hpMax = 100.0f;
 	float hpCur = hpMax;
-	static constexpr float maxFireTimeEarth0aAnim = 1.8f;
+	static constexpr float maxFireTimeEarth0aAnim = 1.5f;
 	float curFireBaseEarth0aAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.1f;
 	float drawDamageTimeCur = drawDamageTimeMax;
 	//static constexpr int nSpritesEarth0a = 6;
 	//static constexpr int spriteEarth0aWidth = 64;
 	//static constexpr int spriteEarth0aHeight = 54;
-	static constexpr float earth0Radius = 32.0f + 4.0f;
+	static constexpr float earth0aRadius = 32.0f + 4.0f;
 	static constexpr float pi = 3.141592741f;
 public:
 	static constexpr int nSpritesEarth0a = 6;

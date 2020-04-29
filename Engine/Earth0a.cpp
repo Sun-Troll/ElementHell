@@ -92,8 +92,8 @@ void Earth0a::HitPlayer(Player& player)
 
 void Earth0a::GetHit(Player& player, float dt)
 {
-	const CircF hitBoxEarth0 = { {pos.x + float(spriteEarth0aWidth) / 2.0f,
-			pos.y + float(spriteBulletDim) / 2.0f + 3.0f}, earth0Radius };
+	const CircF hitBoxEarth0 = { { pos.x + float(spriteEarth0aWidth) / 2.0f,
+			pos.y + float(spriteBulletDim) / 2.0f + 3.0f }, earth0aRadius };
 	const float centerBulletDamage = player.GetCenterBulletDPS() * dt;
 	for (int i = 0; i < player.GetCenterBulletN(); ++i)
 	{
