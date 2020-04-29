@@ -34,19 +34,45 @@ bool Earth0a::Clamp(const RectF& movementRegionEarth0a)
 	return false;
 }
 
-void Earth0a::Fire(float dt)
+void Earth0a::Fire(const Player& player0, const Player& player1, bool multiplayer, float dt)
 {
 	if (RectF(pos, spriteEarth0aWidth, spriteEarth0aHeight).isContained(Graphics::GetGameRectF()))
 	{
-		const VecF earth0aCenter{ pos.x + float(spriteEarth0aWidth) / 2.0f,
-			pos.y + float(spriteBulletDim) / 2.0f + 3.0f };
 		curFireBaseEarth0aAnim += dt;
 		while (curFireBaseEarth0aAnim >= maxFireTimeEarth0aAnim)
 		{
+			const VecF earth0aCenter{ pos.x + float(spriteEarth0aWidth) / 2.0f,
+			pos.y + float(spriteBulletDim) / 2.0f + 3.0f };
+			VecF playerCent = player0.GetCenter();
+			if (multiplayer)
+			{
+				const VecF playerCent1 = player1.GetCenter();
+				if ((playerCent1 - earth0aCenter).GetLengthSq() < (playerCent - earth0aCenter).GetLengthSq())
+				{
+					playerCent = playerCent1;
+				}
+			}
 			curFireBaseEarth0aAnim -= maxFireTimeEarth0aAnim;
-			bullets.emplace_back(Bullet{
-				{ earth0aCenter.x - float(spriteBulletDim) / 2.0f, earth0aCenter.y - float(spriteBulletDim) / 2.0f },
-				VecF{ vel.x, vel.y + bulletSpeed } });
+			if (playerCent.y > earth0aCenter.y)
+			{
+				bullets.emplace_back(Bullet{
+					{ earth0aCenter.x - float(spriteBulletDim) / 2.0f, earth0aCenter.y - float(spriteBulletDim) / 2.0f },
+					{ vel.x, vel.y + bulletSpeed } });
+			}
+			else if (playerCent.x > earth0aCenter.x)
+			{
+				bullets.emplace_back(Bullet{
+					{ earth0aCenter.x - float(spriteBulletDim) / 2.0f, earth0aCenter.y - float(spriteBulletDim) / 2.0f },
+					{ bulletSideVelRight + vel }
+					});
+			}
+			else
+			{
+				bullets.emplace_back(Bullet{
+					{ earth0aCenter.x - float(spriteBulletDim) / 2.0f, earth0aCenter.y - float(spriteBulletDim) / 2.0f },
+					{ bulletSideVelLeft + vel }
+					});
+			}
 		}
 	}
 	else

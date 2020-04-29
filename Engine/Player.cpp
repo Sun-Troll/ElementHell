@@ -214,9 +214,14 @@ void Player::Damaged(float damage)
 	drawDamageTimeCur = 0.0f;
 }
 
+VecF Player::GetCenter() const
+{
+	return VecF(pos.x + spritePlayerWidth * 0.5f, pos.y + spritePlayerHeight * 0.5f);
+}
+
 CircF Player::GetCircF() const
 {
-	return CircF({pos.x + spritePlayerWidth * 0.5f, pos.y + spritePlayerHeight * 0.5f }, radius);
+	return CircF({ pos.x + spritePlayerWidth * 0.5f, pos.y + spritePlayerHeight * 0.5f }, radius);
 }
 
 void Player::Draw(Graphics& gfx) const

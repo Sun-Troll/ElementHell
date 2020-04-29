@@ -254,7 +254,7 @@ void Level::UpdateEarth0(Player& player0, Player& player1, bool multiplayer, flo
 		if (!e.IsDead())
 		{
 			e.Move(dt);
-			e.Fire(dt);
+			e.Fire(player0, player1, multiplayer, dt);
 			e.GetHit(player0, dt);
 			if (multiplayer)
 			{

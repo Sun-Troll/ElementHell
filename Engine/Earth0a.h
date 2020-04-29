@@ -26,7 +26,7 @@ public:
 	Earth0a(const VecF& pos, const VecF& vel);
 	void Move(float dt);
 	bool Clamp(const RectF& movementRegionEarth0a);
-	void Fire(float dt);
+	void Fire(const Player& player0, const Player& player1, bool multiplayer, float dt);
 	void UpdateBullets(const RectF& movementRegionBullet, float dt);
 	void HitPlayer(Player& player);
 	void GetHit(Player& player, float dt);
@@ -57,6 +57,8 @@ public:
 // bullets
 private:
 	static constexpr float bulletSpeed = 100.0f;
+	VecF bulletSideVelRight = VecF(32.0f, -19.0f).Normalize() * bulletSpeed;
+	VecF bulletSideVelLeft = VecF(-32.0f, -19.0f).Normalize() * bulletSpeed;
 	static constexpr float bulletDamage = 50.0f;
 	//static constexpr int nSpritesBulletCenter = 4;
 	//static constexpr int spriteBulletCenterDim = 32; // assumes same width/height

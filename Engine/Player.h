@@ -58,6 +58,7 @@ public:
 	float GetHpCur() const;
 	bool IsAlive() const;
 	void Damaged(float damage);
+	VecF GetCenter() const;
 	CircF GetCircF() const;
 	void Draw(Graphics& gfx) const;
 	void DrawBullets(Graphics& gfx) const;
