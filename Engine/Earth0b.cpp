@@ -33,21 +33,62 @@ bool Earth0b::Clamp(const RectF& movementRegionEarth0b)
 	return false;
 }
 
-void Earth0b::Fire(float dt)
+void Earth0b::Fire(const Player& player0, const Player& player1, bool multiplayer, float dt)
 {
 	if (RectF(pos, spriteEarth0bWidth, spriteEarth0bHeight).isContained(Graphics::GetGameRectF()))
 	{
-		const VecF earth0aCenter{ pos.x + float(spriteEarth0bWidth) / 2.0f, pos.y + float(spriteEarth0bHeight) / 2.0f };
 		curFireBaseEarth0bAnim += dt;
 		while (curFireBaseEarth0bAnim >= maxFireTimeEarth0bAnim)
 		{
+			const VecF earth0bCenter{ pos.x + float(spriteEarth0bWidth) / 2.0f, pos.y + float(spriteEarth0bHeight) / 2.0f };
+			VecF playerCent = player0.GetCenter();
+			if (multiplayer)
+			{
+				const VecF playerCent1 = player1.GetCenter();
+				if ((playerCent1 - earth0bCenter).GetLengthSq() < (playerCent - earth0bCenter).GetLengthSq())
+				{
+					playerCent = playerCent1;
+				}
+			}
 			curFireBaseEarth0bAnim -= maxFireTimeEarth0bAnim;
-			bulletsCentE.emplace_back(BulletCentE{
+			const float xDist = playerCent.x - earth0bCenter.x;
+			const float yDist = playerCent.y - earth0bCenter.y;
+			if (std::abs(xDist) < std::abs(yDist))
+			{
+				if (std::signbit(yDist))
+				{
+					bulletsCentE.emplace_back(BulletCentE{
+						{ earth0bCenter.x - float(spriteBulletCentEDim) / 2.0f, earth0bCenter.y - float(spriteBulletCentEDim) / 2.0f },
+						VecF{ vel.x, vel.y - BulletCentESpeed } });
+				}
+				else
+				{
+					bulletsCentE.emplace_back(BulletCentE{
+						{ earth0bCenter.x - float(spriteBulletCentEDim) / 2.0f, earth0bCenter.y - float(spriteBulletCentEDim) / 2.0f },
+						VecF{ vel.x, vel.y + BulletCentESpeed } });
+				}
+			}
+			else
+			{
+				if (std::signbit(xDist))
+				{
+					bulletsCentE.emplace_back(BulletCentE{
+						{ earth0bCenter.x - float(spriteBulletCentEDim) / 2.0f, earth0bCenter.y - float(spriteBulletCentEDim) / 2.0f },
+						VecF{ vel.x - BulletCentESpeed, vel.y } });
+				}
+				else
+				{
+					bulletsCentE.emplace_back(BulletCentE{
+						{ earth0bCenter.x - float(spriteBulletCentEDim) / 2.0f, earth0bCenter.y - float(spriteBulletCentEDim) / 2.0f },
+						VecF{ vel.x + BulletCentESpeed, vel.y } });
+				}
+			}
+			/*bulletsCentE.emplace_back(BulletCentE{
 				{ earth0aCenter.x - float(spriteBulletCentEDim) / 2.0f, earth0aCenter.y - float(spriteBulletCentEDim) / 2.0f },
-				VecF{ vel.x, vel.y + BulletCentESpeed } });
+				VecF{ vel.x, vel.y + BulletCentESpeed } });*/
 			for (int i = 0; i < 4; ++i)
 			{
-				bulletsSideE.emplace_back(BulletSideE{ earth0aCenter + sideBulOff[i], sideBulVel[i] + vel });
+				bulletsSideE.emplace_back(BulletSideE{ earth0bCenter + sideBulOff[i], sideBulVel[i] + vel });
 			}
 		}
 	}
