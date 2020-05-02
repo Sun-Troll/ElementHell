@@ -338,6 +338,180 @@ void Level::SpawnEarth0(float dt)
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right,  movRegEarth0a.top }, { -20.0f, 30.0f } });
 		}
 		break;
+	case 37:
+		if (spawnTimer > 10.0f)
+		{
+			ad();
+			enEarth0b.emplace_back(Earth0b{ { Graphics::ScreenWidth / 2 - Earth0b::spriteEarth0bWidth / 2,  movRegEarth0b.top }, { 0.0f, 20.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+		}
+		break;
+	case 38:
+		if (spawnTimer > 6.0f)
+		{
+			ad();
+			enEarth0b.emplace_back(Earth0b{ { Graphics::ScreenWidth / 2 - Earth0b::spriteEarth0bWidth / 2,  movRegEarth0b.top }, { 0.0f, 20.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+		}
+		break;
+	case 39:
+		if (spawnTimer > 6.0f)
+		{
+			ad();
+			enEarth0b.emplace_back(Earth0b{ { Graphics::ScreenWidth / 2 - Earth0b::spriteEarth0bWidth / 2,  movRegEarth0b.top }, { 0.0f, 20.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+		}
+		break;
+	case 40:
+		if (spawnTimer > 6.0f)
+		{
+			ad();
+			enEarth0b.emplace_back(Earth0b{ { Graphics::ScreenWidth / 2 - Earth0b::spriteEarth0bWidth / 2,  movRegEarth0b.top }, { 0.0f, 20.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+		}
+		break;
+	case 41:
+		if (spawnTimer > 10.0f)
+		{
+			ad();
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+		}
+		break;
+	case 42:
+		if (spawnTimer > 2.9f)
+		{
+			ad();
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 180,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 180,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+		}
+		break;
+	case 43:
+		if (spawnTimer > 4.0f)
+		{
+			ad();
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+		}
+		break;
+	case 44:
+		if (spawnTimer > 2.9f)
+		{
+			ad();
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 180,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 180,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+		}
+		break;
+	case 45:
+		if (spawnTimer > 6.0f)
+		{
+			ad();
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2,  movRegEarth0a.bottom }, { 0.0f, -30.0f } });
+		}
+		break;
+	case 46:
+		if (spawnTimer > 2.9f)
+		{
+			ad();
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 180,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 180,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+		}
+		break;
+	case 47:
+		if (spawnTimer > 4.0f)
+		{
+			ad();
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2,  movRegEarth0a.bottom }, { 0.0f, -30.0f } });
+		}
+		break;
+	case 48:
+		if (spawnTimer > 2.9f)
+		{
+			ad();
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 180,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 180,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+		}
+		break;
+	case 49:
+		if (spawnTimer > 6.0f)
+		{
+			ad();
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2,  movRegEarth0a.bottom }, { 0.0f, -30.0f } });
+		}
+		break;
+	case 50:
+		if (spawnTimer > 2.9f)
+		{
+			ad();
+			enEarth0b.emplace_back(Earth0b{ { Graphics::ScreenWidth / 2 - Earth0b::spriteEarth0bWidth / 2,  movRegEarth0b.top }, { 0.0f, 20.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 180,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 180,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+		}
+		break;
+	case 51:
+		if (spawnTimer > 4.0f)
+		{
+			ad();
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 100,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2,  movRegEarth0a.bottom }, { 0.0f, -30.0f } });
+		}
+		break;
+	case 52:
+		if (spawnTimer > 2.9f)
+		{
+			ad();
+			enEarth0b.emplace_back(Earth0b{ { Graphics::ScreenWidth / 2 - Earth0b::spriteEarth0bWidth / 2,  movRegEarth0b.top }, { 0.0f, 20.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 180,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 180,  movRegEarth0a.top }, { 0.0f, 30.0f } });
+		}
+		break;
+	case 53:
+		if (spawnTimer > 12.0f)
+		{
+			ad();
+			enEarth0b.emplace_back(Earth0b{ { Graphics::ScreenWidth / 2 - Earth0b::spriteEarth0bWidth / 2,  movRegEarth0b.top }, { 0.0f, 20.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 240,  movRegEarth0a.top }, { -10.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 240,  movRegEarth0a.top }, { 10.0f, 30.0f } });
+		}
+		break;
+	case 54:
+		if (spawnTimer > 4.5f)
+		{
+			ad();
+			enEarth0b.emplace_back(Earth0b{ { Graphics::ScreenWidth / 2 - Earth0b::spriteEarth0bWidth / 2,  movRegEarth0b.top }, { 0.0f, 20.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 240,  movRegEarth0a.top }, { -10.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 240,  movRegEarth0a.top }, { 10.0f, 30.0f } });
+		}
+		break;
+	case 55:
+		if (spawnTimer > 4.5f)
+		{
+			ad();
+			enEarth0b.emplace_back(Earth0b{ { Graphics::ScreenWidth / 2 - Earth0b::spriteEarth0bWidth / 2,  movRegEarth0b.top }, { 0.0f, 20.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 240,  movRegEarth0a.top }, { -10.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 240,  movRegEarth0a.top }, { 10.0f, 30.0f } });
+		}
+		break;
+	case 56:
+		if (spawnTimer > 4.5f)
+		{
+			ad();
+			enEarth0b.emplace_back(Earth0b{ { Graphics::ScreenWidth / 2 - Earth0b::spriteEarth0bWidth / 2,  movRegEarth0b.top }, { 0.0f, 20.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 + 240,  movRegEarth0a.top }, { -10.0f, 30.0f } });
+			enEarth0a.emplace_back(Earth0a{ { Graphics::ScreenWidth / 2 - Earth0a::spriteEarth0aWidth / 2 - 240,  movRegEarth0a.top }, { 10.0f, 30.0f } });
+		}
+		break;
 	default:
 		break;
 	}
