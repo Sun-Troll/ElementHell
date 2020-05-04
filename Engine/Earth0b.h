@@ -55,10 +55,10 @@ public:
 	void DrawBullets(const std::vector<Surface>& spritesBulCentE,
 		const std::vector<Surface>& spritesBulSideE, Graphics& gfx) const;
 private:
-	static constexpr float speed = 30.0f;
+	static constexpr float speed = 40.0f;
 	VecF pos;
 	VecF vel;
-	static constexpr float hpMax = 4000.0f;
+	static constexpr float hpMax = 3000.0f;
 	float hpCur = hpMax;
 	static constexpr float maxFireTimeEarth0bAnim = 0.4f;
 	float curFireBaseEarth0bAnim = 0.0f;

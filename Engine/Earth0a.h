@@ -39,7 +39,7 @@ private:
 	static constexpr float speed = 80.0f;
 	VecF pos;
 	VecF vel;
-	static constexpr float hpMax = 400.0f;
+	static constexpr float hpMax = 300.0f;
 	float hpCur = hpMax;
 	static constexpr float maxFireTimeEarth0aAnim = 1.0f;
 	float curFireBaseEarth0aAnim = 0.0f;
