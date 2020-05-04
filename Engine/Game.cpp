@@ -64,19 +64,19 @@ void Game::UpdateModel()
 				bool right0 = false;
 				bool up0 = false;
 				bool down0 = false;
-				if (wnd.kbd.KeyIsPressed('A'))
+				if (wnd.kbd.KeyIsPressed('A') || wnd.kbd.KeyIsPressed(VK_LEFT))
 				{
 					left0 = true;
 				}
-				if (wnd.kbd.KeyIsPressed('D'))
+				if (wnd.kbd.KeyIsPressed('D') || wnd.kbd.KeyIsPressed(VK_RIGHT))
 				{
 					right0 = true;
 				}
-				if (wnd.kbd.KeyIsPressed('W'))
+				if (wnd.kbd.KeyIsPressed('W') || wnd.kbd.KeyIsPressed(VK_UP))
 				{
 					up0 = true;
 				}
-				if (wnd.kbd.KeyIsPressed('S'))
+				if (wnd.kbd.KeyIsPressed('S') || wnd.kbd.KeyIsPressed(VK_DOWN))
 				{
 					down0 = true;
 				}

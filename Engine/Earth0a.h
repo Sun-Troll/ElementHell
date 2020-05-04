@@ -36,12 +36,12 @@ public:
 	void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
 	void DrawBullets(const std::vector<Surface>& spritesBullet, Graphics& gfx) const;
 private:
-	static constexpr float speed = 40.0f;
+	static constexpr float speed = 80.0f;
 	VecF pos;
 	VecF vel;
-	static constexpr float hpMax = 100.0f;
+	static constexpr float hpMax = 400.0f;
 	float hpCur = hpMax;
-	static constexpr float maxFireTimeEarth0aAnim = 1.5f;
+	static constexpr float maxFireTimeEarth0aAnim = 1.0f;
 	float curFireBaseEarth0aAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.1f;
 	float drawDamageTimeCur = drawDamageTimeMax;
@@ -56,7 +56,7 @@ public:
 	static constexpr int spriteEarth0aHeight = 54;
 // bullets
 private:
-	static constexpr float bulletSpeed = 100.0f;
+	static constexpr float bulletSpeed = 200.0f;
 	VecF bulletSideVelRight = VecF(32.0f, -19.0f).Normalize() * bulletSpeed;
 	VecF bulletSideVelLeft = VecF(-32.0f, -19.0f).Normalize() * bulletSpeed;
 	static constexpr float bulletDamage = 50.0f;

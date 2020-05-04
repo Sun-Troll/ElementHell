@@ -64,12 +64,12 @@ public:
 	void DrawBullets(Graphics& gfx) const;
 private:
 	VecF pos;
-	float speed = 200.0f;
+	float speed = 300.0f;
 	static constexpr float hpBase = 1000.0f;
 	float hpMax = hpBase;
 	float hpCur = hpMax;
 	static constexpr float radius = 5.0f;
-	static constexpr float baseFireTimePlayerAnim = 0.6f;
+	static constexpr float baseFireTimePlayerAnim = 0.06f;
 	float maxFireTimePlayerAnim = baseFireTimePlayerAnim;
 	float curFireBasePlayerAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.2f;
@@ -85,7 +85,7 @@ private:
 	//BulletCenter
 	static constexpr float baseBulletCenterDPS = 100.0f;
 	float bulletCenterDPS = baseBulletCenterDPS;
-	static constexpr float bulletCenterSpeed = 400.0f;
+	static constexpr float bulletCenterSpeed = 600.0f;
 	static constexpr int nSpritesBulletCenter = 2;
 	static constexpr int spriteBulletCenterDim = 12; // assumes same width/height
 	static constexpr float bulletCenterRadius = float(spriteBulletCenterDim) / 2.0f;
@@ -98,7 +98,7 @@ private:
 	//BulletSide
 	static constexpr float baseBulletSideDamage = 10.0f;
 	float bulletSideDamage = baseBulletSideDamage;
-	static constexpr float bulletSideSpeed = 600.0f;
+	static constexpr float bulletSideSpeed = 900.0f;
 	static constexpr float bulletSideSpawnDist = 40.0f;
 	static constexpr int nSpritesBulletSide = 2;
 	static constexpr int spriteBulletSideDim = 8; // assumes same width/height
