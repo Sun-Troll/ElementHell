@@ -36,7 +36,7 @@ public:
 	void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
 	void DrawBullets(const std::vector<Surface>& spritesBullet, Graphics& gfx) const;
 private:
-	static constexpr float speed = 50.0f;
+	static constexpr float speed = 40.0f;
 	VecF pos;
 	VecF vel;
 	static constexpr float hpMax = 100.0f;
