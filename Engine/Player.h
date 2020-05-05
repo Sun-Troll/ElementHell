@@ -37,8 +37,10 @@ private:
 	private:
 		VecF pos;
 		VecF vel;
+		VecF curTarget;
 		static constexpr float maxAnimTime = 0.6f;
 		float curAnimTime = 0.0f;
+		bool targeting = false;
 	};
 public:
 	Player(const VecF& pos);
@@ -101,8 +103,8 @@ private:
 	//BulletSide
 	static constexpr float baseBulletSideDamage = 10.0f;
 	float bulletSideDamage = baseBulletSideDamage;
-	static constexpr float bulletSideSpeedFree = 200.0f;
-	static constexpr float bulletSideSpeedAim = 2000.0f;
+	static constexpr float bulletSideSpeed = 200.0f;
+	static constexpr float trgSpeedUp = 10.0f;
 	static constexpr float bulletSideSpawnDist = 40.0f;
 	static constexpr int nSpritesBulletSide = 4;
 	static constexpr int spriteBulletSideDim = 16; // assumes same width/height
