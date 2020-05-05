@@ -64,12 +64,13 @@ public:
 	void DrawBullets(Graphics& gfx) const;
 private:
 	VecF pos;
-	float speed = 300.0f;
+	float speedFast = 500.0f;
+	float speedSlow = 300.0f;
 	static constexpr float hpBase = 1000.0f;
 	float hpMax = hpBase;
 	float hpCur = hpMax;
 	static constexpr float radius = 5.0f;
-	static constexpr float baseFireTimePlayerAnim = 0.06f;
+	static constexpr float baseFireTimePlayerAnim = 0.12f;
 	float maxFireTimePlayerAnim = baseFireTimePlayerAnim;
 	float curFireBasePlayerAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.2f;
@@ -85,9 +86,9 @@ private:
 	//BulletCenter
 	static constexpr float baseBulletCenterDPS = 100.0f;
 	float bulletCenterDPS = baseBulletCenterDPS;
-	static constexpr float bulletCenterSpeed = 600.0f;
-	static constexpr int nSpritesBulletCenter = 2;
-	static constexpr int spriteBulletCenterDim = 12; // assumes same width/height
+	static constexpr float bulletCenterSpeed = 1000.0f;
+	static constexpr int nSpritesBulletCenter = 4;
+	static constexpr int spriteBulletCenterDim = 24; // assumes same width/height
 	static constexpr float bulletCenterRadius = float(spriteBulletCenterDim) / 2.0f;
 	const RectF movementRegionBulletCenter{ float(-spriteBulletCenterDim), float(Graphics::ScreenWidth),
 		float(-spriteBulletCenterDim), float(Graphics::GameHeight) };
@@ -98,10 +99,10 @@ private:
 	//BulletSide
 	static constexpr float baseBulletSideDamage = 10.0f;
 	float bulletSideDamage = baseBulletSideDamage;
-	static constexpr float bulletSideSpeed = 900.0f;
+	static constexpr float bulletSideSpeed = 1500.0f;
 	static constexpr float bulletSideSpawnDist = 40.0f;
-	static constexpr int nSpritesBulletSide = 2;
-	static constexpr int spriteBulletSideDim = 8; // assumes same width/height
+	static constexpr int nSpritesBulletSide = 4;
+	static constexpr int spriteBulletSideDim = 16; // assumes same width/height
 	static constexpr int nBulletsSideFired = 6;
 	static constexpr float bulletSideRadius = float(spriteBulletSideDim) / 2.0f;
 	const RectF movementRegionBulletSide{ float(-spriteBulletSideDim), float(Graphics::ScreenWidth),

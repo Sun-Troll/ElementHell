@@ -55,21 +55,21 @@ void Player::Move(bool left, bool right, bool up, bool down, float dt)
 	VecF dir{ 0.0f, 0.0f };
 	if (left)
 	{
-		dir.x -= speed;
+		dir.x -= speedFast;
 	}
 	if (right)
 	{
-		dir.x += speed;
+		dir.x += speedFast;
 	}
 	if (up)
 	{
-		dir.y -= speed;
+		dir.y -= speedFast;
 	}
 	if (down)
 	{
-		dir.y += speed;
+		dir.y += speedFast;
 	}
-	pos += dir.GetNormalized() * speed * dt;
+	pos += dir.GetNormalized() * speedFast * dt;
 }
 
 void Player::Clamp()
