@@ -42,7 +42,7 @@ private:
 public:
 	Player(const VecF& pos);
 	void Respawn(const VecF& pos_in, const Stats& stats);
-	void Move(bool left, bool right, bool up, bool down, float dt);
+	void Move(bool left, bool right, bool up, bool down, bool slow, float dt);
 	void Clamp();
 	void Fire(float dt);
 	void UpdateBullets(float dt);
@@ -64,7 +64,7 @@ public:
 	void DrawBullets(Graphics& gfx) const;
 private:
 	VecF pos;
-	float speedFast = 500.0f;
+	float speedFast = 600.0f;
 	float speedSlow = 300.0f;
 	static constexpr float hpBase = 1000.0f;
 	float hpMax = hpBase;

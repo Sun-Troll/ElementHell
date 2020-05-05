@@ -55,10 +55,10 @@ public:
 	void DrawBullets(const std::vector<Surface>& spritesBulCentE,
 		const std::vector<Surface>& spritesBulSideE, Graphics& gfx) const;
 private:
-	static constexpr float speed = 40.0f;
+	static constexpr float speed = 100.0f;
 	VecF pos;
 	VecF vel;
-	static constexpr float hpMax = 3000.0f;
+	static constexpr float hpMax = 400.0f;
 	float hpCur = hpMax;
 	static constexpr float maxFireTimeEarth0bAnim = 0.4f;
 	float curFireBaseEarth0bAnim = 0.0f;
@@ -73,7 +73,7 @@ public:
 
 	// BulletCent
 private:
-	static constexpr float BulletCentESpeed = 100.0f;
+	static constexpr float BulletCentESpeed = 200.0f;
 	static constexpr float BulletCentEDamage = 150.0f;
 	std::vector<BulletCentE> bulletsCentE;
 public:
@@ -82,7 +82,7 @@ public:
 
 	// BulletSide
 private:
-	static constexpr float BulletSideESpeed = 200.0f;
+	static constexpr float BulletSideESpeed = 300.0f;
 	static constexpr float BulletSideEDamage = 50.0f;
 	std::vector<BulletSideE> bulletsSideE;
 	std::vector<VecF> sideBulOff{ VecF{ 16.0f, 16.0f }, VecF{ -48.0f, 16.0f }

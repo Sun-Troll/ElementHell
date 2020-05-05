@@ -64,6 +64,7 @@ void Game::UpdateModel()
 				bool right0 = false;
 				bool up0 = false;
 				bool down0 = false;
+				bool slow0 = false;
 				if (wnd.kbd.KeyIsPressed('A') || wnd.kbd.KeyIsPressed(VK_LEFT))
 				{
 					left0 = true;
@@ -80,7 +81,11 @@ void Game::UpdateModel()
 				{
 					down0 = true;
 				}
-				player0.Move(left0, right0, up0, down0, dt);
+				if (wnd.kbd.KeyIsPressed(VK_SHIFT))
+				{
+					slow0 = true;
+				}
+				player0.Move(left0, right0, up0, down0, slow0, dt);
 				player0.Clamp();
 				player0.Fire(dt);
 				player0.UpdateBullets(dt);
@@ -91,6 +96,7 @@ void Game::UpdateModel()
 					bool right1 = false;
 					bool up1 = false;
 					bool down1 = false;
+					bool slow1 = false;
 					if (wnd.kbd.KeyIsPressed(VK_NUMPAD4))
 					{
 						left1 = true;
@@ -107,7 +113,11 @@ void Game::UpdateModel()
 					{
 						down1 = true;
 					}
-					player1.Move(left1, right1, up1, down1, dt);
+					if (wnd.kbd.KeyIsPressed(VK_NUMPAD0))
+					{
+						slow1 = true;
+					}
+					player1.Move(left1, right1, up1, down1, slow1, dt);
 					player1.Clamp();
 					player1.Fire(dt);
 					player1.UpdateBullets(dt);

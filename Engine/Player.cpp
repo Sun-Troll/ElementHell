@@ -50,7 +50,7 @@ void Player::Respawn(const VecF& pos_in, const Stats& stats)
 	bulletsSide.clear();
 }
 
-void Player::Move(bool left, bool right, bool up, bool down, float dt)
+void Player::Move(bool left, bool right, bool up, bool down, bool slow, float dt)
 {
 	VecF dir{ 0.0f, 0.0f };
 	if (left)
@@ -69,7 +69,14 @@ void Player::Move(bool left, bool right, bool up, bool down, float dt)
 	{
 		dir.y += speedFast;
 	}
-	pos += dir.GetNormalized() * speedFast * dt;
+	if (slow)
+	{
+		pos += dir.GetNormalized() * speedSlow * dt;
+	}
+	else
+	{
+		pos += dir.GetNormalized() * speedFast * dt;
+	}
 }
 
 void Player::Clamp()
