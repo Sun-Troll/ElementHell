@@ -39,9 +39,9 @@ private:
 	static constexpr float speed = 200.0f;
 	VecF pos;
 	VecF vel;
-	static constexpr float hpMax = 100.0f;
+	static constexpr float hpMax = 200.0f;
 	float hpCur = hpMax;
-	static constexpr float maxFireTimeEarth0aAnim = 0.8f;
+	static constexpr float maxFireTimeEarth0aAnim = 0.6f;
 	float curFireBaseEarth0aAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.1f;
 	float drawDamageTimeCur = drawDamageTimeMax;
@@ -56,7 +56,7 @@ public:
 	static constexpr int spriteEarth0aHeight = 54;
 // bullets
 private:
-	static constexpr float bulletSpeed = 300.0f;
+	static constexpr float bulletSpeed = 400.0f;
 	VecF bulletSideVelRight = VecF(32.0f, -19.0f).Normalize() * bulletSpeed;
 	VecF bulletSideVelLeft = VecF(-32.0f, -19.0f).Normalize() * bulletSpeed;
 	static constexpr float bulletDamage = 50.0f;
