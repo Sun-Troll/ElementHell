@@ -44,7 +44,7 @@ void Player::Respawn(const VecF& pos_in, const Stats& stats)
 	hpCur = hpMax;
 	maxFireTimePlayerAnim = baseFireTimePlayerAnim / float(stats.rpm + 1);
 	curFireBasePlayerAnim = 0.0f;
-	bulletCenterDPS = baseBulletCenterDPS * float(stats.dmgCent + 1);
+	bulletCenterDamage = baseBulletCenterDamage * float(stats.dmgCent + 1);
 	bulletsCenter.clear();
 	bulletSideDamage = baseBulletSideDamage * float(stats.dmgSide + 1);
 	bulletsSide.clear();
@@ -107,10 +107,17 @@ void Player::Fire(float dt)
 	while (curFireBasePlayerAnim >= maxFireTimePlayerAnim)
 	{
 		curFireBasePlayerAnim -= maxFireTimePlayerAnim;
-		bulletsCenter.emplace_back(BulletCenter{
-			{ playerCenter.x - float(spriteBulletCenterDim) * 0.5f, playerCenter.y - float(spriteBulletCenterDim) * 0.5f },
-			{ (target - playerCenter).GetNormalized() * bulletCenterSpeed } });
-
+		if (centerFiring)
+		{
+			bulletsCenter.emplace_back(BulletCenter{
+				{ playerCenter.x - float(spriteBulletCenterDim) * 0.5f, playerCenter.y - float(spriteBulletCenterDim) * 0.5f },
+				{ (target - playerCenter).GetNormalized() * bulletCenterSpeed } });
+			centerFiring = false;
+		}
+		else
+		{
+			centerFiring = true;
+		}
 		const VecF bulSideBasePos{ playerCenter.x - float(spriteBulletSideDim) * 0.5f,
 			playerCenter.y - float(spriteBulletSideDim) * 0.5f };
 		for (int i = 0; i < nBulletsSideFired; ++i)
@@ -118,7 +125,7 @@ void Player::Fire(float dt)
 			bulletsSide.emplace_back(BulletSide{
 				{ bulSideBasePos.x + bulletSidePosVel[i].x * bulletSideSpawnDist,
 				bulSideBasePos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
-				{ bulletSidePosVel[i].x * bulletSideSpeed, bulletSidePosVel[i].y * bulletSideSpeed } });
+				{ bulletSidePosVel[i].x * bulletSideSpeedFree, bulletSidePosVel[i].y * bulletSideSpeedFree } });
 		}
 	}
 	if (drawDamageTimeCur <= drawDamageTimeMax)
@@ -158,6 +165,14 @@ void Player::UpdateBullets(float dt)
 	}
 }
 
+void Player::AimBullets(const VecF& target)
+{
+	for (auto& bs : bulletsSide)
+	{
+		bs.SetTarget(target);
+	}
+}
+
 int Player::GetCenterBulletN() const
 {
 	return int(bulletsCenter.size());
@@ -168,9 +183,9 @@ CircF Player::GetCenterBulletCircF(int i) const
 	return bulletsCenter[i].GetCircF();
 }
 
-float Player::GetCenterBulletDPS() const
+float Player::GetCenterBulletDamage() const
 {
-	return bulletCenterDPS;
+	return bulletCenterDamage;
 }
 
 void Player::PopCenterBullet(int i)
@@ -319,6 +334,11 @@ Player::BulletSide::BulletSide(const VecF& pos, const VecF& vel)
 void Player::BulletSide::Move(float dt)
 {
 	pos += vel * dt;
+}
+
+void Player::BulletSide::SetTarget(const VecF& target)
+{
+	vel = (target - pos).GetNormalized() * bulletSideSpeedAim;
 }
 
 void Player::BulletSide::Animate(float dt)

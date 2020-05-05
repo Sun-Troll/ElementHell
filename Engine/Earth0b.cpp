@@ -128,12 +128,15 @@ void Earth0b::GetHit(Player& player, float dt)
 {
 	const CircF hitBoxEarth0 = { { pos.x + float(spriteEarth0bWidth) / 2.0f,
 			pos.y + float(spriteEarth0bHeight) / 2.0f }, earth0bRadius };
-	const float centerBulletDamage = player.GetCenterBulletDPS() * dt;
 	for (int i = 0; i < player.GetCenterBulletN(); ++i)
 	{
-		if (hitBoxEarth0.Coliding(player.GetCenterBulletCircF(i)))
+		const CircF curCentBul = player.GetCenterBulletCircF(i);
+		if (hitBoxEarth0.Coliding(curCentBul))
 		{
-			hpCur -= centerBulletDamage;
+			hpCur -= player.GetCenterBulletDamage();
+			player.AimBullets(curCentBul.pos);
+			player.PopCenterBullet(i);
+			--i;
 			drawDamageTimeCur = 0.0f;
 		}
 	}

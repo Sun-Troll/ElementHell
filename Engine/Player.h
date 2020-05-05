@@ -29,6 +29,7 @@ private:
 	public:
 		BulletSide(const VecF& pos, const VecF& vel);
 		void Move(float dt);
+		void SetTarget(const VecF& target);
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletSideRegion) const;
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
@@ -46,9 +47,10 @@ public:
 	void Clamp();
 	void Fire(float dt);
 	void UpdateBullets(float dt);
+	void AimBullets(const VecF& target);
 	int GetCenterBulletN() const;
 	CircF GetCenterBulletCircF(int i) const;
-	float GetCenterBulletDPS() const;
+	float GetCenterBulletDamage() const;
 	void PopCenterBullet(int i);
 	int GetSideBulletN() const;
 	CircF GetSideBulletCircF(int i) const;
@@ -84,8 +86,8 @@ private:
 	static constexpr float pi = 3.141592741f;
 
 	//BulletCenter
-	static constexpr float baseBulletCenterDPS = 100.0f;
-	float bulletCenterDPS = baseBulletCenterDPS;
+	static constexpr float baseBulletCenterDamage = 20.0f;
+	float bulletCenterDamage = baseBulletCenterDamage;
 	static constexpr float bulletCenterSpeed = 1000.0f;
 	static constexpr int nSpritesBulletCenter = 4;
 	static constexpr int spriteBulletCenterDim = 24; // assumes same width/height
@@ -94,12 +96,13 @@ private:
 		float(-spriteBulletCenterDim), float(Graphics::GameHeight) };
 	std::vector<Surface> spritesBulletCenter;
 	std::vector<BulletCenter> bulletsCenter;
-	bool isFiring = false;
+	bool centerFiring = false;
 
 	//BulletSide
 	static constexpr float baseBulletSideDamage = 10.0f;
 	float bulletSideDamage = baseBulletSideDamage;
-	static constexpr float bulletSideSpeed = 1500.0f;
+	static constexpr float bulletSideSpeedFree = 200.0f;
+	static constexpr float bulletSideSpeedAim = 2000.0f;
 	static constexpr float bulletSideSpawnDist = 40.0f;
 	static constexpr int nSpritesBulletSide = 4;
 	static constexpr int spriteBulletSideDim = 16; // assumes same width/height
