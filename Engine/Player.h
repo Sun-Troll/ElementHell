@@ -68,7 +68,7 @@ public:
 	void DrawBullets(Graphics& gfx) const;
 private:
 	VecF pos;
-	float speedFast = 600.0f;
+	float speedFast = 500.0f;
 	float speedSlow = 300.0f;
 	static constexpr float hpBase = 1000.0f;
 	float hpMax = hpBase;
@@ -103,10 +103,10 @@ private:
 	//BulletSide
 	static constexpr float baseBulletSideDamage = 10.0f;
 	float bulletSideDamage = baseBulletSideDamage;
-	static constexpr float bulletSideSpeed = 200.0f;
-	static constexpr float trgSpeedUp = 10.0f;
+	static constexpr float bulletSideSpeed = 100.0f;
+	static constexpr float trgSpeedUp = 20.0f;
 	static constexpr float bulletSideSpawnDist = 40.0f;
-	static constexpr int nSpritesBulletSide = 4;
+	static constexpr int nSpritesBulletSide = 8;
 	static constexpr int spriteBulletSideDim = 16; // assumes same width/height
 	static constexpr int nBulletsSideFired = 6;
 	static constexpr float bulletSideRadius = float(spriteBulletSideDim) / 2.0f;

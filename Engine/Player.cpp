@@ -388,7 +388,11 @@ bool Player::BulletSide::Clamp(const RectF& bulletSideRegion) const
 
 void Player::BulletSide::Draw(const std::vector<Surface>& sprites, Graphics & gfx) const
 {
-	const int iBulletSide = int(curAnimTime * nSpritesBulletSide / maxAnimTime);
+	int iBulletSide = int(curAnimTime * nSpritesBulletSide / maxAnimTime / 2);
+	if (targeting)
+	{
+		iBulletSide += nSpritesBulletSide / 2;
+	}
 	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iBulletSide], gfx.GetGameRect());
 }
 
