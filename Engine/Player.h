@@ -88,7 +88,7 @@ private:
 	static constexpr float pi = 3.141592741f;
 
 	//BulletCenter
-	static constexpr float baseBulletCenterDamage = 20.0f;
+	static constexpr float baseBulletCenterDamage = 40.0f;
 	float bulletCenterDamage = baseBulletCenterDamage;
 	static constexpr float bulletCenterSpeed = 1000.0f;
 	static constexpr int nSpritesBulletCenter = 4;
