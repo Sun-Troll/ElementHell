@@ -165,8 +165,10 @@ void Player::UpdateBullets(float dt)
 	}
 }
 
-void Player::AimBullets(const VecF& target)
+void Player::AimBullets(VecF target)
 {
+	target.x -= bulletSideRadius;
+	target.y -= bulletSideRadius;
 	for (auto& bs : bulletsSide)
 	{
 		bs.SetTarget(target);

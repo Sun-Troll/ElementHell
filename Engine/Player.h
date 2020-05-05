@@ -49,7 +49,7 @@ public:
 	void Clamp();
 	void Fire(float dt);
 	void UpdateBullets(float dt);
-	void AimBullets(const VecF& target);
+	void AimBullets(VecF target);
 	int GetCenterBulletN() const;
 	CircF GetCenterBulletCircF(int i) const;
 	float GetCenterBulletDamage() const;

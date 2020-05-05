@@ -110,7 +110,7 @@ void Level::SpawnEarth0(float dt)
 		}
 		break;
 	case 7:
-		if (spawnTimer > 2.0f)
+		if (spawnTimer > 1.5f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.left, 100.0f }, { 20.0f, 10.0f } });
@@ -152,7 +152,7 @@ void Level::SpawnEarth0(float dt)
 		}
 		break;
 	case 13:
-		if (spawnTimer > 2.0f)
+		if (spawnTimer > 1.5f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
@@ -194,7 +194,7 @@ void Level::SpawnEarth0(float dt)
 		}
 		break;
 	case 19:
-		if (spawnTimer > 2.0f)
+		if (spawnTimer > 1.5f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.left, 100.0f }, { 20.0f, 10.0f } });
@@ -236,7 +236,7 @@ void Level::SpawnEarth0(float dt)
 		}
 		break;
 	case 25:
-		if (spawnTimer > 3.0f)
+		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
@@ -320,14 +320,14 @@ void Level::SpawnEarth0(float dt)
 		}
 		break;
 	case 37:
-		if (spawnTimer > 3.0f)
+		if (spawnTimer > 2.0f)
 		{
 			ad();
 			enEarth0b.emplace_back(Earth0b{ { Graphics::ScreenWidth / 2 - Earth0b::spriteEarth0bWidth / 2, movRegEarth0b.top }, { 0.0f, 10.0f } });
 		}
 		break;
 	case 38:
-		if (spawnTimer > 6.0f)
+		if (spawnTimer > 4.0f)
 		{
 			ad();
 			enEarth0b.emplace_back(Earth0b{ { Graphics::ScreenWidth / 4 - Earth0b::spriteEarth0bWidth / 2, movRegEarth0b.top }, { 0.0f, 10.0f } });
@@ -335,7 +335,7 @@ void Level::SpawnEarth0(float dt)
 		}
 		break;
 	case 39:
-		if (spawnTimer > 10.0f)
+		if (spawnTimer > 6.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
@@ -392,7 +392,7 @@ void Level::SpawnEarth0(float dt)
 		}
 		break;
 	case 47:
-		if (spawnTimer > 7.0f)
+		if (spawnTimer > 5.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.left, 100.0f }, { 20.0f, 10.0f } });
@@ -449,7 +449,7 @@ void Level::SpawnEarth0(float dt)
 		}
 		break;
 	case 55:
-		if (spawnTimer > 7.0f)
+		if (spawnTimer > 5.0f)
 		{
 			ad();
 			enEarth0b.emplace_back(Earth0b{ { Graphics::ScreenWidth / 2 - Earth0b::spriteEarth0bWidth / 2, movRegEarth0b.top }, { 0.0f, 10.0f } });
