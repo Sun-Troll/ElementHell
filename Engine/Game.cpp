@@ -35,6 +35,7 @@ void Game::Go()
 {
 	gfx.BeginFrame();	
 	UpdateModel();
+	PrepareFrame();
 	ComposeFrame();
 	gfx.EndFrame();
 }
@@ -44,7 +45,7 @@ void Game::UpdateModel()
 	if (menu.GetState() == Menu::State::Level)
 	{
 		const float frameTime = ft.FrameDur();
-		float dt = frameTime / nSubrames;
+		float dt = frameTime / nSubrames / 2.0f;
 
 		if (level.empty()) // change based on cur lvl
 		{
@@ -221,6 +222,18 @@ void Game::UpdateModel()
 		if (multiplayer)
 		{
 			menu.SelectMultiplayer(up1, down1, left1, right1, confirm1, back1);
+		}
+	}
+}
+
+void Game::PrepareFrame()
+{
+	if (menu.GetState() == Menu::State::Level)
+	{
+		if (!level.empty()) // change based on cur lvl
+		{
+			assert(level.size() == 1);
+			level.front().PrepareDrawEarth0();
 		}
 	}
 }

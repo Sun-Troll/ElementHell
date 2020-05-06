@@ -74,7 +74,7 @@ private:
 	float hpMax = hpBase;
 	float hpCur = hpMax;
 	static constexpr float radius = 5.0f;
-	static constexpr float baseFireTimePlayerAnim = 0.12f;
+	static constexpr float baseFireTimePlayerAnim = 110.12f;
 	float maxFireTimePlayerAnim = baseFireTimePlayerAnim;
 	float curFireBasePlayerAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.2f;

@@ -64,11 +64,11 @@ void Level::SpawnEarth0(float dt)
 		if (spawnTimer > 6.0f)
 		{
 			ad();
-			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
+			enEarth0a.emplace_back(Earth0a{ { 250.0f,  movRegEarth0a.bottom }, { 0.0f, -10.0f } });
 		}
 		break;
 	case 1:
-		if (spawnTimer > 4.0f)
+		if (spawnTimer > 40.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
@@ -595,6 +595,15 @@ void Level::UpdateEarth0(Player& player0, Player& player1, bool multiplayer, flo
 			enEarth0b.pop_back();
 			--i;
 		}
+	}
+}
+
+void Level::PrepareDrawEarth0()
+{
+	for (auto& e : enEarth0a)
+	{
+		e.DrawPosUpdate();
+		e.DrawPosBulletsUpdate();
 	}
 }
 
