@@ -44,32 +44,39 @@ void Player::Respawn(const VecF& pos_in, const Stats& stats)
 	hpCur = hpMax;
 	maxFireTimePlayerAnim = baseFireTimePlayerAnim / float(stats.rpm + 1);
 	curFireBasePlayerAnim = 0.0f;
-	bulletCenterDPS = baseBulletCenterDPS * float(stats.dmgCent + 1);
+	bulletCenterDamage = baseBulletCenterDamage * float(stats.dmgCent + 1);
 	bulletsCenter.clear();
 	bulletSideDamage = baseBulletSideDamage * float(stats.dmgSide + 1);
 	bulletsSide.clear();
 }
 
-void Player::Move(bool left, bool right, bool up, bool down, float dt)
+void Player::Move(bool left, bool right, bool up, bool down, bool slow, float dt)
 {
 	VecF dir{ 0.0f, 0.0f };
 	if (left)
 	{
-		dir.x -= speed;
+		dir.x -= speedFast;
 	}
 	if (right)
 	{
-		dir.x += speed;
+		dir.x += speedFast;
 	}
 	if (up)
 	{
-		dir.y -= speed;
+		dir.y -= speedFast;
 	}
 	if (down)
 	{
-		dir.y += speed;
+		dir.y += speedFast;
 	}
-	pos += dir.GetNormalized() * speed * dt;
+	if (slow)
+	{
+		pos += dir.GetNormalized() * speedSlow * dt;
+	}
+	else
+	{
+		pos += dir.GetNormalized() * speedFast * dt;
+	}
 }
 
 void Player::Clamp()
@@ -100,10 +107,17 @@ void Player::Fire(float dt)
 	while (curFireBasePlayerAnim >= maxFireTimePlayerAnim)
 	{
 		curFireBasePlayerAnim -= maxFireTimePlayerAnim;
-		bulletsCenter.emplace_back(BulletCenter{
-			{ playerCenter.x - float(spriteBulletCenterDim) * 0.5f, playerCenter.y - float(spriteBulletCenterDim) * 0.5f },
-			{ (target - playerCenter).GetNormalized() * bulletCenterSpeed } });
-
+		if (centerFiring)
+		{
+			bulletsCenter.emplace_back(BulletCenter{
+				{ playerCenter.x - float(spriteBulletCenterDim) * 0.5f, playerCenter.y - float(spriteBulletCenterDim) * 0.5f },
+				{ (target - playerCenter).GetNormalized() * bulletCenterSpeed } });
+			centerFiring = false;
+		}
+		else
+		{
+			centerFiring = true;
+		}
 		const VecF bulSideBasePos{ playerCenter.x - float(spriteBulletSideDim) * 0.5f,
 			playerCenter.y - float(spriteBulletSideDim) * 0.5f };
 		for (int i = 0; i < nBulletsSideFired; ++i)
@@ -151,6 +165,16 @@ void Player::UpdateBullets(float dt)
 	}
 }
 
+void Player::AimBullets(VecF target)
+{
+	target.x -= bulletSideRadius;
+	target.y -= bulletSideRadius;
+	for (auto& bs : bulletsSide)
+	{
+		bs.SetTarget(target);
+	}
+}
+
 int Player::GetCenterBulletN() const
 {
 	return int(bulletsCenter.size());
@@ -161,9 +185,9 @@ CircF Player::GetCenterBulletCircF(int i) const
 	return bulletsCenter[i].GetCircF();
 }
 
-float Player::GetCenterBulletDPS() const
+float Player::GetCenterBulletDamage() const
 {
-	return bulletCenterDPS;
+	return bulletCenterDamage;
 }
 
 void Player::PopCenterBullet(int i)
@@ -305,13 +329,33 @@ CircF Player::BulletCenter::GetCircF() const
 Player::BulletSide::BulletSide(const VecF& pos, const VecF& vel)
 	:
 	pos(pos),
-	vel(vel)
+	vel(vel),
+	curTarget(pos)
 {
 }
 
 void Player::BulletSide::Move(float dt)
 {
-	pos += vel * dt;
+	if (targeting)
+	{
+		const VecF posTemp = pos;
+		pos += vel * trgSpeedUp * dt;
+		if ((pos - curTarget).GetLengthSq() > (posTemp - curTarget).GetLengthSq())
+		{
+			targeting = false;
+		}
+	}
+	else
+	{
+		pos += vel * dt;
+	}
+}
+
+void Player::BulletSide::SetTarget(const VecF& target)
+{
+	vel = (target - pos).GetNormalized() * bulletSideSpeed;
+	curTarget = target;
+	targeting = true;
 }
 
 void Player::BulletSide::Animate(float dt)
@@ -346,7 +390,11 @@ bool Player::BulletSide::Clamp(const RectF& bulletSideRegion) const
 
 void Player::BulletSide::Draw(const std::vector<Surface>& sprites, Graphics & gfx) const
 {
-	const int iBulletSide = int(curAnimTime * nSpritesBulletSide / maxAnimTime);
+	int iBulletSide = int(curAnimTime * nSpritesBulletSide / maxAnimTime / 2);
+	if (targeting)
+	{
+		iBulletSide += nSpritesBulletSide / 2;
+	}
 	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iBulletSide], gfx.GetGameRect());
 }
 

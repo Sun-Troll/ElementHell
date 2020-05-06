@@ -53,26 +53,9 @@ void Earth0a::Fire(const Player& player0, const Player& player1, bool multiplaye
 				}
 			}
 			curFireBaseEarth0aAnim -= maxFireTimeEarth0aAnim;
-			if (playerCent.y > earth0aCenter.y)
-			{
-				bullets.emplace_back(Bullet{
+			bullets.emplace_back(Bullet{
 					{ earth0aCenter.x - float(spriteBulletDim) / 2.0f, earth0aCenter.y - float(spriteBulletDim) / 2.0f },
-					{ vel.x, vel.y + bulletSpeed } });
-			}
-			else if (playerCent.x > earth0aCenter.x)
-			{
-				bullets.emplace_back(Bullet{
-					{ earth0aCenter.x - float(spriteBulletDim) / 2.0f, earth0aCenter.y - float(spriteBulletDim) / 2.0f },
-					{ bulletSideVelRight + vel }
-					});
-			}
-			else
-			{
-				bullets.emplace_back(Bullet{
-					{ earth0aCenter.x - float(spriteBulletDim) / 2.0f, earth0aCenter.y - float(spriteBulletDim) / 2.0f },
-					{ bulletSideVelLeft + vel }
-					});
-			}
+					{ (playerCent - earth0aCenter).Normalize() * bulletSpeed } });
 		}
 	}
 	else
@@ -120,12 +103,15 @@ void Earth0a::GetHit(Player& player, float dt)
 {
 	const CircF hitBoxEarth0 = { { pos.x + float(spriteEarth0aWidth) / 2.0f,
 			pos.y + float(spriteBulletDim) / 2.0f + 3.0f }, earth0aRadius };
-	const float centerBulletDamage = player.GetCenterBulletDPS() * dt;
 	for (int i = 0; i < player.GetCenterBulletN(); ++i)
 	{
-		if (hitBoxEarth0.Coliding(player.GetCenterBulletCircF(i)))
+		const CircF curCentBul = player.GetCenterBulletCircF(i);
+		if (hitBoxEarth0.Coliding(curCentBul))
 		{
-			hpCur -= centerBulletDamage;
+			hpCur -= player.GetCenterBulletDamage();
+			player.AimBullets(curCentBul.pos);
+			player.PopCenterBullet(i);
+			--i;
 			drawDamageTimeCur = 0.0f;
 		}
 	}
