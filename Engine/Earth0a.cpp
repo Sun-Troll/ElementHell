@@ -150,7 +150,7 @@ void Earth0a::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
 	const int iEarth0a = int(curFireBaseEarth0aAnim * nSpritesEarth0a / maxFireTimeEarth0aAnim);
 	if (drawDamageTimeCur <= drawDamageTimeMax)
 	{
-		gfx.DrawSprite(int(drawPos.x), int(drawPos.y), Colors::Red, sprites[iEarth0a], gfx.GetGameRect());
+		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[iEarth0a], gfx.GetGameRect());
 	}
 	else
 	{
