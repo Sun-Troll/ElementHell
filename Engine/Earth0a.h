@@ -13,7 +13,6 @@ private:
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletRegion) const;
 		bool PlayerHit(const CircF& pCirc) const;
-		CircF GetCircF() const;
 		void DrawPosUpdate();
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
 	private:
@@ -23,7 +22,6 @@ private:
 		static constexpr float maxAnimTime = 1.1f;
 		float curAnimTime = 0.0f;
 		static constexpr float radius = 7.0f;
-		static constexpr int Offset = 16; // sprite bullet dim / 2
 	};
 public:
 	Earth0a(const VecF& pos, const VecF& vel);
@@ -56,12 +54,12 @@ private:
 	//static constexpr int spriteEarth0aHeight = 54;
 	static constexpr float earth0aRadius = 32.0f + 4.0f;
 	static constexpr float pi = 3.141592741f;
-	static constexpr int xOffset = 32; // spriteEarth0aWidth / 2
-	static constexpr int yOffset = 19;
 public:
 	static constexpr int nSpritesEarth0a = 6;
 	static constexpr int spriteEarth0aWidth = 64;
 	static constexpr int spriteEarth0aHeight = 54;
+	static constexpr int xOffset = spriteEarth0aWidth / 2;
+	static constexpr int yOffset = 19; // must manually test/calculate
 // bullets
 private:
 	static constexpr float bulletSpeed = 400.0f;
@@ -74,7 +72,7 @@ private:
 public:
 	static constexpr int nSpritesBullet = 4;
 	static constexpr int spriteBulletDim = 32; // assumes same width/height
-	static constexpr float offset = float(spriteBulletDim / 2);
+	static constexpr int bulOffset = spriteBulletDim / 2;
 };
 
 /*

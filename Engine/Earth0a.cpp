@@ -178,7 +178,7 @@ Earth0a::Bullet::Bullet(const VecF& pos, const VecF& vel)
 	:
 	hitbox(pos, radius),
 	vel(vel),
-	drawPos(int(pos.x) - Offset, int(pos.y) - Offset)
+	drawPos(int(pos.x) - bulOffset, int(pos.y) - bulOffset)
 {
 }
 
@@ -219,17 +219,12 @@ bool Earth0a::Bullet::Clamp(const RectF& bulletRegion) const
 
 bool Earth0a::Bullet::PlayerHit(const CircF& pCirc) const
 {
-	return GetCircF().Coliding(pCirc);
-}
-
-CircF Earth0a::Bullet::GetCircF() const
-{
-	return hitbox;
+	return hitbox.Coliding(pCirc);
 }
 
 void Earth0a::Bullet::DrawPosUpdate()
 {
-	drawPos = { int(hitbox.pos.x) - Offset, int(hitbox.pos.y) - Offset };
+	drawPos = { int(hitbox.pos.x) - bulOffset, int(hitbox.pos.y) - bulOffset };
 }
 
 void Earth0a::Bullet::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const

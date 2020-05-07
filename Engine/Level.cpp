@@ -519,12 +519,12 @@ void Level::SpawnEarth0(float dt)
 
 void Level::UpdateEarth0(Player& player0, Player& player1, bool multiplayer, float dt)
 {
-	/* frame rate test
-	if (dt > (1.0f / 56.0f) / 12.0f)
+	//frame rate test
+	/*if (dt > (1.0f / 56.0f) / 12.0f)
 	{
-		player0.Damaged(10);
-	}*/
-	timer += dt;
+		player0.Damaged(1);
+	}
+	timer += dt;*/
 	// Earth0a
 	for (auto& e : enEarth0a)
 	{
