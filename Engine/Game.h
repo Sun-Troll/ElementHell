@@ -37,6 +37,7 @@ public:
 	Game& operator=( const Game& ) = delete;
 	void Go();
 private:
+	void PrepareFrame();
 	void ComposeFrame();
 	void UpdateModel();
 	/********************************/

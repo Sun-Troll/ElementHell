@@ -35,6 +35,7 @@ void Game::Go()
 {
 	gfx.BeginFrame();	
 	UpdateModel();
+	PrepareFrame();
 	ComposeFrame();
 	gfx.EndFrame();
 }
@@ -221,6 +222,25 @@ void Game::UpdateModel()
 		if (multiplayer)
 		{
 			menu.SelectMultiplayer(up1, down1, left1, right1, confirm1, back1);
+		}
+	}
+}
+
+void Game::PrepareFrame()
+{
+	player0.DrawPosUpdate();
+	player0.DrawPosBulletsUpdate();
+	if (multiplayer)
+	{
+		player1.DrawPosUpdate();
+		player1.DrawPosBulletsUpdate();
+	}
+	if (menu.GetState() == Menu::State::Level)
+	{
+		if (!level.empty()) // change based on cur lvl
+		{
+			assert(level.size() == 1);
+			level.front().PrepareDrawEarth0();
 		}
 	}
 }

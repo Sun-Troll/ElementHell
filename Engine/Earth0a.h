@@ -13,11 +13,12 @@ private:
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletRegion) const;
 		bool PlayerHit(const CircF& pCirc) const;
-		CircF GetCircF() const;
+		void DrawPosUpdate();
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
 	private:
-		VecF pos;
+		CircF hitbox;
 		VecF vel;
+		VecI drawPos;
 		static constexpr float maxAnimTime = 1.1f;
 		float curAnimTime = 0.0f;
 		static constexpr float radius = 7.0f;
@@ -33,11 +34,13 @@ public:
 	bool IsDead() const;
 	void PopBullet(int i);
 	bool BulletsEmpty() const;
+	void DrawPosUpdate();
 	void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+	void DrawPosBulletsUpdate();
 	void DrawBullets(const std::vector<Surface>& spritesBullet, Graphics& gfx) const;
 private:
 	static constexpr float speed = 200.0f;
-	VecF pos;
+	CircF hitbox;
 	VecF vel;
 	static constexpr float hpMax = 200.0f;
 	float hpCur = hpMax;
@@ -45,6 +48,7 @@ private:
 	float curFireBaseEarth0aAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.1f;
 	float drawDamageTimeCur = drawDamageTimeMax;
+	VecI drawPos;
 	//static constexpr int nSpritesEarth0a = 6;
 	//static constexpr int spriteEarth0aWidth = 64;
 	//static constexpr int spriteEarth0aHeight = 54;
@@ -54,6 +58,8 @@ public:
 	static constexpr int nSpritesEarth0a = 6;
 	static constexpr int spriteEarth0aWidth = 64;
 	static constexpr int spriteEarth0aHeight = 54;
+	static constexpr int xOffset = spriteEarth0aWidth / 2;
+	static constexpr int yOffset = 19; // must manually test/calculate
 // bullets
 private:
 	static constexpr float bulletSpeed = 400.0f;
@@ -66,4 +72,12 @@ private:
 public:
 	static constexpr int nSpritesBullet = 4;
 	static constexpr int spriteBulletDim = 32; // assumes same width/height
+	static constexpr int bulOffset = spriteBulletDim / 2;
 };
+
+/*
+const VecF earth0aCenter{ pos.x + float(spriteEarth0aWidth) / 2.0f,
+			pos.y + float(spriteBulletDim) / 2.0f + 3.0f };
+const CircF hitBoxEarth0 = { { pos.x + float(spriteEarth0aWidth) / 2.0f,
+			pos.y + float(spriteBulletDim) / 2.0f + 3.0f }, earth0aRadius };
+*/
