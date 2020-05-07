@@ -16,11 +16,13 @@ private:
 		void Move(float dt);
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletCenterRegion) const;
+		void DrawPosUpdate();
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
 		CircF GetCircF() const;
 	private:
-		VecF pos;
+		CircF hitbox;
 		VecF vel;
+		VecI drawPos;
 		static constexpr float maxAnimTime = 0.6f;
 		float curAnimTime = 0.0f;
 	};
@@ -32,12 +34,14 @@ private:
 		void SetTarget(const VecF& target);
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletSideRegion) const;
+		void DrawPosUpdate();
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
 		CircF GetCircF() const;
 	private:
-		VecF pos;
+		CircF hitbox;
 		VecF vel;
 		VecF curTarget;
+		VecI drawPos;
 		static constexpr float maxAnimTime = 0.6f;
 		float curAnimTime = 0.0f;
 		bool targeting = false;
@@ -49,7 +53,7 @@ public:
 	void Clamp();
 	void Fire(float dt);
 	void UpdateBullets(float dt);
-	void AimBullets(VecF target);
+	void AimBullets(const VecF& target);
 	int GetCenterBulletN() const;
 	CircF GetCenterBulletCircF(int i) const;
 	float GetCenterBulletDamage() const;
@@ -64,10 +68,12 @@ public:
 	void Damaged(float damage);
 	VecF GetCenter() const;
 	CircF GetCircF() const;
+	void DrawPosUpdate();
 	void Draw(Graphics& gfx) const;
+	void DrawPosBulletsUpdate();
 	void DrawBullets(Graphics& gfx) const;
 private:
-	VecF pos;
+	CircF hitbox;
 	float speedFast = 500.0f;
 	float speedSlow = 300.0f;
 	static constexpr float hpBase = 1000.0f;
@@ -82,9 +88,12 @@ private:
 	static constexpr int nSpritesPlayer = 4;
 	static constexpr int spritePlayerWidth = 84;
 	static constexpr int spritePlayerHeight = 96;
+	static constexpr int xOffset = spritePlayerWidth / 2;
+	static constexpr int yOffset = spritePlayerHeight / 2;
+	VecI drawPos;
 	std::vector<Surface> spritesPlayer;
-	const RectF movementRegionPlayer{ 0.0f, float(Graphics::ScreenWidth - spritePlayerWidth),
-		0.0f, float(Graphics::GameHeight - spritePlayerHeight) };
+	const RectF movementRegionPlayer{ xOffset, float(Graphics::ScreenWidth - xOffset),
+		yOffset, float(Graphics::GameHeight - yOffset) };
 	static constexpr float pi = 3.141592741f;
 
 	//BulletCenter
@@ -93,9 +102,10 @@ private:
 	static constexpr float bulletCenterSpeed = 1000.0f;
 	static constexpr int nSpritesBulletCenter = 4;
 	static constexpr int spriteBulletCenterDim = 24; // assumes same width/height
+	static constexpr int bulCentOff = spriteBulletCenterDim / 2;
 	static constexpr float bulletCenterRadius = float(spriteBulletCenterDim) / 2.0f;
-	const RectF movementRegionBulletCenter{ float(-spriteBulletCenterDim), float(Graphics::ScreenWidth),
-		float(-spriteBulletCenterDim), float(Graphics::GameHeight) };
+	const RectF movementRegionBulletCenter{ float(-bulCentOff), float(Graphics::ScreenWidth + bulCentOff),
+		float(-bulCentOff), float(Graphics::GameHeight + bulCentOff) };
 	std::vector<Surface> spritesBulletCenter;
 	std::vector<BulletCenter> bulletsCenter;
 	bool centerFiring = false;
@@ -108,10 +118,11 @@ private:
 	static constexpr float bulletSideSpawnDist = 40.0f;
 	static constexpr int nSpritesBulletSide = 8;
 	static constexpr int spriteBulletSideDim = 16; // assumes same width/height
+	static constexpr int bulSideOff = spriteBulletSideDim / 2;
 	static constexpr int nBulletsSideFired = 6;
 	static constexpr float bulletSideRadius = float(spriteBulletSideDim) / 2.0f;
-	const RectF movementRegionBulletSide{ float(-spriteBulletSideDim), float(Graphics::ScreenWidth),
-		float(-spriteBulletSideDim), float(Graphics::GameHeight) };
+	const RectF movementRegionBulletSide{ float(-bulSideOff), float(Graphics::ScreenWidth + bulSideOff),
+		float(-bulSideOff), float(Graphics::GameHeight + bulSideOff) };
 	std::vector<Surface> spritesBulletSide;
 	std::vector<BulletSide> bulletsSide;
 	std::vector<VecF> bulletSidePosVel;

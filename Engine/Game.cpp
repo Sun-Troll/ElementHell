@@ -228,6 +228,13 @@ void Game::UpdateModel()
 
 void Game::PrepareFrame()
 {
+	player0.DrawPosUpdate();
+	player0.DrawPosBulletsUpdate();
+	if (multiplayer)
+	{
+		player1.DrawPosUpdate();
+		player1.DrawPosBulletsUpdate();
+	}
 	if (menu.GetState() == Menu::State::Level)
 	{
 		if (!level.empty()) // change based on cur lvl
