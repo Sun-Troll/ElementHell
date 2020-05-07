@@ -102,23 +102,24 @@ void Earth0a::GetHit(Player& player, float dt)
 {
 	for (int i = 0; i < player.GetCenterBulletN(); ++i)
 	{
-		const CircF curCentBul = player.GetCenterBulletCircF(i);
-		if (hitbox.Coliding(curCentBul))
+		if (player.GetCenterBulletActive(i))
 		{
-			hpCur -= player.GetCenterBulletDamage();
-			player.AimBullets(curCentBul.pos);
-			player.PopCenterBullet(i);
-			--i;
-			drawDamageTimeCur = 0.0f;
+			const CircF curCentBul = player.GetCenterBulletCircF(i);
+			if (hitbox.Coliding(curCentBul))
+			{
+				hpCur -= player.GetCenterBulletDamage();
+				player.AimBullets(curCentBul.pos);
+				player.DeactivateCenterBullet(i);
+				drawDamageTimeCur = 0.0f;
+			}
 		}
 	}
 	for (int i = 0; i < player.GetSideBulletN(); ++i)
 	{
-		if (hitbox.Coliding(player.GetSideBulletCircF(i)))
+		if (player.GetSideBulletActive(i) && hitbox.Coliding(player.GetSideBulletCircF(i)))
 		{
 			hpCur -= player.GetSideBulletDamage();
-			player.PopSideBullet(i);
-			--i;
+			player.DeactivateSideBullet(i);
 			drawDamageTimeCur = 0.0f;
 		}
 	}

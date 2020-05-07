@@ -108,23 +108,14 @@ void Player::Fire(float dt)
 		curFireBasePlayerAnim -= maxFireTimePlayerAnim;
 		if (centerFiring)
 		{
-			bulletsCenter.emplace_back(BulletCenter{
-				{ hitbox.pos },
-				{ 0.0f, -bulletCenterSpeed } });
+			++nBulCentFire;
 			centerFiring = false;
 		}
 		else
 		{
 			centerFiring = true;
 		}
-		const VecF bulSideBasePos{ hitbox.pos };
-		for (int i = 0; i < nBulletsSideFired; ++i)
-		{
-			bulletsSide.emplace_back(BulletSide{
-				{ bulSideBasePos.x + bulletSidePosVel[i].x * bulletSideSpawnDist,
-				bulSideBasePos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
-				{ bulletSidePosVel[i].x * bulletSideSpeed, bulletSidePosVel[i].y * bulletSideSpeed } });
-		}
+		++nBulSideFire;
 	}
 	if (drawDamageTimeCur <= drawDamageTimeMax)
 	{
@@ -138,27 +129,18 @@ void Player::UpdateBullets(float dt)
 	{
 		bc.Move(dt);
 		bc.Animate(dt);
+		if (bc.Clamp(movementRegionBulletCenter))
+		{
+			bc.Deactivate();
+		}
 	}
 	for (auto& bs : bulletsSide)
 	{
 		bs.Move(dt);
 		bs.Animate(dt);
-	}
-
-	for (int i = 0; i < bulletsCenter.size(); ++i)
-	{
-		if (bulletsCenter[i].Clamp(movementRegionBulletCenter))
+		if (bs.Clamp(movementRegionBulletSide))
 		{
-			PopCenterBullet(i);
-			--i;
-		}
-	}
-	for (int i = 0; i < bulletsSide.size(); ++i)
-	{
-		if (bulletsSide[i].Clamp(movementRegionBulletSide))
-		{
-			PopSideBullet(i);
-			--i;
+			bs.Deactivate();
 		}
 	}
 }
@@ -181,9 +163,19 @@ const CircF& Player::GetCenterBulletCircF(int i) const
 	return bulletsCenter[i].GetCircF();
 }
 
+bool Player::GetCenterBulletActive(int i) const
+{
+	return bulletsCenter[i].GetActive();
+}
+
 float Player::GetCenterBulletDamage() const
 {
 	return bulletCenterDamage;
+}
+
+void Player::DeactivateCenterBullet(int i)
+{
+	bulletsCenter[i].Deactivate();
 }
 
 void Player::PopCenterBullet(int i)
@@ -202,9 +194,19 @@ const CircF& Player::GetSideBulletCircF(int i) const
 	return bulletsSide[i].GetCircF();
 }
 
+bool Player::GetSideBulletActive(int i) const
+{
+	return bulletsSide[i].GetActive();
+}
+
 float Player::GetSideBulletDamage() const
 {
 	return bulletSideDamage;
+}
+
+void Player::DeactivateSideBullet(int i)
+{
+	bulletsSide[i].Deactivate();
 }
 
 void Player::PopSideBullet(int i)
@@ -247,23 +249,40 @@ const CircF& Player::GetCircF() const
 void Player::DrawPosUpdate()
 {
 	drawPos = { int(hitbox.pos.x) - xOffset, int(hitbox.pos.y) - yOffset };
+	curDrawFrame = int(curFireBasePlayerAnim * nSpritesPlayer / maxFireTimePlayerAnim);
+	drawDamaged = drawDamageTimeCur <= drawDamageTimeMax;
 }
 
 void Player::Draw(Graphics& gfx) const
 {
-	const int iSpritePlayer = int(curFireBasePlayerAnim * nSpritesPlayer / maxFireTimePlayerAnim);
-	if (drawDamageTimeCur <= drawDamageTimeMax)
+	if (drawDamaged)
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, spritesPlayer[iSpritePlayer]);
+		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, spritesPlayer[curDrawFrame]);
 	}
 	else
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, spritesPlayer[iSpritePlayer]);
+		gfx.DrawSprite(drawPos.x, drawPos.y, spritesPlayer[curDrawFrame]);
 	}
 }
 
 void Player::DrawPosBulletsUpdate()
 {
+	for (int i = 0; i < bulletsCenter.size(); ++i)
+	{
+		if (!GetCenterBulletActive(i))
+		{
+			PopCenterBullet(i);
+			--i;
+		}
+	}
+	for (int i = 0; i < bulletsSide.size(); ++i)
+	{
+		if (!GetSideBulletActive(i))
+		{
+			PopSideBullet(i);
+			--i;
+		}
+	}
 	for (auto& bc : bulletsCenter)
 	{
 		bc.DrawPosUpdate();
@@ -271,6 +290,25 @@ void Player::DrawPosBulletsUpdate()
 	for (auto& bs : bulletsSide)
 	{
 		bs.DrawPosUpdate();
+	}
+	while (nBulCentFire > 0)
+	{
+		bulletsCenter.emplace_back(BulletCenter{
+			{ hitbox.pos },
+			{ 0.0f, -bulletCenterSpeed } });
+		--nBulCentFire;
+	}
+	while (nBulSideFire > 0)
+	{
+		const VecF bulSideBasePos{ hitbox.pos };
+		for (int i = 0; i < nBulletsSideFired; ++i)
+		{
+			bulletsSide.emplace_back(BulletSide{
+				{ bulSideBasePos.x + bulletSidePosVel[i].x * bulletSideSpawnDist,
+				bulSideBasePos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
+				{ bulletSidePosVel[i].x * bulletSideSpeed, bulletSidePosVel[i].y * bulletSideSpeed } });
+		}
+		--nBulSideFire;
 	}
 }
 
@@ -332,17 +370,27 @@ bool Player::BulletCenter::Clamp(const RectF& bulletCenterRegion) const
 void Player::BulletCenter::DrawPosUpdate()
 {
 	drawPos = { int(hitbox.pos.x) - bulCentOff, int(hitbox.pos.y) - bulCentOff };
+	curDrawFrame = int(curAnimTime * nSpritesBulletCenter / maxAnimTime);
 }
 
 void Player::BulletCenter::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
 {
-	const int iBullet = int(curAnimTime * nSpritesBulletCenter / maxAnimTime);
-	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[iBullet], gfx.GetGameRect());
+	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
 }
 
 const CircF& Player::BulletCenter::GetCircF() const
 {
 	return hitbox;
+}
+
+bool Player::BulletCenter::GetActive() const
+{
+	return active;
+}
+
+void Player::BulletCenter::Deactivate()
+{
+	active = false;
 }
 
 Player::BulletSide::BulletSide(const VecF& pos, const VecF& vel)
@@ -411,19 +459,29 @@ bool Player::BulletSide::Clamp(const RectF& bulletSideRegion) const
 void Player::BulletSide::DrawPosUpdate()
 {
 	drawPos = { int(hitbox.pos.x) - bulSideOff, int(hitbox.pos.y) - bulSideOff };
+	curDrawFrame = int(curAnimTime * nSpritesBulletSide / maxAnimTime / 2);
+	if (targeting)
+	{
+		curDrawFrame += nSpritesBulletSide / 2;
+	}
 }
 
 void Player::BulletSide::Draw(const std::vector<Surface>& sprites, Graphics & gfx) const
 {
-	int iBullet = int(curAnimTime * nSpritesBulletSide / maxAnimTime / 2);
-	if (targeting)
-	{
-		iBullet += nSpritesBulletSide / 2;
-	}
-	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[iBullet], gfx.GetGameRect());
+	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
 }
 
 const CircF& Player::BulletSide::GetCircF() const
 {
 	return hitbox;
+}
+
+bool Player::BulletSide::GetActive() const
+{
+	return active;
+}
+
+void Player::BulletSide::Deactivate()
+{
+	active = false;
 }

@@ -20,6 +20,7 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include <thread>
 #include <cassert>
 
 Game::Game(MainWindow& wnd)
@@ -33,10 +34,12 @@ Game::Game(MainWindow& wnd)
 
 void Game::Go()
 {
-	gfx.BeginFrame();	
-	UpdateModel();
-	PrepareFrame();
+	gfx.BeginFrame();
+	std::thread one(&Game::UpdateModel, this);
+	//UpdateModel();
 	ComposeFrame();
+	one.join();
+	PrepareFrame();
 	gfx.EndFrame();
 }
 
@@ -228,15 +231,15 @@ void Game::UpdateModel()
 
 void Game::PrepareFrame()
 {
-	player0.DrawPosUpdate();
-	player0.DrawPosBulletsUpdate();
-	if (multiplayer)
-	{
-		player1.DrawPosUpdate();
-		player1.DrawPosBulletsUpdate();
-	}
 	if (menu.GetState() == Menu::State::Level)
 	{
+		player0.DrawPosUpdate();
+		player0.DrawPosBulletsUpdate();
+		if (multiplayer)
+		{
+			player1.DrawPosUpdate();
+			player1.DrawPosBulletsUpdate();
+		}
 		if (!level.empty()) // change based on cur lvl
 		{
 			assert(level.size() == 1);
