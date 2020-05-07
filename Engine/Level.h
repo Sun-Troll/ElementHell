@@ -47,12 +47,12 @@ private:
 	// Earth0b stats
 	std::vector<Earth0b> enEarth0b;
 	std::vector<Surface> spritesEarth0b;
-	const RectF movRegEarth0b{ float(-Earth0b::spriteEarth0bWidth), float(Graphics::ScreenWidth),
-		float(-Earth0b::spriteEarth0bHeight), float(Graphics::GameHeight) };
+	const RectF movRegEarth0b{ float(-Earth0b::xOffset), float(Graphics::ScreenWidth + Earth0b::xOffset),
+		float(-Earth0b::yOffset), float(Graphics::GameHeight + Earth0b::yOffset) };
 	std::vector<Surface> spritesEarth0bBulletCent;
-	const RectF movRegEarth0bBulletCent{ float(-Earth0b::spriteBulletCentEDim), float(Graphics::ScreenWidth),
-		float(-Earth0b::spriteBulletCentEDim), float(Graphics::GameHeight) };
+	const RectF movRegEarth0bBulletCent{ float(-Earth0b::bulCentOff), float(Graphics::ScreenWidth + Earth0b::bulCentOff),
+		float(-Earth0b::bulCentOff), float(Graphics::GameHeight + Earth0b::bulCentOff) };
 	std::vector<Surface> spritesEarth0bBulletSide;
-	const RectF movRegEarth0bBulletSide{ float(-Earth0b::spriteBulletSideEDim), float(Graphics::ScreenWidth),
-		float(-Earth0b::spriteBulletSideEDim), float(Graphics::GameHeight) };
+	const RectF movRegEarth0bBulletSide{ float(-Earth0b::bulSideOff), float(Graphics::ScreenWidth + Earth0b::bulSideOff),
+		float(-Earth0b::bulSideOff), float(Graphics::GameHeight + Earth0b::bulSideOff) };
 };

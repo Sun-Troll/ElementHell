@@ -45,7 +45,7 @@ void Game::UpdateModel()
 	if (menu.GetState() == Menu::State::Level)
 	{
 		const float frameTime = ft.FrameDur();
-		float dt = frameTime / nSubrames / 2.0f;
+		float dt = frameTime / nSubrames;
 
 		if (level.empty()) // change based on cur lvl
 		{

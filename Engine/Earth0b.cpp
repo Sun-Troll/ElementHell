@@ -2,31 +2,32 @@
 
 Earth0b::Earth0b(const VecF& pos, const VecF& vel)
 	:
-	pos(pos),
-	vel(vel.GetNormalized() * speed)
+	hitbox(pos, earth0bRadius),
+	vel(vel.GetNormalized() * speed),
+	drawPos(int(pos.x) - xOffset, int(pos.y) - yOffset)
 {
 }
 
 void Earth0b::Move(float dt)
 {
-	pos += vel * dt;
+	hitbox.pos += vel * dt;
 }
 
 bool Earth0b::Clamp(const RectF& movementRegionEarth0b)
 {
-	if (pos.x < movementRegionEarth0b.left)
+	if (hitbox.pos.x < movementRegionEarth0b.left)
 	{
 		return true;
 	}
-	else if (pos.x > movementRegionEarth0b.right)
+	else if (hitbox.pos.x > movementRegionEarth0b.right)
 	{
 		return true;
 	}
-	if (pos.y < movementRegionEarth0b.top)
+	if (hitbox.pos.y < movementRegionEarth0b.top)
 	{
 		return true;
 	}
-	else if (pos.y > movementRegionEarth0b.bottom)
+	else if (hitbox.pos.y > movementRegionEarth0b.bottom)
 	{
 		return true;
 	}
@@ -35,29 +36,32 @@ bool Earth0b::Clamp(const RectF& movementRegionEarth0b)
 
 void Earth0b::Fire(const Player& player0, const Player& player1, bool multiplayer, float dt)
 {
-	if (RectF(pos, spriteEarth0bWidth, spriteEarth0bHeight).isContained(Graphics::GetGameRectF()))
+	if (RectF(VecF(hitbox.pos.x - float(xOffset), hitbox.pos.y - float(yOffset)),
+		spriteEarth0bWidth, spriteEarth0bHeight).isContained(Graphics::GetGameRectF()))
 	{
 		curFireBaseEarth0bAnim += dt;
 		while (curFireBaseEarth0bAnim >= maxFireTimeEarth0bAnim)
 		{
-			const VecF earth0bCenter{ pos.x + float(spriteEarth0bWidth) / 2.0f, pos.y + float(spriteEarth0bHeight) / 2.0f };
 			VecF playerCent = player0.GetCenter();
 			if (multiplayer)
 			{
 				const VecF playerCent1 = player1.GetCenter();
-				if ((playerCent1 - earth0bCenter).GetLengthSq() < (playerCent - earth0bCenter).GetLengthSq())
+				if ((playerCent1 - hitbox.pos).GetLengthSq() < (playerCent - hitbox.pos).GetLengthSq())
 				{
 					playerCent = playerCent1;
 				}
 			}
 			curFireBaseEarth0bAnim -= maxFireTimeEarth0bAnim;
 			bulletsCentE.emplace_back(BulletCentE{
-					{ earth0bCenter.x - float(spriteBulletCentEDim) / 2.0f, earth0bCenter.y - float(spriteBulletCentEDim) / 2.0f },
-					{ (playerCent - earth0bCenter).Normalize() * BulletCentESpeed } });
-			for (int i = 0; i < 4; ++i)
-			{
-				bulletsSideE.emplace_back(BulletSideE{ earth0bCenter + sideBulOff[i], sideBulVel[i] + vel });
-			}
+					hitbox.pos, { (playerCent - hitbox.pos).Normalize() * BulletCentESpeed } });
+			bulletsSideE.emplace_back(BulletSideE{ { hitbox.pos.x + bulletSideSpawnOff, hitbox.pos.y + bulletSideSpawnOff },
+				{ bulletSideVelComponent, bulletSideVelComponent } });
+			bulletsSideE.emplace_back(BulletSideE{ { hitbox.pos.x - bulletSideSpawnOff, hitbox.pos.y + bulletSideSpawnOff },
+				{ -bulletSideVelComponent, bulletSideVelComponent } });
+			bulletsSideE.emplace_back(BulletSideE{ { hitbox.pos.x - bulletSideSpawnOff, hitbox.pos.y - bulletSideSpawnOff },
+				{ -bulletSideVelComponent, -bulletSideVelComponent } });
+			bulletsSideE.emplace_back(BulletSideE{ { hitbox.pos.x + bulletSideSpawnOff, hitbox.pos.y - bulletSideSpawnOff },
+				{ bulletSideVelComponent, -bulletSideVelComponent } });
 		}
 	}
 	else
@@ -126,12 +130,10 @@ void Earth0b::HitPlayer(Player& player)
 
 void Earth0b::GetHit(Player& player, float dt)
 {
-	const CircF hitBoxEarth0 = { { pos.x + float(spriteEarth0bWidth) / 2.0f,
-			pos.y + float(spriteEarth0bHeight) / 2.0f }, earth0bRadius };
 	for (int i = 0; i < player.GetCenterBulletN(); ++i)
 	{
 		const CircF curCentBul = player.GetCenterBulletCircF(i);
-		if (hitBoxEarth0.Coliding(curCentBul))
+		if (hitbox.Coliding(curCentBul))
 		{
 			hpCur -= player.GetCenterBulletDamage();
 			player.AimBullets(curCentBul.pos);
@@ -142,7 +144,7 @@ void Earth0b::GetHit(Player& player, float dt)
 	}
 	for (int i = 0; i < player.GetSideBulletN(); ++i)
 	{
-		if (hitBoxEarth0.Coliding(player.GetSideBulletCircF(i)))
+		if (hitbox.Coliding(player.GetSideBulletCircF(i)))
 		{
 			hpCur -= player.GetSideBulletDamage();
 			player.PopSideBullet(i);
@@ -174,16 +176,34 @@ bool Earth0b::BulletsEmpty() const
 	return bulletsCentE.size() == 0 && bulletsSideE.size() == 0;
 }
 
+void Earth0b::DrawPosUpdate()
+{
+	drawPos = { int(hitbox.pos.x) - xOffset, int(hitbox.pos.y) - yOffset };
+}
+
 void Earth0b::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
 {
 	const int iEarth0b = int(curFireBaseEarth0bAnim * nSpritesEarth0b / maxFireTimeEarth0bAnim);
 	if (drawDamageTimeCur <= drawDamageTimeMax)
 	{
-		gfx.DrawSprite(int(pos.x), int(pos.y), Colors::Red, sprites[iEarth0b], gfx.GetGameRect());
+		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[iEarth0b], gfx.GetGameRect());
 	}
 	else
 	{
-		gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iEarth0b], gfx.GetGameRect());
+		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[iEarth0b], gfx.GetGameRect());
+	}
+}
+
+void Earth0b::DrawPosBulletsUpdate()
+{
+	for (auto& bc : bulletsCentE)
+	{
+		bc.DrawPosUpdate();
+	}
+
+	for (auto& bs : bulletsSideE)
+	{
+		bs.DrawPosUpdate();
 	}
 }
 
@@ -203,14 +223,15 @@ void Earth0b::DrawBullets(const std::vector<Surface>& spritesBulCentE,
 
 Earth0b::BulletCentE::BulletCentE(const VecF& pos, const VecF& vel)
 	:
-	pos(pos),
-	vel(vel)
+	hitbox(pos, radius),
+	vel(vel),
+	drawPos(int(pos.x) - bulCentOff, int(pos.y) - bulCentOff)
 {
 }
 
 void Earth0b::BulletCentE::Move(float dt)
 {
-	pos += vel * dt;
+	hitbox.pos += vel * dt;
 }
 
 void Earth0b::BulletCentE::Animate(float dt)
@@ -224,52 +245,52 @@ void Earth0b::BulletCentE::Animate(float dt)
 
 bool Earth0b::BulletCentE::Clamp(const RectF& bulletCentERegion) const
 {
-	if (pos.x < bulletCentERegion.left)
+	if (hitbox.pos.x < bulletCentERegion.left)
 	{
 		return true;
 	}
-	else if (pos.x > bulletCentERegion.right)
+	else if (hitbox.pos.x > bulletCentERegion.right)
 	{
 		return true;
 	}
-	if (pos.y < bulletCentERegion.top)
+	if (hitbox.pos.y < bulletCentERegion.top)
 	{
 		return true;
 	}
-	else if (pos.y > bulletCentERegion.bottom)
+	else if (hitbox.pos.y > bulletCentERegion.bottom)
 	{
 		return true;
 	}
 	return false;
 }
 
-bool Earth0b::BulletCentE::PlayerHit(const CircF & pCirc) const
+bool Earth0b::BulletCentE::PlayerHit(const CircF& pCirc) const
 {
-	return GetCircF().Coliding(pCirc);
+	return hitbox.Coliding(pCirc);
 }
 
-CircF Earth0b::BulletCentE::GetCircF() const
+void Earth0b::BulletCentE::DrawPosUpdate()
 {
-	const float halfDim = spriteBulletCentEDim * 0.5f;
-	return CircF({ pos.x + halfDim, pos.y + halfDim }, radius);
+	drawPos = { int(hitbox.pos.x) - bulCentOff, int(hitbox.pos.y) - bulCentOff };
 }
 
 void Earth0b::BulletCentE::Draw(const std::vector<Surface>& sprites, Graphics & gfx) const
 {
 	const int iBullet = int(curAnimTime * nSpritesBulletCentE / maxAnimTime);
-	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iBullet], gfx.GetGameRect());
+	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[iBullet], gfx.GetGameRect());
 }
 
 Earth0b::BulletSideE::BulletSideE(const VecF& pos, const VecF& vel)
 	:
-	pos(pos),
-	vel(vel)
+	hitbox(pos, radius),
+	vel(vel),
+	drawPos(int(pos.x) - bulSideOff, int(pos.y) - bulSideOff)
 {
 }
 
 void Earth0b::BulletSideE::Move(float dt)
 {
-	pos += vel * dt;
+	hitbox.pos += vel * dt;
 }
 
 void Earth0b::BulletSideE::Animate(float dt)
@@ -283,19 +304,19 @@ void Earth0b::BulletSideE::Animate(float dt)
 
 bool Earth0b::BulletSideE::Clamp(const RectF& bulletSideERegion) const
 {
-	if (pos.x < bulletSideERegion.left)
+	if (hitbox.pos.x < bulletSideERegion.left)
 	{
 		return true;
 	}
-	else if (pos.x > bulletSideERegion.right)
+	else if (hitbox.pos.x > bulletSideERegion.right)
 	{
 		return true;
 	}
-	if (pos.y < bulletSideERegion.top)
+	if (hitbox.pos.y < bulletSideERegion.top)
 	{
 		return true;
 	}
-	else if (pos.y > bulletSideERegion.bottom)
+	else if (hitbox.pos.y > bulletSideERegion.bottom)
 	{
 		return true;
 	}
@@ -304,17 +325,16 @@ bool Earth0b::BulletSideE::Clamp(const RectF& bulletSideERegion) const
 
 bool Earth0b::BulletSideE::PlayerHit(const CircF& pCirc) const
 {
-	return GetCircF().Coliding(pCirc);
+	return hitbox.Coliding(pCirc);
 }
 
-CircF Earth0b::BulletSideE::GetCircF() const
+void Earth0b::BulletSideE::DrawPosUpdate()
 {
-	const float halfDim = spriteBulletSideEDim * 0.5f;
-	return CircF({ pos.x + halfDim, pos.y + halfDim }, radius);
+	drawPos = { int(hitbox.pos.x) - bulSideOff, int(hitbox.pos.y) - bulSideOff };
 }
 
 void Earth0b::BulletSideE::Draw(const std::vector<Surface>& sprites, Graphics & gfx) const
 {
 	const int iBullet = int(curAnimTime * nSpritesBulletSideE / maxAnimTime);
-	gfx.DrawSprite(int(pos.x), int(pos.y), sprites[iBullet], gfx.GetGameRect());
+	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[iBullet], gfx.GetGameRect());
 }
