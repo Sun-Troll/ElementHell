@@ -18,7 +18,7 @@ private:
 		bool Clamp(const RectF& bulletCenterRegion) const;
 		void DrawPosUpdate();
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
-		CircF GetCircF() const;
+		const CircF& GetCircF() const;
 	private:
 		CircF hitbox;
 		VecF vel;
@@ -36,7 +36,7 @@ private:
 		bool Clamp(const RectF& bulletSideRegion) const;
 		void DrawPosUpdate();
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
-		CircF GetCircF() const;
+		const CircF& GetCircF() const;
 	private:
 		CircF hitbox;
 		VecF vel;
@@ -55,19 +55,19 @@ public:
 	void UpdateBullets(float dt);
 	void AimBullets(const VecF& target);
 	int GetCenterBulletN() const;
-	CircF GetCenterBulletCircF(int i) const;
+	const CircF& GetCenterBulletCircF(int i) const;
 	float GetCenterBulletDamage() const;
 	void PopCenterBullet(int i);
 	int GetSideBulletN() const;
-	CircF GetSideBulletCircF(int i) const;
+	const CircF& GetSideBulletCircF(int i) const;
 	float GetSideBulletDamage() const;
 	void PopSideBullet(int i);
 	float GetHpMax() const;
 	float GetHpCur() const;
 	bool IsAlive() const;
 	void Damaged(float damage);
-	VecF GetCenter() const;
-	CircF GetCircF() const;
+	const VecF& GetCenter() const;
+	const CircF& GetCircF() const;
 	void DrawPosUpdate();
 	void Draw(Graphics& gfx) const;
 	void DrawPosBulletsUpdate();
@@ -80,7 +80,7 @@ private:
 	float hpMax = hpBase;
 	float hpCur = hpMax;
 	static constexpr float radius = 5.0f;
-	static constexpr float baseFireTimePlayerAnim = 0.12f; // starts lagging at 0.001f
+	static constexpr float baseFireTimePlayerAnim = 0.12f; // starts lagging at 0.001f normal 0.12f
 	float maxFireTimePlayerAnim = baseFireTimePlayerAnim;
 	float curFireBasePlayerAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.2f;

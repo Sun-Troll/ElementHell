@@ -176,7 +176,7 @@ int Player::GetCenterBulletN() const
 	return int(bulletsCenter.size());
 }
 
-CircF Player::GetCenterBulletCircF(int i) const
+const CircF& Player::GetCenterBulletCircF(int i) const
 {
 	return bulletsCenter[i].GetCircF();
 }
@@ -197,7 +197,7 @@ int Player::GetSideBulletN() const
 	return int(bulletsSide.size());
 }
 
-CircF Player::GetSideBulletCircF(int i) const
+const CircF& Player::GetSideBulletCircF(int i) const
 {
 	return bulletsSide[i].GetCircF();
 }
@@ -234,12 +234,12 @@ void Player::Damaged(float damage)
 	drawDamageTimeCur = 0.0f;
 }
 
-VecF Player::GetCenter() const
+const VecF& Player::GetCenter() const
 {
 	return hitbox.pos;
 }
 
-CircF Player::GetCircF() const
+const CircF& Player::GetCircF() const
 {
 	return hitbox;
 }
@@ -340,7 +340,7 @@ void Player::BulletCenter::Draw(const std::vector<Surface>& sprites, Graphics& g
 	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[iBullet], gfx.GetGameRect());
 }
 
-CircF Player::BulletCenter::GetCircF() const
+const CircF& Player::BulletCenter::GetCircF() const
 {
 	return hitbox;
 }
@@ -423,7 +423,7 @@ void Player::BulletSide::Draw(const std::vector<Surface>& sprites, Graphics & gf
 	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[iBullet], gfx.GetGameRect());
 }
 
-CircF Player::BulletSide::GetCircF() const
+const CircF& Player::BulletSide::GetCircF() const
 {
 	return hitbox;
 }
