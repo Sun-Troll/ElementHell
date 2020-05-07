@@ -153,19 +153,9 @@ void Player::AimBullets(const VecF& target)
 	}
 }
 
-int Player::GetCenterBulletN() const
+std::vector<Player::BulletCenter>& Player::GetCenterBullets()
 {
-	return int(bulletsCenter.size());
-}
-
-const CircF& Player::GetCenterBulletCircF(int i) const
-{
-	return bulletsCenter[i].GetCircF();
-}
-
-bool Player::GetCenterBulletActive(int i) const
-{
-	return bulletsCenter[i].GetActive();
+	return bulletsCenter;
 }
 
 float Player::GetCenterBulletDamage() const
@@ -173,46 +163,14 @@ float Player::GetCenterBulletDamage() const
 	return bulletCenterDamage;
 }
 
-void Player::DeactivateCenterBullet(int i)
+std::vector<Player::BulletSide>& Player::GetSideBullets()
 {
-	bulletsCenter[i].Deactivate();
-}
-
-void Player::PopCenterBullet(int i)
-{
-	std::swap(bulletsCenter[i], bulletsCenter.back());
-	bulletsCenter.pop_back();
-}
-
-int Player::GetSideBulletN() const
-{
-	return int(bulletsSide.size());
-}
-
-const CircF& Player::GetSideBulletCircF(int i) const
-{
-	return bulletsSide[i].GetCircF();
-}
-
-bool Player::GetSideBulletActive(int i) const
-{
-	return bulletsSide[i].GetActive();
+	return bulletsSide;
 }
 
 float Player::GetSideBulletDamage() const
 {
 	return bulletSideDamage;
-}
-
-void Player::DeactivateSideBullet(int i)
-{
-	bulletsSide[i].Deactivate();
-}
-
-void Player::PopSideBullet(int i)
-{
-	std::swap(bulletsSide[i], bulletsSide.back());
-	bulletsSide.pop_back();
 }
 
 float Player::GetHpMax() const
@@ -269,20 +227,23 @@ void Player::DrawPosBulletsUpdate()
 {
 	for (int i = 0; i < bulletsCenter.size(); ++i)
 	{
-		if (!GetCenterBulletActive(i))
+		if (!bulletsCenter[i].GetActive())
 		{
-			PopCenterBullet(i);
+			std::swap(bulletsCenter[i], bulletsCenter.back());
+			bulletsCenter.pop_back();
 			--i;
 		}
 	}
 	for (int i = 0; i < bulletsSide.size(); ++i)
 	{
-		if (!GetSideBulletActive(i))
+		if (!bulletsSide[i].GetActive())
 		{
-			PopSideBullet(i);
+			std::swap(bulletsSide[i], bulletsSide.back());
+			bulletsSide.pop_back();
 			--i;
 		}
 	}
+
 	for (auto& bc : bulletsCenter)
 	{
 		bc.DrawPosUpdate();
@@ -291,6 +252,7 @@ void Player::DrawPosBulletsUpdate()
 	{
 		bs.DrawPosUpdate();
 	}
+
 	while (nBulCentFire > 0)
 	{
 		bulletsCenter.emplace_back(BulletCenter{

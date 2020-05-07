@@ -62,18 +62,10 @@ public:
 	void Fire(float dt);
 	void UpdateBullets(float dt);
 	void AimBullets(const VecF& target);
-	int GetCenterBulletN() const;
-	const CircF& GetCenterBulletCircF(int i) const;
-	bool GetCenterBulletActive(int i) const;
+	std::vector<BulletCenter>& GetCenterBullets();
 	float GetCenterBulletDamage() const;
-	void DeactivateCenterBullet(int i);
-	void PopCenterBullet(int i);
-	int GetSideBulletN() const;
-	const CircF& GetSideBulletCircF(int i) const;
-	bool GetSideBulletActive(int i) const;
+	std::vector<BulletSide>& GetSideBullets();
 	float GetSideBulletDamage() const;
-	void DeactivateSideBullet(int i);
-	void PopSideBullet(int i);
 	float GetHpMax() const;
 	float GetHpCur() const;
 	bool IsAlive() const;
@@ -92,7 +84,7 @@ private:
 	float hpMax = hpBase;
 	float hpCur = hpMax;
 	static constexpr float radius = 5.0f;
-	static constexpr float baseFireTimePlayerAnim = 0.001f; // starts lagging at 0.001f normal 0.12f
+	static constexpr float baseFireTimePlayerAnim = 0.12f; // starts lagging at 0.001f normal 0.12f
 	float maxFireTimePlayerAnim = baseFireTimePlayerAnim;
 	float curFireBasePlayerAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.2f;

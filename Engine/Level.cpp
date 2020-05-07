@@ -68,7 +68,7 @@ void Level::SpawnEarth0(float dt)
 		}
 		break;
 	case 1:
-		if (spawnTimer > 40.0f)
+		if (spawnTimer > 6.0f)
 		{
 			ad();
 			enEarth0a.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
