@@ -108,14 +108,23 @@ void Player::Fire(float dt)
 		curFireBasePlayerAnim -= maxFireTimePlayerAnim;
 		if (centerFiring)
 		{
-			++nBulCentFire;
+			bulletsCenterTemp.emplace_back(BulletCenter{
+			{ hitbox.pos },
+			{ 0.0f, -bulletCenterSpeed } });
 			centerFiring = false;
 		}
 		else
 		{
 			centerFiring = true;
 		}
-		++nBulSideFire;
+		const VecF bulSideBasePos{ hitbox.pos };
+		for (int i = 0; i < nBulletsSideFired; ++i)
+		{
+			bulletsSideTemp.emplace_back(BulletSide{
+				{ bulSideBasePos.x + bulletSidePosVel[i].x * bulletSideSpawnDist,
+				bulSideBasePos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
+				{ bulletSidePosVel[i].x * bulletSideSpeed, bulletSidePosVel[i].y * bulletSideSpeed } });
+		}
 	}
 	if (drawDamageTimeCur <= drawDamageTimeMax)
 	{
@@ -143,6 +152,25 @@ void Player::UpdateBullets(float dt)
 			bs.Deactivate();
 		}
 	}
+
+	for (auto& bct : bulletsCenterTemp)
+	{
+		bct.Move(dt);
+		bct.Animate(dt);
+		if (bct.Clamp(movementRegionBulletCenter))
+		{
+			bct.Deactivate();
+		}
+	}
+	for (auto& bst : bulletsSideTemp)
+	{
+		bst.Move(dt);
+		bst.Animate(dt);
+		if (bst.Clamp(movementRegionBulletSide))
+		{
+			bst.Deactivate();
+		}
+	}
 }
 
 void Player::AimBullets(const VecF& target)
@@ -150,6 +178,11 @@ void Player::AimBullets(const VecF& target)
 	for (auto& bs : bulletsSide)
 	{
 		bs.SetTarget(target);
+	}
+
+	for (auto& bst : bulletsSideTemp)
+	{
+		bst.SetTarget(target);
 	}
 }
 
@@ -225,6 +258,17 @@ void Player::Draw(Graphics& gfx) const
 
 void Player::DrawPosBulletsUpdate()
 {
+	for (const auto& bct : bulletsCenterTemp)
+	{
+		bulletsCenter.emplace_back(bct);
+	}
+	bulletsCenterTemp.clear();
+	for (const auto& bst : bulletsSideTemp)
+	{
+		bulletsSide.emplace_back(bst);
+	}
+	bulletsSideTemp.clear();
+
 	for (int i = 0; i < bulletsCenter.size(); ++i)
 	{
 		if (!bulletsCenter[i].GetActive())
@@ -251,26 +295,6 @@ void Player::DrawPosBulletsUpdate()
 	for (auto& bs : bulletsSide)
 	{
 		bs.DrawPosUpdate();
-	}
-
-	while (nBulCentFire > 0)
-	{
-		bulletsCenter.emplace_back(BulletCenter{
-			{ hitbox.pos },
-			{ 0.0f, -bulletCenterSpeed } });
-		--nBulCentFire;
-	}
-	while (nBulSideFire > 0)
-	{
-		const VecF bulSideBasePos{ hitbox.pos };
-		for (int i = 0; i < nBulletsSideFired; ++i)
-		{
-			bulletsSide.emplace_back(BulletSide{
-				{ bulSideBasePos.x + bulletSidePosVel[i].x * bulletSideSpawnDist,
-				bulSideBasePos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
-				{ bulletSidePosVel[i].x * bulletSideSpeed, bulletSidePosVel[i].y * bulletSideSpeed } });
-		}
-		--nBulSideFire;
 	}
 }
 
