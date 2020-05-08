@@ -15,13 +15,17 @@ private:
 		bool PlayerHit(const CircF& pCirc) const;
 		void DrawPosUpdate();
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		bool GetActive() const;
+		void Deactivate();
 	private:
 		CircF hitbox;
 		VecF vel;
 		VecI drawPos;
 		static constexpr float maxAnimTime = 1.1f;
 		float curAnimTime = 0.0f;
+		int curDrawFrame = 0;
 		static constexpr float radius = 7.0f;
+		bool active = true;
 	};
 public:
 	Earth0a(const VecF& pos, const VecF& vel);
@@ -32,7 +36,6 @@ public:
 	void HitPlayer(Player& player);
 	void GetHit(Player& player, float dt);
 	bool IsDead() const;
-	void PopBullet(int i);
 	bool BulletsEmpty() const;
 	void DrawPosUpdate();
 	void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
@@ -44,11 +47,13 @@ private:
 	VecF vel;
 	static constexpr float hpMax = 200.0f;
 	float hpCur = hpMax;
-	static constexpr float maxFireTimeEarth0aAnim = 0.6f;
+	static constexpr float maxFireTimeEarth0aAnim = 0.3f; // normal 0.6
 	float curFireBaseEarth0aAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.1f;
 	float drawDamageTimeCur = drawDamageTimeMax;
 	VecI drawPos;
+	int curDrawFrame = 0;
+	bool drawDamaged = false;
 	//static constexpr int nSpritesEarth0a = 6;
 	//static constexpr int spriteEarth0aWidth = 64;
 	//static constexpr int spriteEarth0aHeight = 54;
@@ -69,6 +74,7 @@ private:
 	//static constexpr int nSpritesBulletCenter = 4;
 	//static constexpr int spriteBulletCenterDim = 32; // assumes same width/height
 	std::vector<Bullet> bullets;
+	std::vector<Bullet> bulletsTemp;
 public:
 	static constexpr int nSpritesBullet = 4;
 	static constexpr int spriteBulletDim = 32; // assumes same width/height

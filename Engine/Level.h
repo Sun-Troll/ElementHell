@@ -37,6 +37,7 @@ private:
 
 	// Earth0a stats
 	std::vector<Earth0a> enEarth0a;
+	std::vector<Earth0a> enEarth0aTemp;
 	std::vector<Surface> spritesEarth0a;
 	const RectF movRegEarth0a{ float(-Earth0a::xOffset), float(Graphics::ScreenWidth + Earth0a::xOffset),
 		float(Earth0a::yOffset - Earth0a::spriteEarth0aHeight), float(Graphics::GameHeight + Earth0a::yOffset) };

@@ -58,7 +58,31 @@ void Level::StartEarth0()
 void Level::SpawnEarth0(float dt)
 {
 	spawnTimer += dt;
-	switch (curSpawn)
+	while (spawnTimer > 0.08f)
+	{
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 200.0f }, { -20.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 300.0f }, { -20.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 400.0f }, { -20.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 500.0f }, { -20.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 600.0f }, { -20.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 120.0f }, { 25.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 220.0f }, { 25.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 320.0f }, { 25.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 420.0f }, { 25.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 520.0f }, { 25.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 620.0f }, { 25.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { 100.0f, movRegEarth0a.top }, { 1.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { 200.0f, movRegEarth0a.top }, { 1.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { 300.0f, movRegEarth0a.top }, { 1.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { 400.0f, movRegEarth0a.top }, { 1.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { 130.0f, movRegEarth0a.bottom }, { -1.0f, -10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { 230.0f, movRegEarth0a.bottom }, { -1.0f, -10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { 330.0f, movRegEarth0a.bottom }, { -1.0f, -10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { 430.0f, movRegEarth0a.bottom }, { -1.0f, -10.0f } });
+		spawnTimer -= 0.08f; // multithread read between 0.08 0.07
+	}
+	/*switch (curSpawn)
 	{
 	case 0:
 		if (spawnTimer > 6.0f)
@@ -514,7 +538,7 @@ void Level::SpawnEarth0(float dt)
 		break;
 	default:
 		break;
-	}
+	}*/
 }
 
 void Level::UpdateEarth0(Player& player0, Player& player1, bool multiplayer, float dt)
@@ -525,6 +549,7 @@ void Level::UpdateEarth0(Player& player0, Player& player1, bool multiplayer, flo
 		player0.Damaged(1);
 	}
 	timer += dt;
+
 	// Earth0a
 	for (auto& e : enEarth0a)
 	{
@@ -545,19 +570,23 @@ void Level::UpdateEarth0(Player& player0, Player& player1, bool multiplayer, flo
 			e.HitPlayer(player1);
 		}
 	}
-	for (int i = 0; i < enEarth0a.size(); ++i)
+	for (auto& et : enEarth0aTemp)
 	{
-		if (enEarth0a[i].IsDead() && enEarth0a[i].BulletsEmpty())
+		if (!et.IsDead())
 		{
-			std::swap(enEarth0a[i], enEarth0a.back());
-			enEarth0a.pop_back();
-			--i;
+			et.Move(dt);
+			et.Fire(player0, player1, multiplayer, dt);
+			et.GetHit(player0, dt);
+			if (multiplayer)
+			{
+				et.GetHit(player1, dt);
+			}
 		}
-		else if (enEarth0a[i].Clamp(movRegEarth0a) && enEarth0a[i].BulletsEmpty())
+		et.UpdateBullets(movRegEarth0aBullet, dt);
+		et.HitPlayer(player0);
+		if (multiplayer)
 		{
-			std::swap(enEarth0a[i], enEarth0a.back());
-			enEarth0a.pop_back();
-			--i;
+			et.HitPlayer(player1);
 		}
 	}
 
@@ -581,6 +610,43 @@ void Level::UpdateEarth0(Player& player0, Player& player1, bool multiplayer, flo
 			e.HitPlayer(player1);
 		}
 	}
+}
+
+void Level::PrepareDrawEarth0()
+{
+	// Earth0a
+	for (const auto& et : enEarth0aTemp)
+	{
+		enEarth0a.emplace_back(et);
+	}
+	enEarth0aTemp.clear();
+	for (int i = 0; i < enEarth0a.size(); ++i)
+	{
+		if (enEarth0a[i].IsDead() && enEarth0a[i].BulletsEmpty())
+		{
+			std::swap(enEarth0a[i], enEarth0a.back());
+			enEarth0a.pop_back();
+			--i;
+		}
+		else if (enEarth0a[i].Clamp(movRegEarth0a) && enEarth0a[i].BulletsEmpty())
+		{
+			std::swap(enEarth0a[i], enEarth0a.back());
+			enEarth0a.pop_back();
+			--i;
+		}
+	}
+	for (auto& e : enEarth0a)
+	{
+		e.DrawPosUpdate();
+		e.DrawPosBulletsUpdate();
+	}
+
+	// Earth0b
+	for (auto& e : enEarth0b)
+	{
+		e.DrawPosUpdate();
+		e.DrawPosBulletsUpdate();
+	}
 	for (int i = 0; i < enEarth0b.size(); ++i)
 	{
 		if (enEarth0b[i].IsDead() && enEarth0b[i].BulletsEmpty())
@@ -595,20 +661,6 @@ void Level::UpdateEarth0(Player& player0, Player& player1, bool multiplayer, flo
 			enEarth0b.pop_back();
 			--i;
 		}
-	}
-}
-
-void Level::PrepareDrawEarth0()
-{
-	for (auto& e : enEarth0a)
-	{
-		e.DrawPosUpdate();
-		e.DrawPosBulletsUpdate();
-	}
-	for (auto& e : enEarth0b)
-	{
-		e.DrawPosUpdate();
-		e.DrawPosBulletsUpdate();
 	}
 }
 
