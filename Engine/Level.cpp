@@ -58,7 +58,7 @@ void Level::StartEarth0()
 void Level::SpawnEarth0(float dt)
 {
 	spawnTimer += dt;
-	while (spawnTimer > 100.08f)
+	while (spawnTimer > 0.08f)
 	{
 		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
 		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 200.0f }, { -20.0f, 10.0f } });

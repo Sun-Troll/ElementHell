@@ -134,6 +134,30 @@ void Earth0a::GetHit(Player& player, float dt)
 			drawDamageTimeCur = 0.0f;
 		}
 	}
+
+	for (auto& bct : player.GetCenterBulletsTemp())
+	{
+		if (bct.GetActive())
+		{
+			const CircF curCentBul = bct.GetCircF();
+			if (hitbox.Coliding(curCentBul))
+			{
+				hpCur -= player.GetCenterBulletDamage();
+				player.AimBullets(curCentBul.pos);
+				bct.Deactivate();
+				drawDamageTimeCur = 0.0f;
+			}
+		}
+	}
+	for (auto& bst : player.GetSideBulletsTemp())
+	{
+		if (bst.GetActive() && hitbox.Coliding(bst.GetCircF()))
+		{
+			hpCur -= player.GetSideBulletDamage();
+			bst.Deactivate();
+			drawDamageTimeCur = 0.0f;
+		}
+	}
 }
 
 bool Earth0a::IsDead() const

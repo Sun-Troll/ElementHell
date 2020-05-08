@@ -191,6 +191,11 @@ std::vector<Player::BulletCenter>& Player::GetCenterBullets()
 	return bulletsCenter;
 }
 
+std::vector<Player::BulletCenter>& Player::GetCenterBulletsTemp()
+{
+	return bulletsCenterTemp;
+}
+
 float Player::GetCenterBulletDamage() const
 {
 	return bulletCenterDamage;
@@ -199,6 +204,11 @@ float Player::GetCenterBulletDamage() const
 std::vector<Player::BulletSide>& Player::GetSideBullets()
 {
 	return bulletsSide;
+}
+
+std::vector<Player::BulletSide>& Player::GetSideBulletsTemp()
+{
+	return bulletsSideTemp;
 }
 
 float Player::GetSideBulletDamage() const

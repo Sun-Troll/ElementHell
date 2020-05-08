@@ -63,8 +63,10 @@ public:
 	void UpdateBullets(float dt);
 	void AimBullets(const VecF& target);
 	std::vector<BulletCenter>& GetCenterBullets();
+	std::vector<BulletCenter>& GetCenterBulletsTemp();
 	float GetCenterBulletDamage() const;
 	std::vector<BulletSide>& GetSideBullets();
+	std::vector<BulletSide>& GetSideBulletsTemp();
 	float GetSideBulletDamage() const;
 	float GetHpMax() const;
 	float GetHpCur() const;
@@ -84,7 +86,7 @@ private:
 	float hpMax = hpBase;
 	float hpCur = hpMax;
 	static constexpr float radius = 5.0f;
-	static constexpr float baseFireTimePlayerAnim = 0.001f; // starts lagging at 0.001f normal 0.12f
+	static constexpr float baseFireTimePlayerAnim = 0.03f; // starts lagging at 0.001f normal 0.12f
 	float maxFireTimePlayerAnim = baseFireTimePlayerAnim;
 	float curFireBasePlayerAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.2f;
