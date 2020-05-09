@@ -38,7 +38,7 @@ public:
 	void Go();
 private:
 	void PrepareFrame();
-	void ComposeFrame();
+	void ComposeFrame(Graphics::DrawRegion cur);
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */

@@ -30,6 +30,13 @@
 class Graphics
 {
 public:
+	enum class DrawRegion
+	{
+		Top,
+		Bottom,
+		Rest
+	};
+public:
 	class Exception : public ChiliException
 	{
 	public:
@@ -84,6 +91,7 @@ public:
 	static constexpr int ScreenWidth = 540;
 	static constexpr int ScreenHeight = 960;
 	static constexpr int GameHeight = 900;
+	static constexpr int DrawSplit = ScreenHeight / 2;
 	static RectI GetGameRect();
 	static RectF GetGameRectF();
 };

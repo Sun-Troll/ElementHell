@@ -14,13 +14,14 @@ private:
 		bool Clamp(const RectF& bulletRegion) const;
 		bool PlayerHit(const CircF& pCirc) const;
 		void DrawPosUpdate();
-		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		void Draw(const std::vector<Surface>& sprites, Graphics::DrawRegion cur, Graphics& gfx) const;
 		bool GetActive() const;
 		void Deactivate();
 	private:
 		CircF hitbox;
 		VecF vel;
 		VecI drawPos;
+		Graphics::DrawRegion drawReg = Graphics::DrawRegion::Rest;
 		static constexpr float maxAnimTime = 1.1f;
 		float curAnimTime = 0.0f;
 		int curDrawFrame = 0;
@@ -38,9 +39,9 @@ public:
 	bool IsDead() const;
 	bool BulletsEmpty() const;
 	void DrawPosUpdate();
-	void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+	void Draw(const std::vector<Surface>& sprites, Graphics::DrawRegion cur, Graphics& gfx) const;
 	void DrawPosBulletsUpdate();
-	void DrawBullets(const std::vector<Surface>& spritesBullet, Graphics& gfx) const;
+	void DrawBullets(const std::vector<Surface>& spritesBullet, Graphics::DrawRegion cur, Graphics& gfx) const;
 private:
 	static constexpr float speed = 200.0f;
 	CircF hitbox;
@@ -54,9 +55,7 @@ private:
 	VecI drawPos;
 	int curDrawFrame = 0;
 	bool drawDamaged = false;
-	//static constexpr int nSpritesEarth0a = 6;
-	//static constexpr int spriteEarth0aWidth = 64;
-	//static constexpr int spriteEarth0aHeight = 54;
+	Graphics::DrawRegion drawReg = Graphics::DrawRegion::Rest;
 	static constexpr float earth0aRadius = 32.0f + 4.0f;
 	static constexpr float pi = 3.141592741f;
 public:
@@ -65,12 +64,11 @@ public:
 	static constexpr int spriteEarth0aHeight = 54;
 	static constexpr int xOffset = spriteEarth0aWidth / 2;
 	static constexpr int yOffset = 19; // must manually test/calculate
+
 // bullets
 private:
 	static constexpr float bulletSpeed = 400.0f;
 	static constexpr float bulletDamage = 50.0f;
-	//static constexpr int nSpritesBulletCenter = 4;
-	//static constexpr int spriteBulletCenterDim = 32; // assumes same width/height
 	std::vector<Bullet> bullets;
 	std::vector<Bullet> bulletsTemp;
 public:
@@ -78,10 +76,3 @@ public:
 	static constexpr int spriteBulletDim = 32; // assumes same width/height
 	static constexpr int bulOffset = spriteBulletDim / 2;
 };
-
-/*
-const VecF earth0aCenter{ pos.x + float(spriteEarth0aWidth) / 2.0f,
-			pos.y + float(spriteBulletDim) / 2.0f + 3.0f };
-const CircF hitBoxEarth0 = { { pos.x + float(spriteEarth0aWidth) / 2.0f,
-			pos.y + float(spriteBulletDim) / 2.0f + 3.0f }, earth0aRadius };
-*/

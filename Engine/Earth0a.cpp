@@ -175,17 +175,32 @@ void Earth0a::DrawPosUpdate()
 	drawPos = { int(hitbox.pos.x) - xOffset, int(hitbox.pos.y) - yOffset };
 	curDrawFrame = int(curFireBaseEarth0aAnim * nSpritesEarth0a / maxFireTimeEarth0aAnim);
 	drawDamaged = drawDamageTimeCur <= drawDamageTimeMax;
-}
-
-void Earth0a::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
-{
-	if (drawDamaged)
+	if (drawPos.y > Graphics::DrawSplit)
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[curDrawFrame], gfx.GetGameRect());
+		drawReg = Graphics::DrawRegion::Bottom;
+	}
+	else if (drawPos.y + spriteEarth0aHeight < Graphics::DrawSplit)
+	{
+		drawReg = Graphics::DrawRegion::Top;
 	}
 	else
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+		drawReg = Graphics::DrawRegion::Rest;
+	}
+}
+
+void Earth0a::Draw(const std::vector<Surface>& sprites, Graphics::DrawRegion cur, Graphics& gfx) const
+{
+	if (drawReg == cur)
+	{
+		if (drawDamaged)
+		{
+			gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[curDrawFrame], gfx.GetGameRect());
+		}
+		else
+		{
+			gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+		}
 	}
 }
 
@@ -213,11 +228,11 @@ void Earth0a::DrawPosBulletsUpdate()
 	}
 }
 
-void Earth0a::DrawBullets(const std::vector<Surface>& spritesBullet, Graphics& gfx) const
+void Earth0a::DrawBullets(const std::vector<Surface>& spritesBullet, Graphics::DrawRegion cur, Graphics& gfx) const
 {
 	for (const auto& bc : bullets)
 	{
-		bc.Draw(spritesBullet, gfx);
+		bc.Draw(spritesBullet, cur, gfx);
 	}
 }
 
@@ -274,11 +289,26 @@ void Earth0a::Bullet::DrawPosUpdate()
 	assert(active);
 	drawPos = { int(hitbox.pos.x) - bulOffset, int(hitbox.pos.y) - bulOffset };
 	curDrawFrame = int(curAnimTime * nSpritesBullet / maxAnimTime);
+	if (drawPos.y > Graphics::DrawSplit)
+	{
+		drawReg = Graphics::DrawRegion::Bottom;
+	}
+	else if (drawPos.y + spriteBulletDim < Graphics::DrawSplit)
+	{
+		drawReg = Graphics::DrawRegion::Top;
+	}
+	else
+	{
+		drawReg = Graphics::DrawRegion::Rest;
+	}
 }
 
-void Earth0a::Bullet::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
+void Earth0a::Bullet::Draw(const std::vector<Surface>& sprites, Graphics::DrawRegion cur, Graphics& gfx) const
 {
-	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+	if (drawReg == cur)
+	{
+		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+	}
 }
 
 bool Earth0a::Bullet::GetActive() const

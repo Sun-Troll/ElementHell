@@ -17,7 +17,7 @@ private:
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletCenterRegion) const;
 		void DrawPosUpdate();
-		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		void Draw(const std::vector<Surface>& sprites, Graphics::DrawRegion cur, Graphics& gfx) const;
 		const CircF& GetCircF() const;
 		bool GetActive() const;
 		void Deactivate();
@@ -25,6 +25,7 @@ private:
 		CircF hitbox;
 		VecF vel;
 		VecI drawPos;
+		Graphics::DrawRegion drawReg = Graphics::DrawRegion::Rest;
 		static constexpr float maxAnimTime = 0.6f;
 		float curAnimTime = 0.0f;
 		int curDrawFrame = 0;
@@ -39,7 +40,7 @@ private:
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletSideRegion) const;
 		void DrawPosUpdate();
-		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		void Draw(const std::vector<Surface>& sprites, Graphics::DrawRegion cur, Graphics& gfx) const;
 		const CircF& GetCircF() const;
 		bool GetActive() const;
 		void Deactivate();
@@ -48,6 +49,7 @@ private:
 		VecF vel;
 		VecF curTarget;
 		VecI drawPos;
+		Graphics::DrawRegion drawReg = Graphics::DrawRegion::Rest;
 		static constexpr float maxAnimTime = 0.6f;
 		float curAnimTime = 0.0f;
 		int curDrawFrame = 0;
@@ -75,9 +77,9 @@ public:
 	const VecF& GetCenter() const;
 	const CircF& GetCircF() const;
 	void DrawPosUpdate();
-	void Draw(Graphics& gfx) const;
+	void Draw(Graphics::DrawRegion cur, Graphics& gfx) const;
 	void DrawPosBulletsUpdate();
-	void DrawBullets(Graphics& gfx) const;
+	void DrawBullets(Graphics::DrawRegion cur, Graphics& gfx) const;
 private:
 	CircF hitbox;
 	float speedFast = 500.0f;
@@ -99,6 +101,7 @@ private:
 	VecI drawPos;
 	int curDrawFrame = 0;
 	bool drawDamaged = false;
+	Graphics::DrawRegion drawReg = Graphics::DrawRegion::Rest;
 	std::vector<Surface> spritesPlayer;
 	const RectF movementRegionPlayer{ xOffset, float(Graphics::ScreenWidth - xOffset),
 		yOffset, float(Graphics::GameHeight - yOffset) };

@@ -252,17 +252,32 @@ void Player::DrawPosUpdate()
 	drawPos = { int(hitbox.pos.x) - xOffset, int(hitbox.pos.y) - yOffset };
 	curDrawFrame = int(curFireBasePlayerAnim * nSpritesPlayer / maxFireTimePlayerAnim);
 	drawDamaged = drawDamageTimeCur <= drawDamageTimeMax;
-}
-
-void Player::Draw(Graphics& gfx) const
-{
-	if (drawDamaged)
+	if (drawPos.y > Graphics::DrawSplit)
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, spritesPlayer[curDrawFrame]);
+		drawReg = Graphics::DrawRegion::Bottom;
+	}
+	else if (drawPos.y + spritePlayerHeight < Graphics::DrawSplit)
+	{
+		drawReg = Graphics::DrawRegion::Top;
 	}
 	else
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, spritesPlayer[curDrawFrame]);
+		drawReg = Graphics::DrawRegion::Rest;
+	}
+}
+
+void Player::Draw(Graphics::DrawRegion cur, Graphics& gfx) const
+{
+	if (drawReg == cur)
+	{
+		if (drawDamaged)
+		{
+			gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, spritesPlayer[curDrawFrame]);
+		}
+		else
+		{
+			gfx.DrawSprite(drawPos.x, drawPos.y, spritesPlayer[curDrawFrame]);
+		}
 	}
 }
 
@@ -308,15 +323,15 @@ void Player::DrawPosBulletsUpdate()
 	}
 }
 
-void Player::DrawBullets(Graphics& gfx) const
+void Player::DrawBullets(Graphics::DrawRegion cur, Graphics& gfx) const
 {
 	for (const auto& bc : bulletsCenter)
 	{
-		bc.Draw(spritesBulletCenter, gfx);
+		bc.Draw(spritesBulletCenter, cur, gfx);
 	}
 	for (const auto& bs : bulletsSide)
 	{
-		bs.Draw(spritesBulletSide, gfx);
+		bs.Draw(spritesBulletSide, cur, gfx);
 	}
 }
 
@@ -365,13 +380,29 @@ bool Player::BulletCenter::Clamp(const RectF& bulletCenterRegion) const
 
 void Player::BulletCenter::DrawPosUpdate()
 {
+	assert(active);
 	drawPos = { int(hitbox.pos.x) - bulCentOff, int(hitbox.pos.y) - bulCentOff };
 	curDrawFrame = int(curAnimTime * nSpritesBulletCenter / maxAnimTime);
+	if (drawPos.y > Graphics::DrawSplit)
+	{
+		drawReg = Graphics::DrawRegion::Bottom;
+	}
+	else if (drawPos.y + spriteBulletCenterDim < Graphics::DrawSplit)
+	{
+		drawReg = Graphics::DrawRegion::Top;
+	}
+	else
+	{
+		drawReg = Graphics::DrawRegion::Rest;
+	}
 }
 
-void Player::BulletCenter::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
+void Player::BulletCenter::Draw(const std::vector<Surface>& sprites, Graphics::DrawRegion cur, Graphics& gfx) const
 {
-	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+	if (drawReg == cur)
+	{
+		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+	}
 }
 
 const CircF& Player::BulletCenter::GetCircF() const
@@ -454,17 +485,33 @@ bool Player::BulletSide::Clamp(const RectF& bulletSideRegion) const
 
 void Player::BulletSide::DrawPosUpdate()
 {
+	assert(active);
 	drawPos = { int(hitbox.pos.x) - bulSideOff, int(hitbox.pos.y) - bulSideOff };
 	curDrawFrame = int(curAnimTime * nSpritesBulletSide / maxAnimTime / 2);
 	if (targeting)
 	{
 		curDrawFrame += nSpritesBulletSide / 2;
 	}
+	if (drawPos.y > Graphics::DrawSplit)
+	{
+		drawReg = Graphics::DrawRegion::Bottom;
+	}
+	else if (drawPos.y + spriteBulletSideDim < Graphics::DrawSplit)
+	{
+		drawReg = Graphics::DrawRegion::Top;
+	}
+	else
+	{
+		drawReg = Graphics::DrawRegion::Rest;
+	}
 }
 
-void Player::BulletSide::Draw(const std::vector<Surface>& sprites, Graphics & gfx) const
+void Player::BulletSide::Draw(const std::vector<Surface>& sprites, Graphics::DrawRegion cur, Graphics& gfx) const
 {
-	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+	if (drawReg == cur)
+	{
+		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+	}
 }
 
 const CircF& Player::BulletSide::GetCircF() const

@@ -14,13 +14,14 @@ private:
 		bool Clamp(const RectF& bulletCentERegion) const;
 		bool PlayerHit(const CircF& pCirc) const;
 		void DrawPosUpdate();
-		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		void Draw(const std::vector<Surface>& sprites, Graphics::DrawRegion cur, Graphics& gfx) const;
 		bool GetActive() const;
 		void Deactivate();
 	private:
 		CircF hitbox;
 		VecF vel;
 		VecI drawPos;
+		Graphics::DrawRegion drawReg = Graphics::DrawRegion::Rest;
 		static constexpr float maxAnimTime = 1.4f;
 		float curAnimTime = 0.0f;
 		int curDrawFrame = 0;
@@ -36,13 +37,14 @@ private:
 		bool Clamp(const RectF& bulletSideERegion) const;
 		bool PlayerHit(const CircF& pCirc) const;
 		void DrawPosUpdate();
-		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		void Draw(const std::vector<Surface>& sprites, Graphics::DrawRegion cur, Graphics& gfx) const;
 		bool GetActive() const;
 		void Deactivate();
 	private:
 		CircF hitbox;
 		VecF vel;
 		VecI drawPos;
+		Graphics::DrawRegion drawReg = Graphics::DrawRegion::Rest;
 		static constexpr float maxAnimTime = 1.1f;
 		float curAnimTime = 0.0f;
 		int curDrawFrame = 0;
@@ -60,10 +62,10 @@ public:
 	bool IsDead() const;
 	bool BulletsEmpty() const;
 	void DrawPosUpdate();
-	void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+	void Draw(const std::vector<Surface>& sprites, Graphics::DrawRegion cur, Graphics& gfx) const;
 	void DrawPosBulletsUpdate();
 	void DrawBullets(const std::vector<Surface>& spritesBulCentE,
-		const std::vector<Surface>& spritesBulSideE, Graphics& gfx) const;
+		const std::vector<Surface>& spritesBulSideE, Graphics::DrawRegion cur, Graphics& gfx) const;
 private:
 	static constexpr float speed = 100.0f;
 	CircF hitbox;
@@ -77,6 +79,7 @@ private:
 	VecI drawPos;
 	int curDrawFrame = 0;
 	bool drawDamaged = false;
+	Graphics::DrawRegion drawReg = Graphics::DrawRegion::Rest;
 	static constexpr float earth0bRadius = 48.0f;
 	static constexpr float pi = 3.141592741f;
 public:

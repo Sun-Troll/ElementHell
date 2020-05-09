@@ -35,10 +35,13 @@ Game::Game(MainWindow& wnd)
 void Game::Go()
 {
 	gfx.BeginFrame();
-	std::thread one(&Game::UpdateModel, this);
-	//UpdateModel();
-	ComposeFrame();
-	one.join();
+	std::thread oneDrawTop(&Game::ComposeFrame, this, Graphics::DrawRegion::Top);
+	std::thread twoDrawBottom(&Game::ComposeFrame, this, Graphics::DrawRegion::Bottom);
+	std::thread threeUpdate(&Game::UpdateModel, this);
+	twoDrawBottom.join();
+	oneDrawTop.join();
+	ComposeFrame(Graphics::DrawRegion::Rest);
+	threeUpdate.join();
 	PrepareFrame();
 	gfx.EndFrame();
 }
@@ -248,25 +251,28 @@ void Game::PrepareFrame()
 	}
 }
 
-void Game::ComposeFrame()
+void Game::ComposeFrame(Graphics::DrawRegion cur)
 {
 	if (menu.GetState() == Menu::State::Level)
 	{
-		hud.Draw(player0.GetHpMax(), player0.GetHpCur(), gfx);
-		player0.DrawBullets(gfx);
-		player0.Draw(gfx);
+		if (cur == Graphics::DrawRegion::Bottom)
+		{
+			hud.Draw(player0.GetHpMax(), player0.GetHpCur(), gfx);
+		}
+		player0.DrawBullets(cur, gfx);
+		player0.Draw(cur, gfx);
 		if (multiplayer)
 		{
-			player1.DrawBullets(gfx);
-			player1.Draw(gfx);
+			player1.DrawBullets(cur, gfx);
+			player1.Draw(cur, gfx);
 		}
 		if (!level.empty()) // change based on cur lvl
 		{
 			assert(level.size() == 1);
-			level.front().DrawEarth0(gfx);
+			level.front().DrawEarth0(cur, gfx);
 		}
 	}
-	else
+	else if (cur == Graphics::DrawRegion::Rest)
 	{
 		menu.Draw(gfx);
 	}
