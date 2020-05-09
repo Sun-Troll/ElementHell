@@ -1,4 +1,5 @@
 #include "Earth0b.h"
+#include <cassert>
 
 Earth0b::Earth0b(const VecF& pos, const VecF& vel)
 	:
@@ -52,15 +53,15 @@ void Earth0b::Fire(const Player& player0, const Player& player1, bool multiplaye
 				}
 			}
 			curFireBaseEarth0bAnim -= maxFireTimeEarth0bAnim;
-			bulletsCentE.emplace_back(BulletCentE{
+			bulletsCentETemp.emplace_back(BulletCentE{
 					hitbox.pos, { (playerCent - hitbox.pos).Normalize() * BulletCentESpeed } });
-			bulletsSideE.emplace_back(BulletSideE{ { hitbox.pos.x + bulletSideSpawnOff, hitbox.pos.y + bulletSideSpawnOff },
+			bulletsSideETemp.emplace_back(BulletSideE{ { hitbox.pos.x + bulletSideSpawnOff, hitbox.pos.y + bulletSideSpawnOff },
 				{ bulletSideVelComponent, bulletSideVelComponent } });
-			bulletsSideE.emplace_back(BulletSideE{ { hitbox.pos.x - bulletSideSpawnOff, hitbox.pos.y + bulletSideSpawnOff },
+			bulletsSideETemp.emplace_back(BulletSideE{ { hitbox.pos.x - bulletSideSpawnOff, hitbox.pos.y + bulletSideSpawnOff },
 				{ -bulletSideVelComponent, bulletSideVelComponent } });
-			bulletsSideE.emplace_back(BulletSideE{ { hitbox.pos.x - bulletSideSpawnOff, hitbox.pos.y - bulletSideSpawnOff },
+			bulletsSideETemp.emplace_back(BulletSideE{ { hitbox.pos.x - bulletSideSpawnOff, hitbox.pos.y - bulletSideSpawnOff },
 				{ -bulletSideVelComponent, -bulletSideVelComponent } });
-			bulletsSideE.emplace_back(BulletSideE{ { hitbox.pos.x + bulletSideSpawnOff, hitbox.pos.y - bulletSideSpawnOff },
+			bulletsSideETemp.emplace_back(BulletSideE{ { hitbox.pos.x + bulletSideSpawnOff, hitbox.pos.y - bulletSideSpawnOff },
 				{ bulletSideVelComponent, -bulletSideVelComponent } });
 		}
 	}
@@ -80,50 +81,74 @@ void Earth0b::UpdateBullets(const RectF& movRegBulCentE, const RectF& movRegBulS
 	{
 		bc.Move(dt);
 		bc.Animate(dt);
+		if (bc.Clamp(movRegBulCentE))
+		{
+			bc.Deactivate();
+		}
 	}
 	for (auto& bs : bulletsSideE)
 	{
 		bs.Move(dt);
 		bs.Animate(dt);
-	}
-
-	for (int i = 0; i < bulletsCentE.size(); ++i)
-	{
-		if (bulletsCentE[i].Clamp(movRegBulCentE))
+		if (bs.Clamp(movRegBulSideE))
 		{
-			PopBulletCentE(i);
-			--i;
+			bs.Deactivate();
 		}
 	}
-	for (int i = 0; i < bulletsSideE.size(); ++i)
+
+	for (auto& bct : bulletsCentETemp)
 	{
-		if (bulletsSideE[i].Clamp(movRegBulSideE))
+		bct.Move(dt);
+		bct.Animate(dt);
+		if (bct.Clamp(movRegBulCentE))
 		{
-			PopBulletSideE(i);
-			--i;
+			bct.Deactivate();
+		}
+	}
+	for (auto& bst : bulletsSideETemp)
+	{
+		bst.Move(dt);
+		bst.Animate(dt);
+		if (bst.Clamp(movRegBulSideE))
+		{
+			bst.Deactivate();
 		}
 	}
 }
 
 void Earth0b::HitPlayer(Player& player)
 {
-	for (int i = 0; i < bulletsCentE.size(); ++i)
+	for (auto& bc : bulletsCentE)
 	{
-		if (bulletsCentE[i].PlayerHit(player.GetCircF()))
+		if (bc.GetActive() && bc.PlayerHit(player.GetCircF()))
 		{
-			PopBulletCentE(i);
-			player.Damaged(BulletCentEDamage);
-			--i;
+			bc.Deactivate();
+			//player.Damaged(BulletCentEDamage);
+		}
+	}
+	for (auto& bs : bulletsSideE)
+	{
+		if (bs.GetActive() && bs.PlayerHit(player.GetCircF()))
+		{
+			bs.Deactivate();
+			//player.Damaged(BulletCentEDamage);
 		}
 	}
 
-	for (int i = 0; i < bulletsSideE.size(); ++i)
+	for (auto& bct : bulletsCentETemp)
 	{
-		if (bulletsSideE[i].PlayerHit(player.GetCircF()))
+		if (bct.GetActive() && bct.PlayerHit(player.GetCircF()))
 		{
-			PopBulletSideE(i);
-			player.Damaged(BulletSideEDamage);
-			--i;
+			bct.Deactivate();
+			//player.Damaged(BulletCentEDamage);
+		}
+	}
+	for (auto& bst : bulletsSideETemp)
+	{
+		if (bst.GetActive() && bst.PlayerHit(player.GetCircF()))
+		{
+			bst.Deactivate();
+			//player.Damaged(BulletCentEDamage);
 		}
 	}
 }
@@ -153,23 +178,35 @@ void Earth0b::GetHit(Player& player, float dt)
 			drawDamageTimeCur = 0.0f;
 		}
 	}
+
+	for (auto& bct : player.GetCenterBulletsTemp())
+	{
+		if (bct.GetActive())
+		{
+			const CircF curCentBul = bct.GetCircF();
+			if (hitbox.Coliding(curCentBul))
+			{
+				hpCur -= player.GetCenterBulletDamage();
+				player.AimBullets(curCentBul.pos);
+				bct.Deactivate();
+				drawDamageTimeCur = 0.0f;
+			}
+		}
+	}
+	for (auto& bst : player.GetSideBulletsTemp())
+	{
+		if (bst.GetActive() && hitbox.Coliding(bst.GetCircF()))
+		{
+			hpCur -= player.GetSideBulletDamage();
+			bst.Deactivate();
+			drawDamageTimeCur = 0.0f;
+		}
+	}
 }
 
 bool Earth0b::IsDead() const
 {
 	return hpCur <= 0.0f;
-}
-
-void Earth0b::PopBulletCentE(int i)
-{
-	std::swap(bulletsCentE[i], bulletsCentE.back());
-	bulletsCentE.pop_back();
-}
-
-void Earth0b::PopBulletSideE(int i)
-{
-	std::swap(bulletsSideE[i], bulletsSideE.back());
-	bulletsSideE.pop_back();
 }
 
 bool Earth0b::BulletsEmpty() const
@@ -180,28 +217,58 @@ bool Earth0b::BulletsEmpty() const
 void Earth0b::DrawPosUpdate()
 {
 	drawPos = { int(hitbox.pos.x) - xOffset, int(hitbox.pos.y) - yOffset };
+	curDrawFrame = int(curFireBaseEarth0bAnim * nSpritesEarth0b / maxFireTimeEarth0bAnim);
+	drawDamaged = drawDamageTimeCur <= drawDamageTimeMax;
 }
 
 void Earth0b::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
 {
-	const int iEarth0b = int(curFireBaseEarth0bAnim * nSpritesEarth0b / maxFireTimeEarth0bAnim);
-	if (drawDamageTimeCur <= drawDamageTimeMax)
+	if (drawDamaged)
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[iEarth0b], gfx.GetGameRect());
+		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[curDrawFrame], gfx.GetGameRect());
 	}
 	else
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[iEarth0b], gfx.GetGameRect());
+		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
 	}
 }
 
 void Earth0b::DrawPosBulletsUpdate()
 {
+	for (const auto& bct : bulletsCentETemp)
+	{
+		bulletsCentE.emplace_back(bct);
+	}
+	bulletsCentETemp.clear();
+	for (const auto& bct : bulletsSideETemp)
+	{
+		bulletsSideE.emplace_back(bct);
+	}
+	bulletsSideETemp.clear();
+
+	for (int i = 0; i < bulletsCentE.size(); ++i)
+	{
+		if (!bulletsCentE[i].GetActive())
+		{
+			std::swap(bulletsCentE[i], bulletsCentE.back());
+			bulletsCentE.pop_back();
+			--i;
+		}
+	}
+	for (int i = 0; i < bulletsSideE.size(); ++i)
+	{
+		if (!bulletsSideE[i].GetActive())
+		{
+			std::swap(bulletsSideE[i], bulletsSideE.back());
+			bulletsSideE.pop_back();
+			--i;
+		}
+	}
+
 	for (auto& bc : bulletsCentE)
 	{
 		bc.DrawPosUpdate();
 	}
-
 	for (auto& bs : bulletsSideE)
 	{
 		bs.DrawPosUpdate();
@@ -272,13 +339,24 @@ bool Earth0b::BulletCentE::PlayerHit(const CircF& pCirc) const
 
 void Earth0b::BulletCentE::DrawPosUpdate()
 {
+	assert(active);
 	drawPos = { int(hitbox.pos.x) - bulCentOff, int(hitbox.pos.y) - bulCentOff };
+	curDrawFrame = int(curAnimTime * nSpritesBulletCentE / maxAnimTime);
 }
 
 void Earth0b::BulletCentE::Draw(const std::vector<Surface>& sprites, Graphics & gfx) const
 {
-	const int iBullet = int(curAnimTime * nSpritesBulletCentE / maxAnimTime);
-	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[iBullet], gfx.GetGameRect());
+	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+}
+
+bool Earth0b::BulletCentE::GetActive() const
+{
+	return active;
+}
+
+void Earth0b::BulletCentE::Deactivate()
+{
+	active = false;
 }
 
 Earth0b::BulletSideE::BulletSideE(const VecF& pos, const VecF& vel)
@@ -331,11 +409,22 @@ bool Earth0b::BulletSideE::PlayerHit(const CircF& pCirc) const
 
 void Earth0b::BulletSideE::DrawPosUpdate()
 {
+	assert(active);
 	drawPos = { int(hitbox.pos.x) - bulSideOff, int(hitbox.pos.y) - bulSideOff };
+	curDrawFrame = int(curAnimTime * nSpritesBulletSideE / maxAnimTime);
 }
 
 void Earth0b::BulletSideE::Draw(const std::vector<Surface>& sprites, Graphics & gfx) const
 {
-	const int iBullet = int(curAnimTime * nSpritesBulletSideE / maxAnimTime);
-	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[iBullet], gfx.GetGameRect());
+	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+}
+
+bool Earth0b::BulletSideE::GetActive() const
+{
+	return active;
+}
+
+void Earth0b::BulletSideE::Deactivate()
+{
+	active = false;
 }

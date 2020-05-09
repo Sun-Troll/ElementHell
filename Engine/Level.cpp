@@ -58,29 +58,29 @@ void Level::StartEarth0()
 void Level::SpawnEarth0(float dt)
 {
 	spawnTimer += dt;
-	while (spawnTimer > 0.08f)
+	while (spawnTimer > 2.6f)
 	{
-		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 200.0f }, { -20.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 300.0f }, { -20.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 400.0f }, { -20.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 500.0f }, { -20.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 600.0f }, { -20.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 120.0f }, { 25.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 220.0f }, { 25.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 320.0f }, { 25.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 420.0f }, { 25.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 520.0f }, { 25.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 620.0f }, { 25.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { 100.0f, movRegEarth0a.top }, { 1.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { 200.0f, movRegEarth0a.top }, { 1.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { 300.0f, movRegEarth0a.top }, { 1.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { 400.0f, movRegEarth0a.top }, { 1.0f, 10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { 130.0f, movRegEarth0a.bottom }, { -1.0f, -10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { 230.0f, movRegEarth0a.bottom }, { -1.0f, -10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { 330.0f, movRegEarth0a.bottom }, { -1.0f, -10.0f } });
-		enEarth0aTemp.emplace_back(Earth0a{ { 430.0f, movRegEarth0a.bottom }, { -1.0f, -10.0f } });
-		spawnTimer -= 0.08f; // multithread read between 0.08 0.07
+		enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.right, 100.0f }, { -20.0f, 10.0f } });
+		//enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.right, 200.0f }, { -20.0f, 10.0f } });
+		enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.right, 300.0f }, { -20.0f, 10.0f } });
+		//enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.right, 400.0f }, { -20.0f, 10.0f } });
+		enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.right, 500.0f }, { -20.0f, 10.0f } });
+		//enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.right, 600.0f }, { -20.0f, 10.0f } });
+		enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.left, 120.0f }, { 25.0f, 10.0f } });
+		//enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.left, 220.0f }, { 25.0f, 10.0f } });
+		enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.left, 320.0f }, { 25.0f, 10.0f } });
+		//enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.left, 420.0f }, { 25.0f, 10.0f } });
+		enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.left, 520.0f }, { 25.0f, 10.0f } });
+		//enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.left, 620.0f }, { 25.0f, 10.0f } });
+		enEarth0bTemp.emplace_back(Earth0b{ { 100.0f, movRegEarth0b.top }, { 1.0f, 10.0f } });
+		//enEarth0bTemp.emplace_back(Earth0b{ { 200.0f, movRegEarth0b.top }, { 1.0f, 10.0f } });
+		enEarth0bTemp.emplace_back(Earth0b{ { 300.0f, movRegEarth0b.top }, { 1.0f, 10.0f } });
+		//enEarth0bTemp.emplace_back(Earth0b{ { 400.0f, movRegEarth0b.top }, { 1.0f, 10.0f } });
+		enEarth0bTemp.emplace_back(Earth0b{ { 130.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
+		//enEarth0bTemp.emplace_back(Earth0b{ { 230.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
+		enEarth0bTemp.emplace_back(Earth0b{ { 330.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
+		//enEarth0bTemp.emplace_back(Earth0b{ { 430.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
+		spawnTimer -= 2.6f; // multithread read between 0.08 0.07 a / 2.7 2.6 b
 	}
 	/*switch (curSpawn)
 	{
@@ -610,6 +610,25 @@ void Level::UpdateEarth0(Player& player0, Player& player1, bool multiplayer, flo
 			e.HitPlayer(player1);
 		}
 	}
+	for (auto& et : enEarth0bTemp)
+	{
+		if (!et.IsDead())
+		{
+			et.Move(dt);
+			et.Fire(player0, player1, multiplayer, dt);
+			et.GetHit(player0, dt);
+			if (multiplayer)
+			{
+				et.GetHit(player1, dt);
+			}
+		}
+		et.UpdateBullets(movRegEarth0bBulletCent, movRegEarth0bBulletSide, dt);
+		et.HitPlayer(player0);
+		if (multiplayer)
+		{
+			et.HitPlayer(player1);
+		}
+	}
 }
 
 void Level::PrepareDrawEarth0()
@@ -642,11 +661,11 @@ void Level::PrepareDrawEarth0()
 	}
 
 	// Earth0b
-	for (auto& e : enEarth0b)
+	for (const auto& et : enEarth0bTemp)
 	{
-		e.DrawPosUpdate();
-		e.DrawPosBulletsUpdate();
+		enEarth0b.emplace_back(et);
 	}
+	enEarth0bTemp.clear();
 	for (int i = 0; i < enEarth0b.size(); ++i)
 	{
 		if (enEarth0b[i].IsDead() && enEarth0b[i].BulletsEmpty())
@@ -661,6 +680,11 @@ void Level::PrepareDrawEarth0()
 			enEarth0b.pop_back();
 			--i;
 		}
+	}
+	for (auto& e : enEarth0b)
+	{
+		e.DrawPosUpdate();
+		e.DrawPosBulletsUpdate();
 	}
 }
 

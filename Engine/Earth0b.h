@@ -15,13 +15,17 @@ private:
 		bool PlayerHit(const CircF& pCirc) const;
 		void DrawPosUpdate();
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		bool GetActive() const;
+		void Deactivate();
 	private:
 		CircF hitbox;
 		VecF vel;
 		VecI drawPos;
 		static constexpr float maxAnimTime = 1.4f;
 		float curAnimTime = 0.0f;
+		int curDrawFrame = 0;
 		static constexpr float radius = 11.0f;
+		bool active = true;
 	};
 	class BulletSideE
 	{
@@ -33,13 +37,17 @@ private:
 		bool PlayerHit(const CircF& pCirc) const;
 		void DrawPosUpdate();
 		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		bool GetActive() const;
+		void Deactivate();
 	private:
 		CircF hitbox;
 		VecF vel;
 		VecI drawPos;
 		static constexpr float maxAnimTime = 1.1f;
 		float curAnimTime = 0.0f;
+		int curDrawFrame = 0;
 		static constexpr float radius = 7.0f;
+		bool active = true;
 	};
 public:
 	Earth0b(const VecF& pos, const VecF& vel);
@@ -50,8 +58,6 @@ public:
 	void HitPlayer(Player& player);
 	void GetHit(Player& player, float dt);
 	bool IsDead() const;
-	void PopBulletCentE(int i);
-	void PopBulletSideE(int i);
 	bool BulletsEmpty() const;
 	void DrawPosUpdate();
 	void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
@@ -64,11 +70,13 @@ private:
 	VecF vel;
 	static constexpr float hpMax = 1000.0f;
 	float hpCur = hpMax;
-	static constexpr float maxFireTimeEarth0bAnim = 0.3f;
+	static constexpr float maxFireTimeEarth0bAnim = 0.02f; // normal 0.3
 	float curFireBaseEarth0bAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.1f;
 	float drawDamageTimeCur = drawDamageTimeMax;
 	VecI drawPos;
+	int curDrawFrame = 0;
+	bool drawDamaged = false;
 	static constexpr float earth0bRadius = 48.0f;
 	static constexpr float pi = 3.141592741f;
 public:
@@ -83,6 +91,7 @@ private:
 	static constexpr float BulletCentESpeed = 300.0f;
 	static constexpr float BulletCentEDamage = 150.0f;
 	std::vector<BulletCentE> bulletsCentE;
+	std::vector<BulletCentE> bulletsCentETemp;
 public:
 	static constexpr int nSpritesBulletCentE = 4;
 	static constexpr int spriteBulletCentEDim = 48; // assumes same width/height
@@ -93,6 +102,7 @@ private:
 	static constexpr float BulletSideESpeed = 400.0f;
 	static constexpr float BulletSideEDamage = 50.0f;
 	std::vector<BulletSideE> bulletsSideE;
+	std::vector<BulletSideE> bulletsSideETemp;
 	static constexpr float bulletSideSpawnOff = 32.0f;
 	static constexpr float bulletSideVelComponent = BulletSideESpeed * 0.7071067691f;
 public:
