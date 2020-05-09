@@ -58,29 +58,29 @@ void Level::StartEarth0()
 void Level::SpawnEarth0(float dt)
 {
 	spawnTimer += dt;
-	while (spawnTimer > 0.4f)
+	while (spawnTimer > 0.41f)
 	{
-		enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.right, 100.0f }, { -20.0f, 10.0f } });
-		//enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.right, 200.0f }, { -20.0f, 10.0f } });
-		enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.right, 300.0f }, { -20.0f, 10.0f } });
-		//enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.right, 400.0f }, { -20.0f, 10.0f } });
-		enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.right, 500.0f }, { -20.0f, 10.0f } });
-		//enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.right, 600.0f }, { -20.0f, 10.0f } });
-		enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.left, 120.0f }, { 25.0f, 10.0f } });
-		//enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.left, 220.0f }, { 25.0f, 10.0f } });
-		enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.left, 320.0f }, { 25.0f, 10.0f } });
-		//enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.left, 420.0f }, { 25.0f, 10.0f } });
-		enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.left, 520.0f }, { 25.0f, 10.0f } });
-		//enEarth0bTemp.emplace_back(Earth0b{ { movRegEarth0b.left, 620.0f }, { 25.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 200.0f }, { -20.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 300.0f }, { -20.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 400.0f }, { -20.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 500.0f }, { -20.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 600.0f }, { -20.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 120.0f }, { 25.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 220.0f }, { 25.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 320.0f }, { 25.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 420.0f }, { 25.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 520.0f }, { 25.0f, 10.0f } });
+		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 620.0f }, { 25.0f, 10.0f } });
 		enEarth0bTemp.emplace_back(Earth0b{ { 100.0f, movRegEarth0b.top }, { 1.0f, 10.0f } });
-		//enEarth0bTemp.emplace_back(Earth0b{ { 200.0f, movRegEarth0b.top }, { 1.0f, 10.0f } });
+		enEarth0bTemp.emplace_back(Earth0b{ { 200.0f, movRegEarth0b.top }, { 1.0f, 10.0f } });
 		enEarth0bTemp.emplace_back(Earth0b{ { 300.0f, movRegEarth0b.top }, { 1.0f, 10.0f } });
-		//enEarth0bTemp.emplace_back(Earth0b{ { 400.0f, movRegEarth0b.top }, { 1.0f, 10.0f } });
+		enEarth0bTemp.emplace_back(Earth0b{ { 400.0f, movRegEarth0b.top }, { 1.0f, 10.0f } });
 		enEarth0bTemp.emplace_back(Earth0b{ { 130.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
-		//enEarth0bTemp.emplace_back(Earth0b{ { 230.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
+		enEarth0bTemp.emplace_back(Earth0b{ { 230.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
 		enEarth0bTemp.emplace_back(Earth0b{ { 330.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
-		//enEarth0bTemp.emplace_back(Earth0b{ { 430.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
-		spawnTimer -= 0.4f; // multithread read between 0.08 0.07 a / 0.40 0.35 b
+		enEarth0bTemp.emplace_back(Earth0b{ { 430.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
+		spawnTimer -= 0.41f; // multithread read between 0.08 0.07 a / 0.40 0.35 b // draw test single 0.42 0.41
 	}
 	/*switch (curSpawn)
 	{
