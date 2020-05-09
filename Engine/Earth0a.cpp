@@ -93,7 +93,7 @@ void Earth0a::HitPlayer(Player& player)
 {
 	for (auto& bc : bullets)
 	{
-		if (bc.PlayerHit(player.GetCircF()))
+		if (bc.GetActive() && bc.PlayerHit(player.GetCircF()))
 		{
 			bc.Deactivate();
 			player.Damaged(bulletDamage);
@@ -101,7 +101,7 @@ void Earth0a::HitPlayer(Player& player)
 	}
 	for (auto& bct : bulletsTemp)
 	{
-		if (bct.PlayerHit(player.GetCircF()))
+		if (bct.GetActive() && bct.PlayerHit(player.GetCircF()))
 		{
 			bct.Deactivate();
 			player.Damaged(bulletDamage);
@@ -196,6 +196,7 @@ void Earth0a::DrawPosBulletsUpdate()
 		bullets.emplace_back(bct);
 	}
 	bulletsTemp.clear();
+
 	for (int i = 0; i < bullets.size(); ++i)
 	{
 		if (!bullets[i].GetActive())
@@ -205,6 +206,7 @@ void Earth0a::DrawPosBulletsUpdate()
 			--i;
 		}
 	}
+
 	for (auto& bc : bullets)
 	{
 		bc.DrawPosUpdate();
@@ -269,6 +271,7 @@ bool Earth0a::Bullet::PlayerHit(const CircF& pCirc) const
 
 void Earth0a::Bullet::DrawPosUpdate()
 {
+	assert(active);
 	drawPos = { int(hitbox.pos.x) - bulOffset, int(hitbox.pos.y) - bulOffset };
 	curDrawFrame = int(curAnimTime * nSpritesBullet / maxAnimTime);
 }

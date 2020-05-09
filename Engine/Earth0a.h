@@ -68,8 +68,6 @@ public:
 // bullets
 private:
 	static constexpr float bulletSpeed = 400.0f;
-	VecF bulletSideVelRight = VecF(32.0f, -19.0f).Normalize() * bulletSpeed;
-	VecF bulletSideVelLeft = VecF(-32.0f, -19.0f).Normalize() * bulletSpeed;
 	static constexpr float bulletDamage = 50.0f;
 	//static constexpr int nSpritesBulletCenter = 4;
 	//static constexpr int spriteBulletCenterDim = 32; // assumes same width/height
