@@ -35,13 +35,13 @@ Game::Game(MainWindow& wnd)
 void Game::Go()
 {
 	gfx.BeginFrame();
-	std::thread oneDrawTop(&Game::ComposeFrame, this, Graphics::DrawRegion::Top);
-	std::thread twoDrawBottom(&Game::ComposeFrame, this, Graphics::DrawRegion::Bottom);
-	std::thread threeUpdate(&Game::UpdateModel, this);
-	twoDrawBottom.join();
+	std::thread oneDrawTop(&Game::ComposeFrame, std::ref(*this), Graphics::DrawRegion::Top);
+	std::thread twoUpdate(&Game::UpdateModel, std::ref(*this));
+	//ComposeFrame(Graphics::DrawRegion::Top);
+	ComposeFrame(Graphics::DrawRegion::Bottom);
 	oneDrawTop.join();
 	ComposeFrame(Graphics::DrawRegion::Rest);
-	threeUpdate.join();
+	twoUpdate.join();
 	PrepareFrame();
 	gfx.EndFrame();
 }
