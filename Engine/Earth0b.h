@@ -70,7 +70,7 @@ private:
 	VecF vel;
 	static constexpr float hpMax = 1000.0f;
 	float hpCur = hpMax;
-	static constexpr float maxFireTimeEarth0bAnim = 0.02f; // normal 0.3
+	static constexpr float maxFireTimeEarth0bAnim = 0.2f; // normal 0.3
 	float curFireBaseEarth0bAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.1f;
 	float drawDamageTimeCur = drawDamageTimeMax;
