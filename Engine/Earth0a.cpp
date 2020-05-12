@@ -96,7 +96,7 @@ void Earth0a::HitPlayer(Player& player)
 		if (bc.GetActive() && bc.PlayerHit(player.GetCircF()))
 		{
 			bc.Deactivate();
-			//player.Damaged(bulletDamage);
+			player.Damaged(bulletDamage);
 		}
 	}
 	for (auto& bct : bulletsTemp)
@@ -104,7 +104,7 @@ void Earth0a::HitPlayer(Player& player)
 		if (bct.GetActive() && bct.PlayerHit(player.GetCircF()))
 		{
 			bct.Deactivate();
-			//player.Damaged(bulletDamage);
+			player.Damaged(bulletDamage);
 		}
 	}
 }

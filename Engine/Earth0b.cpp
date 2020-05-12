@@ -123,7 +123,7 @@ void Earth0b::HitPlayer(Player& player)
 		if (bc.GetActive() && bc.PlayerHit(player.GetCircF()))
 		{
 			bc.Deactivate();
-			//player.Damaged(BulletCentEDamage);
+			player.Damaged(BulletCentEDamage);
 		}
 	}
 	for (auto& bs : bulletsSideE)
@@ -131,7 +131,7 @@ void Earth0b::HitPlayer(Player& player)
 		if (bs.GetActive() && bs.PlayerHit(player.GetCircF()))
 		{
 			bs.Deactivate();
-			//player.Damaged(BulletCentEDamage);
+			player.Damaged(BulletCentEDamage);
 		}
 	}
 
@@ -140,7 +140,7 @@ void Earth0b::HitPlayer(Player& player)
 		if (bct.GetActive() && bct.PlayerHit(player.GetCircF()))
 		{
 			bct.Deactivate();
-			//player.Damaged(BulletCentEDamage);
+			player.Damaged(BulletCentEDamage);
 		}
 	}
 	for (auto& bst : bulletsSideETemp)
@@ -148,7 +148,7 @@ void Earth0b::HitPlayer(Player& player)
 		if (bst.GetActive() && bst.PlayerHit(player.GetCircF()))
 		{
 			bst.Deactivate();
-			//player.Damaged(BulletCentEDamage);
+			player.Damaged(BulletCentEDamage);
 		}
 	}
 }
