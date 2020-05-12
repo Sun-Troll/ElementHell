@@ -30,6 +30,14 @@ Player::Player(const VecF& pos)
 		assert(spritesBulletSide[i].GetWidth() == spriteBulletSideDim
 			&& spritesBulletSide[i].GetHeight() == spriteBulletSideDim);
 	}
+	spritesBulletAim.resize(nSpritesBulletAim);
+	for (int i = 0; i < nSpritesBulletAim; ++i)
+	{
+		const std::string bitmapFile = "Sprites\\PlBulAim\\PlBulAim" + std::to_string(i) + ".bmp";
+		spritesBulletAim[i] = Surface(bitmapFile);
+		assert(spritesBulletAim[i].GetWidth() == spriteBulletAimDim
+			&& spritesBulletAim[i].GetHeight() == spriteBulletAimDim);
+	}
 
 	for (int i = 0; i < nBulletsSideFired; ++i)
 	{
@@ -100,15 +108,15 @@ void Player::Clamp()
 	}
 }
 
-void Player::Fire(float dt)
+void Player::Fire(bool fireAim, bool recall, float dt)
 {
 	curFireBasePlayerAnim += dt;
+	curFireTimeAim += dt;
+	recallCurCool += dt;
 	while (curFireBasePlayerAnim >= maxFireTimePlayerAnim)
 	{
 		curFireBasePlayerAnim -= maxFireTimePlayerAnim;
-		bulletsCenterTemp.emplace_back(BulletCenter{
-		{ hitbox.pos },
-		{ 0.0f, -bulletCenterSpeed } });
+		bulletsCenterTemp.emplace_back(BulletCenter{ { hitbox.pos }, { 0.0f, -bulletCenterSpeed } });
 
 		if (sideFiring)
 		{
@@ -129,6 +137,17 @@ void Player::Fire(float dt)
 	if (drawDamageTimeCur <= drawDamageTimeMax)
 	{
 		drawDamageTimeCur += dt;
+	}
+	if (fireAim && curFireTimeAim >= FireRateAim)
+	{
+		bulletsAimTemp.emplace_back(BulletAim{ { hitbox.pos }, { 0.0f, -bulletAimSpeed } });
+		curFireTimeAim = 0.0f;
+	}
+	if (recall && recallCurCool >= recallCooldown)
+	{
+		AimBullets(hitbox.pos);
+		hpCur -= hpBase * 0.24f;
+		recallCurCool = 0.0f;
 	}
 }
 
@@ -152,6 +171,15 @@ void Player::UpdateBullets(float dt)
 			bs.Deactivate();
 		}
 	}
+	for (auto& bc : bulletsAim)
+	{
+		bc.Move(dt);
+		bc.Animate(dt);
+		if (bc.Clamp(movementRegionBulletAim))
+		{
+			bc.Deactivate();
+		}
+	}
 
 	for (auto& bct : bulletsCenterTemp)
 	{
@@ -169,6 +197,15 @@ void Player::UpdateBullets(float dt)
 		if (bst.Clamp(movementRegionBulletSide))
 		{
 			bst.Deactivate();
+		}
+	}
+	for (auto& bct : bulletsAimTemp)
+	{
+		bct.Move(dt);
+		bct.Animate(dt);
+		if (bct.Clamp(movementRegionBulletAim))
+		{
+			bct.Deactivate();
 		}
 	}
 }
@@ -214,6 +251,16 @@ std::vector<Player::BulletSide>& Player::GetSideBulletsTemp()
 float Player::GetSideBulletDamage() const
 {
 	return bulletSideDamage;
+}
+
+std::vector<Player::BulletAim>& Player::GetAimBullets()
+{
+	return bulletsAim;
+}
+
+std::vector<Player::BulletAim>& Player::GetAimBulletsTemp()
+{
+	return bulletsAimTemp;
 }
 
 float Player::GetHpMax() const
@@ -278,6 +325,11 @@ void Player::DrawPosBulletsUpdate()
 		bulletsSide.emplace_back(bst);
 	}
 	bulletsSideTemp.clear();
+	for (const auto& bst : bulletsAimTemp)
+	{
+		bulletsAim.emplace_back(bst);
+	}
+	bulletsAimTemp.clear();
 
 	for (int i = 0; i < bulletsCenter.size(); ++i)
 	{
@@ -297,12 +349,25 @@ void Player::DrawPosBulletsUpdate()
 			--i;
 		}
 	}
+	for (int i = 0; i < bulletsAim.size(); ++i)
+	{
+		if (!bulletsAim[i].GetActive())
+		{
+			std::swap(bulletsAim[i], bulletsAim.back());
+			bulletsAim.pop_back();
+			--i;
+		}
+	}
 
 	for (auto& bc : bulletsCenter)
 	{
 		bc.DrawPosUpdate();
 	}
 	for (auto& bs : bulletsSide)
+	{
+		bs.DrawPosUpdate();
+	}
+	for (auto& bs : bulletsAim)
 	{
 		bs.DrawPosUpdate();
 	}
@@ -317,6 +382,10 @@ void Player::DrawBullets(const RectI& curRect, Graphics& gfx) const
 	for (const auto& bs : bulletsSide)
 	{
 		bs.Draw(spritesBulletSide, curRect, gfx);
+	}
+	for (const auto& bs : bulletsAim)
+	{
+		bs.Draw(spritesBulletAim, curRect, gfx);
 	}
 }
 
@@ -478,6 +547,75 @@ bool Player::BulletSide::GetActive() const
 }
 
 void Player::BulletSide::Deactivate()
+{
+	active = false;
+}
+
+Player::BulletAim::BulletAim(const VecF& pos, const VecF& vel)
+	:
+	hitbox(pos, radius),
+	vel(vel),
+	drawPos(int(pos.x) - bulAimOff, int(pos.y) - bulAimOff)
+{
+}
+
+void Player::BulletAim::Move(float dt)
+{
+	hitbox.pos += vel * dt;
+}
+
+void Player::BulletAim::Animate(float dt)
+{
+	curAnimTime += dt;
+	while (curAnimTime >= maxAnimTime)
+	{
+		curAnimTime -= maxAnimTime;
+	}
+}
+
+bool Player::BulletAim::Clamp(const RectF& bulletCenterRegion) const
+{
+	if (hitbox.pos.x < bulletCenterRegion.left)
+	{
+		return true;
+	}
+	else if (hitbox.pos.x > bulletCenterRegion.right)
+	{
+		return true;
+	}
+	if (hitbox.pos.y < bulletCenterRegion.top)
+	{
+		return true;
+	}
+	else if (hitbox.pos.y > bulletCenterRegion.bottom)
+	{
+		return true;
+	}
+	return false;
+}
+
+void Player::BulletAim::DrawPosUpdate()
+{
+	drawPos = { int(hitbox.pos.x) - bulCentOff, int(hitbox.pos.y) - bulCentOff };
+	curDrawFrame = int(curAnimTime * nSpritesBulletCenter / maxAnimTime);
+}
+
+void Player::BulletAim::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const
+{
+	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
+}
+
+const CircF & Player::BulletAim::GetCircF() const
+{
+	return hitbox;
+}
+
+bool Player::BulletAim::GetActive() const
+{
+	return active;
+}
+
+void Player::BulletAim::Deactivate()
 {
 	active = false;
 }

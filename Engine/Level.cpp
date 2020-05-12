@@ -693,20 +693,14 @@ void Level::DrawEarth0(const RectI& curRect, Graphics& gfx) const
 	// Earth0a
 	for (const auto& e : enEarth0a)
 	{
-		if (!e.IsDead())
-		{
-			e.Draw(spritesEarth0a, curRect, gfx);
-		}
+		e.Draw(spritesEarth0a, curRect, gfx);
 		e.DrawBullets(spritesEarth0aBullet, curRect, gfx);
 	}
 
 	// Earth0b
 	for (const auto& e : enEarth0b)
 	{
-		if (!e.IsDead())
-		{
-			e.Draw(spritesEarth0b, curRect, gfx);
-		}
+		e.Draw(spritesEarth0b, curRect, gfx);
 		e.DrawBullets(spritesEarth0bBulletCent, spritesEarth0bBulletSide, curRect, gfx);
 	}
 }

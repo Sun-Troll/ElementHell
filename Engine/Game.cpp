@@ -79,7 +79,8 @@ void Game::UpdateModel()
 				bool up0 = false;
 				bool down0 = false;
 				bool abilityA0 = false; // slow
-				bool abilityB0 = false; // aimShot
+				bool abilityB0 = false; // aimBullet
+				bool abilityC0 = false; // recall
 				if (wnd.kbd.KeyIsPressed('A') || wnd.kbd.KeyIsPressed(VK_LEFT))
 				{
 					left0 = true;
@@ -104,9 +105,13 @@ void Game::UpdateModel()
 				{
 					abilityB0 = true;
 				}
+				if (wnd.kbd.KeyIsPressed(VK_CONTROL))
+				{
+					abilityC0 = true;
+				}
 				player0.Move(left0, right0, up0, down0, abilityA0, dt);
 				player0.Clamp();
-				player0.Fire(dt);
+				player0.Fire(abilityB0, abilityC0, dt);
 				player0.UpdateBullets(dt);
 
 				if (multiplayer)
@@ -115,8 +120,9 @@ void Game::UpdateModel()
 					bool right1 = false;
 					bool up1 = false;
 					bool down1 = false;
-					bool abilityA1 = false;
-					bool abilityB1 = false;
+					bool abilityA1 = false; // slow
+					bool abilityB1 = false; // aimBullet
+					bool abilityC1 = false; // recall
 					if (wnd.kbd.KeyIsPressed(VK_NUMPAD4))
 					{
 						left1 = true;
@@ -141,9 +147,13 @@ void Game::UpdateModel()
 					{
 						abilityB1 = true;
 					}
+					if (wnd.kbd.KeyIsPressed(VK_DECIMAL))
+					{
+						abilityC1 = true;
+					}
 					player1.Move(left1, right1, up1, down1, abilityA1, dt);
 					player1.Clamp();
-					player1.Fire(dt);
+					player1.Fire(abilityB1, abilityC1, dt);
 					player1.UpdateBullets(dt);
 				}
 

@@ -25,6 +25,7 @@ private:
 		CircF hitbox;
 		VecF vel;
 		VecI drawPos;
+		static constexpr float radius = 13.0f;
 		static constexpr float maxAnimTime = 0.6f;
 		float curAnimTime = 0.0f;
 		int curDrawFrame = 0;
@@ -48,10 +49,33 @@ private:
 		VecF vel;
 		VecF curTarget;
 		VecI drawPos;
-		static constexpr float maxAnimTime = 0.6f;
+		static constexpr float radius = 9.0f;
+		static constexpr float maxAnimTime = 0.4f;
 		float curAnimTime = 0.0f;
 		int curDrawFrame = 0;
 		bool targeting = false;
+		bool active = true;
+	};
+	class BulletAim
+	{
+	public:
+		BulletAim(const VecF& pos, const VecF& vel);
+		void Move(float dt);
+		void Animate(float dt);
+		bool Clamp(const RectF& bulletCenterRegion) const;
+		void DrawPosUpdate();
+		void Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const;
+		const CircF& GetCircF() const;
+		bool GetActive() const;
+		void Deactivate();
+	private:
+		CircF hitbox;
+		VecF vel;
+		VecI drawPos;
+		static constexpr float radius = 17.0f;
+		static constexpr float maxAnimTime = 1.0f;
+		float curAnimTime = 0.0f;
+		int curDrawFrame = 0;
 		bool active = true;
 	};
 public:
@@ -59,7 +83,7 @@ public:
 	void Respawn(const VecF& pos_in, const Stats& stats);
 	void Move(bool left, bool right, bool up, bool down, bool slow, float dt);
 	void Clamp();
-	void Fire(float dt);
+	void Fire(bool fireAim, bool recall, float dt);
 	void UpdateBullets(float dt);
 	void AimBullets(const VecF& target);
 	std::vector<BulletCenter>& GetCenterBullets();
@@ -68,6 +92,8 @@ public:
 	std::vector<BulletSide>& GetSideBullets();
 	std::vector<BulletSide>& GetSideBulletsTemp();
 	float GetSideBulletDamage() const;
+	std::vector<BulletAim>& GetAimBullets();
+	std::vector<BulletAim>& GetAimBulletsTemp();
 	float GetHpMax() const;
 	float GetHpCur() const;
 	bool IsAlive() const;
@@ -89,6 +115,8 @@ private:
 	static constexpr float baseFireTimePlayerAnim = 0.2f; // starts lagging at 0.001f normal 0.12f
 	float maxFireTimePlayerAnim = baseFireTimePlayerAnim;
 	float curFireBasePlayerAnim = 0.0f;
+	static constexpr float recallCooldown = 0.5f;
+	float recallCurCool = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.2f;
 	float drawDamageTimeCur = drawDamageTimeMax + 1.0f;
 	static constexpr int nSpritesPlayer = 4;
@@ -107,7 +135,7 @@ private:
 	//BulletCenter
 	static constexpr float baseBulletCenterDamage = 40.0f;
 	float bulletCenterDamage = baseBulletCenterDamage;
-	static constexpr float bulletCenterSpeed = 1000.0f;
+	static constexpr float bulletCenterSpeed = 1500.0f;
 	static constexpr int nSpritesBulletCenter = 4;
 	static constexpr int spriteBulletCenterDim = 24; // assumes same width/height
 	static constexpr int bulCentOff = spriteBulletCenterDim / 2;
@@ -121,8 +149,8 @@ private:
 	//BulletSide
 	static constexpr float baseBulletSideDamage = 10.0f;
 	float bulletSideDamage = baseBulletSideDamage;
-	static constexpr float bulletSideSpeed = 100.0f;
-	static constexpr float trgSpeedUp = 20.0f;
+	static constexpr float bulletSideSpeed = 50.0f;
+	static constexpr float trgSpeedUp = 40.0f;
 	static constexpr float bulletSideSpawnDist = 40.0f;
 	static constexpr int nSpritesBulletSide = 8;
 	static constexpr int spriteBulletSideDim = 16; // assumes same width/height
@@ -136,4 +164,18 @@ private:
 	std::vector<BulletSide> bulletsSideTemp;
 	std::vector<VecF> bulletSidePosVel;
 	bool sideFiring = false;
+
+	//BulletAim
+	static constexpr float FireRateAim = baseFireTimePlayerAnim * 2.0f;
+	float curFireTimeAim = 0.0f;
+	static constexpr float bulletAimSpeed = 1000.0f;
+	static constexpr int nSpritesBulletAim = 6;
+	static constexpr int spriteBulletAimDim = 32; // assumes same width/height
+	static constexpr int bulAimOff = spriteBulletAimDim / 2;
+	static constexpr float bulletAimRadius = float(spriteBulletAimDim) / 2.0f;
+	const RectF movementRegionBulletAim{ float(-bulAimOff), float(Graphics::ScreenWidth + bulAimOff),
+		float(-bulAimOff), float(Graphics::GameHeight + bulAimOff) };
+	std::vector<Surface> spritesBulletAim;
+	std::vector<BulletAim> bulletsAim;
+	std::vector<BulletAim> bulletsAimTemp;
 };

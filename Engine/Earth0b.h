@@ -77,6 +77,7 @@ private:
 	VecI drawPos;
 	int curDrawFrame = 0;
 	bool drawDamaged = false;
+	bool drawIsDead = false;
 	static constexpr float earth0bRadius = 48.0f;
 	static constexpr float pi = 3.141592741f;
 public:

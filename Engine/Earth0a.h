@@ -54,6 +54,7 @@ private:
 	VecI drawPos;
 	int curDrawFrame = 0;
 	bool drawDamaged = false;
+	bool drawIsDead = false;
 	//static constexpr int nSpritesEarth0a = 6;
 	//static constexpr int spriteEarth0aWidth = 64;
 	//static constexpr int spriteEarth0aHeight = 54;

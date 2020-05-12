@@ -115,8 +115,7 @@ void Earth0a::GetHit(Player& player, float dt)
 	{
 		if (bc.GetActive())
 		{
-			const CircF curCentBul = bc.GetCircF();
-			if (hitbox.Coliding(curCentBul))
+			if (hitbox.Coliding(bc.GetCircF()))
 			{
 				hpCur -= player.GetCenterBulletDamage();
 				bc.Deactivate();
@@ -126,6 +125,10 @@ void Earth0a::GetHit(Player& player, float dt)
 	}
 	for (auto& bs : player.GetSideBullets())
 	{
+		if (hpCur <= 0.0f)
+		{
+			break;
+		}
 		if (bs.GetActive() && hitbox.Coliding(bs.GetCircF()))
 		{
 			hpCur -= player.GetSideBulletDamage();
@@ -133,16 +136,26 @@ void Earth0a::GetHit(Player& player, float dt)
 			drawDamageTimeCur = 0.0f;
 		}
 	}
+	for (auto& ba : player.GetAimBullets())
+	{
+		if (ba.GetActive())
+		{
+			const CircF curAimBul = ba.GetCircF();
+			if (hitbox.Coliding(curAimBul))
+			{
+				player.AimBullets(curAimBul.pos);
+				ba.Deactivate();
+			}
+		}
+	}
 
 	for (auto& bct : player.GetCenterBulletsTemp())
 	{
 		if (bct.GetActive())
 		{
-			const CircF curCentBul = bct.GetCircF();
-			if (hitbox.Coliding(curCentBul))
+			if (hitbox.Coliding(bct.GetCircF()))
 			{
 				hpCur -= player.GetCenterBulletDamage();
-				player.AimBullets(curCentBul.pos);
 				bct.Deactivate();
 				drawDamageTimeCur = 0.0f;
 			}
@@ -150,11 +163,27 @@ void Earth0a::GetHit(Player& player, float dt)
 	}
 	for (auto& bst : player.GetSideBulletsTemp())
 	{
+		if (hpCur <= 0.0f)
+		{
+			break;
+		}
 		if (bst.GetActive() && hitbox.Coliding(bst.GetCircF()))
 		{
 			hpCur -= player.GetSideBulletDamage();
 			bst.Deactivate();
 			drawDamageTimeCur = 0.0f;
+		}
+	}
+	for (auto& bat : player.GetAimBulletsTemp())
+	{
+		if (bat.GetActive())
+		{
+			const CircF curAimBul = bat.GetCircF();
+			if (hitbox.Coliding(curAimBul))
+			{
+				player.AimBullets(curAimBul.pos);
+				bat.Deactivate();
+			}
 		}
 	}
 }
@@ -174,17 +203,21 @@ void Earth0a::DrawPosUpdate()
 	drawPos = { int(hitbox.pos.x) - xOffset, int(hitbox.pos.y) - yOffset };
 	curDrawFrame = int(curFireBaseEarth0aAnim * nSpritesEarth0a / maxFireTimeEarth0aAnim);
 	drawDamaged = drawDamageTimeCur <= drawDamageTimeMax;
+	drawIsDead = IsDead();
 }
 
 void Earth0a::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const
 {
-	if (drawDamaged)
+	if (!drawIsDead)
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[curDrawFrame], curRect);
-	}
-	else
-	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
+		if (drawDamaged)
+		{
+			gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[curDrawFrame], curRect);
+		}
+		else
+		{
+			gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
+		}
 	}
 }
 
