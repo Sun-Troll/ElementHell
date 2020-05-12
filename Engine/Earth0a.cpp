@@ -52,7 +52,7 @@ void Earth0a::Fire(const Player& player0, const Player& player1, bool multiplaye
 				}
 			}
 			curFireBaseEarth0aAnim -= maxFireTimeEarth0aAnim;
-			bullets.emplace_back(Bullet{
+			bulletsTemp.emplace_back(Bullet{
 					{ hitbox.pos },
 					{ (playerCent - hitbox.pos).Normalize() * bulletSpeed } });
 		}
@@ -73,52 +73,88 @@ void Earth0a::UpdateBullets(const RectF& movementRegionBullet, float dt)
 	{
 		bc.Move(dt);
 		bc.Animate(dt);
-	}
-
-	for (int i = 0; i < bullets.size(); ++i)
-	{
-		if (bullets[i].Clamp(movementRegionBullet))
+		if (bc.Clamp(movementRegionBullet))
 		{
-			PopBullet(i);
-			--i;
+			bc.Deactivate();
+		}
+	}
+	for (auto& bct : bulletsTemp)
+	{
+		bct.Move(dt);
+		bct.Animate(dt);
+		if (bct.Clamp(movementRegionBullet))
+		{
+			bct.Deactivate();
 		}
 	}
 }
 
 void Earth0a::HitPlayer(Player& player)
 {
-	for (int i = 0; i < bullets.size(); ++i)
+	for (auto& bc : bullets)
 	{
-		if (bullets[i].PlayerHit(player.GetCircF()))
+		if (bc.GetActive() && bc.PlayerHit(player.GetCircF()))
 		{
-			PopBullet(i);
-			player.Damaged(bulletDamage);
-			--i;
+			bc.Deactivate();
+			//player.Damaged(bulletDamage);
+		}
+	}
+	for (auto& bct : bulletsTemp)
+	{
+		if (bct.GetActive() && bct.PlayerHit(player.GetCircF()))
+		{
+			bct.Deactivate();
+			//player.Damaged(bulletDamage);
 		}
 	}
 }
 
 void Earth0a::GetHit(Player& player, float dt)
 {
-	for (int i = 0; i < player.GetCenterBulletN(); ++i)
+	for (auto& bc : player.GetCenterBullets())
 	{
-		const CircF curCentBul = player.GetCenterBulletCircF(i);
-		if (hitbox.Coliding(curCentBul))
+		if (bc.GetActive())
 		{
-			hpCur -= player.GetCenterBulletDamage();
-			player.AimBullets(curCentBul.pos);
-			player.PopCenterBullet(i);
-			--i;
+			const CircF curCentBul = bc.GetCircF();
+			if (hitbox.Coliding(curCentBul))
+			{
+				hpCur -= player.GetCenterBulletDamage();
+				player.AimBullets(curCentBul.pos);
+				bc.Deactivate();
+				drawDamageTimeCur = 0.0f;
+			}
+		}
+	}
+	for (auto& bs : player.GetSideBullets())
+	{
+		if (bs.GetActive() && hitbox.Coliding(bs.GetCircF()))
+		{
+			hpCur -= player.GetSideBulletDamage();
+			bs.Deactivate();
 			drawDamageTimeCur = 0.0f;
 		}
 	}
-	for (int i = 0; i < player.GetSideBulletN(); ++i)
+
+	for (auto& bct : player.GetCenterBulletsTemp())
 	{
-		if (hitbox.Coliding(player.GetSideBulletCircF(i)))
+		if (bct.GetActive())
+		{
+			const CircF curCentBul = bct.GetCircF();
+			if (hitbox.Coliding(curCentBul))
+			{
+				hpCur -= player.GetCenterBulletDamage();
+				player.AimBullets(curCentBul.pos);
+				bct.Deactivate();
+				drawDamageTimeCur = 0.0f;
+			}
+		}
+	}
+	for (auto& bst : player.GetSideBulletsTemp())
+	{
+		if (bst.GetActive() && hitbox.Coliding(bst.GetCircF()))
 		{
 			hpCur -= player.GetSideBulletDamage();
-			player.PopSideBullet(i);
-			--i;
+			bst.Deactivate();
 			drawDamageTimeCur = 0.0f;
 		}
 	}
@@ -129,12 +165,6 @@ bool Earth0a::IsDead() const
 	return hpCur <= 0.0f;
 }
 
-void Earth0a::PopBullet(int i)
-{
-	std::swap(bullets[i], bullets.back());
-	bullets.pop_back();
-}
-
 bool Earth0a::BulletsEmpty() const
 {
 	return bullets.size() == 0;
@@ -143,34 +173,51 @@ bool Earth0a::BulletsEmpty() const
 void Earth0a::DrawPosUpdate()
 {
 	drawPos = { int(hitbox.pos.x) - xOffset, int(hitbox.pos.y) - yOffset };
+	curDrawFrame = int(curFireBaseEarth0aAnim * nSpritesEarth0a / maxFireTimeEarth0aAnim);
+	drawDamaged = drawDamageTimeCur <= drawDamageTimeMax;
 }
 
-void Earth0a::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
+void Earth0a::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const
 {
-	const int iEarth0a = int(curFireBaseEarth0aAnim * nSpritesEarth0a / maxFireTimeEarth0aAnim);
-	if (drawDamageTimeCur <= drawDamageTimeMax)
+	if (drawDamaged)
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[iEarth0a], gfx.GetGameRect());
+		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[curDrawFrame], curRect);
 	}
 	else
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[iEarth0a], gfx.GetGameRect());
+		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
 	}
 }
 
 void Earth0a::DrawPosBulletsUpdate()
 {
+	for (const auto& bct : bulletsTemp)
+	{
+		bullets.emplace_back(bct);
+	}
+	bulletsTemp.clear();
+
+	for (int i = 0; i < bullets.size(); ++i)
+	{
+		if (!bullets[i].GetActive())
+		{
+			std::swap(bullets[i], bullets.back());
+			bullets.pop_back();
+			--i;
+		}
+	}
+
 	for (auto& bc : bullets)
 	{
 		bc.DrawPosUpdate();
 	}
 }
 
-void Earth0a::DrawBullets(const std::vector<Surface>& spritesBullet, Graphics& gfx) const
+void Earth0a::DrawBullets(const std::vector<Surface>& spritesBullet, const RectI& curRect, Graphics& gfx) const
 {
 	for (const auto& bc : bullets)
 	{
-		bc.Draw(spritesBullet, gfx);
+		bc.Draw(spritesBullet, curRect, gfx);
 	}
 }
 
@@ -224,11 +271,22 @@ bool Earth0a::Bullet::PlayerHit(const CircF& pCirc) const
 
 void Earth0a::Bullet::DrawPosUpdate()
 {
+	assert(active);
 	drawPos = { int(hitbox.pos.x) - bulOffset, int(hitbox.pos.y) - bulOffset };
+	curDrawFrame = int(curAnimTime * nSpritesBullet / maxAnimTime);
 }
 
-void Earth0a::Bullet::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
+void Earth0a::Bullet::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const
 {
-	const int iBullet = int(curAnimTime * nSpritesBullet / maxAnimTime);
-	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[iBullet], gfx.GetGameRect());
+	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
+}
+
+bool Earth0a::Bullet::GetActive() const
+{
+	return active;
+}
+
+void Earth0a::Bullet::Deactivate()
+{
+	active = false;
 }

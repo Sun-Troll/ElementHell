@@ -17,14 +17,18 @@ private:
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletCenterRegion) const;
 		void DrawPosUpdate();
-		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		void Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const;
 		const CircF& GetCircF() const;
+		bool GetActive() const;
+		void Deactivate();
 	private:
 		CircF hitbox;
 		VecF vel;
 		VecI drawPos;
 		static constexpr float maxAnimTime = 0.6f;
 		float curAnimTime = 0.0f;
+		int curDrawFrame = 0;
+		bool active = true;
 	};
 	class BulletSide
 	{
@@ -35,8 +39,10 @@ private:
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletSideRegion) const;
 		void DrawPosUpdate();
-		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		void Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const;
 		const CircF& GetCircF() const;
+		bool GetActive() const;
+		void Deactivate();
 	private:
 		CircF hitbox;
 		VecF vel;
@@ -44,7 +50,9 @@ private:
 		VecI drawPos;
 		static constexpr float maxAnimTime = 0.6f;
 		float curAnimTime = 0.0f;
+		int curDrawFrame = 0;
 		bool targeting = false;
+		bool active = true;
 	};
 public:
 	Player(const VecF& pos);
@@ -54,14 +62,12 @@ public:
 	void Fire(float dt);
 	void UpdateBullets(float dt);
 	void AimBullets(const VecF& target);
-	int GetCenterBulletN() const;
-	const CircF& GetCenterBulletCircF(int i) const;
+	std::vector<BulletCenter>& GetCenterBullets();
+	std::vector<BulletCenter>& GetCenterBulletsTemp();
 	float GetCenterBulletDamage() const;
-	void PopCenterBullet(int i);
-	int GetSideBulletN() const;
-	const CircF& GetSideBulletCircF(int i) const;
+	std::vector<BulletSide>& GetSideBullets();
+	std::vector<BulletSide>& GetSideBulletsTemp();
 	float GetSideBulletDamage() const;
-	void PopSideBullet(int i);
 	float GetHpMax() const;
 	float GetHpCur() const;
 	bool IsAlive() const;
@@ -69,18 +75,18 @@ public:
 	const VecF& GetCenter() const;
 	const CircF& GetCircF() const;
 	void DrawPosUpdate();
-	void Draw(Graphics& gfx) const;
+	void Draw(const RectI& curRect, Graphics& gfx) const;
 	void DrawPosBulletsUpdate();
-	void DrawBullets(Graphics& gfx) const;
+	void DrawBullets(const RectI& curRect, Graphics& gfx) const;
 private:
 	CircF hitbox;
 	float speedFast = 500.0f;
 	float speedSlow = 300.0f;
-	static constexpr float hpBase = 1000.0f;
+	static constexpr float hpBase = 1000000.0f;
 	float hpMax = hpBase;
 	float hpCur = hpMax;
 	static constexpr float radius = 5.0f;
-	static constexpr float baseFireTimePlayerAnim = 0.12f; // starts lagging at 0.001f normal 0.12f
+	static constexpr float baseFireTimePlayerAnim = 0.06f; // starts lagging at 0.001f normal 0.12f
 	float maxFireTimePlayerAnim = baseFireTimePlayerAnim;
 	float curFireBasePlayerAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.2f;
@@ -91,6 +97,8 @@ private:
 	static constexpr int xOffset = spritePlayerWidth / 2;
 	static constexpr int yOffset = spritePlayerHeight / 2;
 	VecI drawPos;
+	int curDrawFrame = 0;
+	bool drawDamaged = false;
 	std::vector<Surface> spritesPlayer;
 	const RectF movementRegionPlayer{ xOffset, float(Graphics::ScreenWidth - xOffset),
 		yOffset, float(Graphics::GameHeight - yOffset) };
@@ -108,6 +116,7 @@ private:
 		float(-bulCentOff), float(Graphics::GameHeight + bulCentOff) };
 	std::vector<Surface> spritesBulletCenter;
 	std::vector<BulletCenter> bulletsCenter;
+	std::vector<BulletCenter> bulletsCenterTemp;
 	bool centerFiring = false;
 
 	//BulletSide
@@ -125,5 +134,6 @@ private:
 		float(-bulSideOff), float(Graphics::GameHeight + bulSideOff) };
 	std::vector<Surface> spritesBulletSide;
 	std::vector<BulletSide> bulletsSide;
+	std::vector<BulletSide> bulletsSideTemp;
 	std::vector<VecF> bulletSidePosVel;
 };

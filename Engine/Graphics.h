@@ -84,6 +84,13 @@ public:
 	static constexpr int ScreenWidth = 540;
 	static constexpr int ScreenHeight = 960;
 	static constexpr int GameHeight = 900;
+	static constexpr float GameHeightF = float(GameHeight);
 	static RectI GetGameRect();
 	static RectF GetGameRectF();
+	static RectI GetRektTL();
+	static RectI GetRektTR();
+	static RectI GetRektML();
+	static RectI GetRektMR();
+	static RectI GetRektBL();
+	static RectI GetRektBR();
 };

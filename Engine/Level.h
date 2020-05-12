@@ -16,7 +16,7 @@ public:
 	void SpawnEarth0(float dt);
 	void UpdateEarth0(Player& player0, Player& player1, bool multiplayer, float dt);
 	void PrepareDrawEarth0();
-	void DrawEarth0(Graphics& gfx) const;
+	void DrawEarth0(const RectI& curRect, Graphics& gfx) const;
 	bool IsStarted() const;
 	bool SetFailed(const Player& player0, const Player& player1, bool multiplayer);
 	bool GetFailed() const;
@@ -37,6 +37,7 @@ private:
 
 	// Earth0a stats
 	std::vector<Earth0a> enEarth0a;
+	std::vector<Earth0a> enEarth0aTemp;
 	std::vector<Surface> spritesEarth0a;
 	const RectF movRegEarth0a{ float(-Earth0a::xOffset), float(Graphics::ScreenWidth + Earth0a::xOffset),
 		float(Earth0a::yOffset - Earth0a::spriteEarth0aHeight), float(Graphics::GameHeight + Earth0a::yOffset) };
@@ -46,6 +47,7 @@ private:
 
 	// Earth0b stats
 	std::vector<Earth0b> enEarth0b;
+	std::vector<Earth0b> enEarth0bTemp;
 	std::vector<Surface> spritesEarth0b;
 	const RectF movRegEarth0b{ float(-Earth0b::xOffset), float(Graphics::ScreenWidth + Earth0b::xOffset),
 		float(-Earth0b::yOffset), float(Graphics::GameHeight + Earth0b::yOffset) };
