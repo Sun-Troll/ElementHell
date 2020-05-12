@@ -108,7 +108,7 @@ private:
 	CircF hitbox;
 	float speedFast = 500.0f;
 	float speedSlow = 300.0f;
-	static constexpr float hpBase = 1000000.0f;
+	static constexpr float hpBase = 1000.0f;
 	float hpMax = hpBase;
 	float hpCur = hpMax;
 	static constexpr float radius = 5.0f;
