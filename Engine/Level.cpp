@@ -58,7 +58,7 @@ void Level::StartEarth0()
 void Level::SpawnEarth0(float dt)
 {
 	spawnTimer += dt;
-	while (spawnTimer > 0.21f)
+	while (spawnTimer > 0.19f)
 	{
 		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
 		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 200.0f }, { -20.0f, 10.0f } });
@@ -80,7 +80,7 @@ void Level::SpawnEarth0(float dt)
 		enEarth0bTemp.emplace_back(Earth0b{ { 230.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
 		enEarth0bTemp.emplace_back(Earth0b{ { 330.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
 		enEarth0bTemp.emplace_back(Earth0b{ { 430.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
-		spawnTimer -= 0.21f; // multithread read between 0.08 0.07 a / 0.40 0.35 b // draw test single 0.42 0.41 multi 0.22 0.21
+		spawnTimer -= 0.19f; // multithread read between 0.08 0.07 a / 0.40 0.35 b // draw test single 0.42 0.41 multi 0.19 0.18
 	}
 	/*switch (curSpawn)
 	{

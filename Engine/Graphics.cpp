@@ -264,22 +264,32 @@ RectF Graphics::GetGameRectF()
 
 RectI Graphics::GetRektTL()
 {
-	return RectI(0, ScreenWidth / 2, 0, GameHeight / 2);
+	return RectI(0, ScreenWidth / 2, 0, GameHeight / 3);
 }
 
 RectI Graphics::GetRektTR()
 {
-	return RectI(ScreenWidth / 2, ScreenWidth, 0, GameHeight / 2);
+	return RectI(ScreenWidth / 2, ScreenWidth, 0, GameHeight / 3);
+}
+
+RectI Graphics::GetRektML()
+{
+	return RectI(0, ScreenWidth / 2, GameHeight / 3, GameHeight * 2 / 3);
+}
+
+RectI Graphics::GetRektMR()
+{
+	return RectI(ScreenWidth / 2, ScreenWidth, GameHeight / 3, GameHeight * 2 / 3);
 }
 
 RectI Graphics::GetRektBL()
 {
-	return RectI(0, ScreenWidth / 2, GameHeight / 2, GameHeight);
+	return RectI(0, ScreenWidth / 2, GameHeight * 2 / 3, GameHeight);
 }
 
 RectI Graphics::GetRektBR()
 {
-	return RectI(ScreenWidth / 2, ScreenWidth, GameHeight / 2, GameHeight);
+	return RectI(ScreenWidth / 2, ScreenWidth, GameHeight * 2 / 3, GameHeight);
 }
 
 void Graphics::EndFrame()

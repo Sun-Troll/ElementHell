@@ -35,17 +35,20 @@ Game::Game(MainWindow& wnd)
 void Game::Go()
 {
 	gfx.BeginFrame();
-	std::thread oneDrawTL(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektTL());
-	std::thread twoDrawTR(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektTR());
-	std::thread threeDrawBL(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektBL());
-	std::thread fourDrawBR(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektBR());
-	std::thread fiveUpdate(&Game::UpdateModel, std::ref(*this));
+	std::thread oneDrawML(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektML());
+	std::thread twoDrawMR(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektMR());
+	std::thread threeDrawTL(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektTL());
+	std::thread fourDrawTR(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektTR());
+	std::thread fiveDrawBL(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektBL());
+	std::thread sixDrawBR(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektBR());
+	UpdateModel();
 	DrawHud();
-	fiveUpdate.join();
-	threeDrawBL.join();
-	fourDrawBR.join();
-	oneDrawTL.join();
-	twoDrawTR.join();
+	fiveDrawBL.join();
+	sixDrawBR.join();
+	threeDrawTL.join();
+	fourDrawTR.join();
+	oneDrawML.join();
+	twoDrawMR.join();
 	PrepareFrame();
 	gfx.EndFrame();
 }

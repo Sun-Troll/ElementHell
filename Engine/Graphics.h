@@ -89,6 +89,8 @@ public:
 	static RectF GetGameRectF();
 	static RectI GetRektTL();
 	static RectI GetRektTR();
+	static RectI GetRektML();
+	static RectI GetRektMR();
 	static RectI GetRektBL();
 	static RectI GetRektBR();
 };
