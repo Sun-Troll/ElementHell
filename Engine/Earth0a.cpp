@@ -119,7 +119,6 @@ void Earth0a::GetHit(Player& player, float dt)
 			if (hitbox.Coliding(curCentBul))
 			{
 				hpCur -= player.GetCenterBulletDamage();
-				player.AimBullets(curCentBul.pos);
 				bc.Deactivate();
 				drawDamageTimeCur = 0.0f;
 			}

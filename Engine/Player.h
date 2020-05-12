@@ -86,7 +86,7 @@ private:
 	float hpMax = hpBase;
 	float hpCur = hpMax;
 	static constexpr float radius = 5.0f;
-	static constexpr float baseFireTimePlayerAnim = 0.12f; // starts lagging at 0.001f normal 0.12f
+	static constexpr float baseFireTimePlayerAnim = 0.2f; // starts lagging at 0.001f normal 0.12f
 	float maxFireTimePlayerAnim = baseFireTimePlayerAnim;
 	float curFireBasePlayerAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.2f;
@@ -117,7 +117,6 @@ private:
 	std::vector<Surface> spritesBulletCenter;
 	std::vector<BulletCenter> bulletsCenter;
 	std::vector<BulletCenter> bulletsCenterTemp;
-	bool centerFiring = false;
 
 	//BulletSide
 	static constexpr float baseBulletSideDamage = 10.0f;
@@ -136,4 +135,5 @@ private:
 	std::vector<BulletSide> bulletsSide;
 	std::vector<BulletSide> bulletsSideTemp;
 	std::vector<VecF> bulletSidePosVel;
+	bool sideFiring = false;
 };

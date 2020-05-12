@@ -68,7 +68,7 @@ private:
 	static constexpr float speed = 100.0f;
 	CircF hitbox;
 	VecF vel;
-	static constexpr float hpMax = 1000.0f;
+	static constexpr float hpMax = 500.0f;
 	float hpCur = hpMax;
 	static constexpr float maxFireTimeEarth0bAnim = 0.3f; // normal 0.3
 	float curFireBaseEarth0bAnim = 0.0f;

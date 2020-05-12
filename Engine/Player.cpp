@@ -106,24 +106,24 @@ void Player::Fire(float dt)
 	while (curFireBasePlayerAnim >= maxFireTimePlayerAnim)
 	{
 		curFireBasePlayerAnim -= maxFireTimePlayerAnim;
-		if (centerFiring)
+		bulletsCenterTemp.emplace_back(BulletCenter{
+		{ hitbox.pos },
+		{ 0.0f, -bulletCenterSpeed } });
+
+		if (sideFiring)
 		{
-			bulletsCenterTemp.emplace_back(BulletCenter{
-			{ hitbox.pos },
-			{ 0.0f, -bulletCenterSpeed } });
-			centerFiring = false;
+			for (int i = 0; i < nBulletsSideFired; ++i)
+			{
+				bulletsSideTemp.emplace_back(BulletSide{
+					{ hitbox.pos.x + bulletSidePosVel[i].x * bulletSideSpawnDist,
+					hitbox.pos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
+					{ bulletSidePosVel[i].x * bulletSideSpeed, bulletSidePosVel[i].y * bulletSideSpeed } });
+			}
+			sideFiring = false;
 		}
 		else
 		{
-			centerFiring = true;
-		}
-		const VecF bulSideBasePos{ hitbox.pos };
-		for (int i = 0; i < nBulletsSideFired; ++i)
-		{
-			bulletsSideTemp.emplace_back(BulletSide{
-				{ bulSideBasePos.x + bulletSidePosVel[i].x * bulletSideSpawnDist,
-				bulSideBasePos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
-				{ bulletSidePosVel[i].x * bulletSideSpeed, bulletSidePosVel[i].y * bulletSideSpeed } });
+			sideFiring = true;
 		}
 	}
 	if (drawDamageTimeCur <= drawDamageTimeMax)

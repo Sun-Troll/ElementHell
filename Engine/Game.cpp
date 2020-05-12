@@ -78,7 +78,8 @@ void Game::UpdateModel()
 				bool right0 = false;
 				bool up0 = false;
 				bool down0 = false;
-				bool slow0 = false;
+				bool abilityA0 = false; // slow
+				bool abilityB0 = false; // aimShot
 				if (wnd.kbd.KeyIsPressed('A') || wnd.kbd.KeyIsPressed(VK_LEFT))
 				{
 					left0 = true;
@@ -97,9 +98,13 @@ void Game::UpdateModel()
 				}
 				if (wnd.kbd.KeyIsPressed(VK_SHIFT))
 				{
-					slow0 = true;
+					abilityA0 = true;
 				}
-				player0.Move(left0, right0, up0, down0, slow0, dt);
+				if (wnd.kbd.KeyIsPressed(VK_SPACE))
+				{
+					abilityB0 = true;
+				}
+				player0.Move(left0, right0, up0, down0, abilityA0, dt);
 				player0.Clamp();
 				player0.Fire(dt);
 				player0.UpdateBullets(dt);
@@ -110,7 +115,8 @@ void Game::UpdateModel()
 					bool right1 = false;
 					bool up1 = false;
 					bool down1 = false;
-					bool slow1 = false;
+					bool abilityA1 = false;
+					bool abilityB1 = false;
 					if (wnd.kbd.KeyIsPressed(VK_NUMPAD4))
 					{
 						left1 = true;
@@ -129,9 +135,13 @@ void Game::UpdateModel()
 					}
 					if (wnd.kbd.KeyIsPressed(VK_NUMPAD0))
 					{
-						slow1 = true;
+						abilityA1 = true;
 					}
-					player1.Move(left1, right1, up1, down1, slow1, dt);
+					if (wnd.kbd.KeyIsPressed(VK_ADD))
+					{
+						abilityB1 = true;
+					}
+					player1.Move(left1, right1, up1, down1, abilityA1, dt);
 					player1.Clamp();
 					player1.Fire(dt);
 					player1.UpdateBullets(dt);
