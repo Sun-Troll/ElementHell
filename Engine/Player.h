@@ -17,7 +17,7 @@ private:
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletCenterRegion) const;
 		void DrawPosUpdate();
-		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		void Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const;
 		const CircF& GetCircF() const;
 		bool GetActive() const;
 		void Deactivate();
@@ -39,7 +39,7 @@ private:
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletSideRegion) const;
 		void DrawPosUpdate();
-		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		void Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const;
 		const CircF& GetCircF() const;
 		bool GetActive() const;
 		void Deactivate();
@@ -75,9 +75,9 @@ public:
 	const VecF& GetCenter() const;
 	const CircF& GetCircF() const;
 	void DrawPosUpdate();
-	void Draw(Graphics& gfx) const;
+	void Draw(const RectI& curRect, Graphics& gfx) const;
 	void DrawPosBulletsUpdate();
-	void DrawBullets(Graphics& gfx) const;
+	void DrawBullets(const RectI& curRect, Graphics& gfx) const;
 private:
 	CircF hitbox;
 	float speedFast = 500.0f;

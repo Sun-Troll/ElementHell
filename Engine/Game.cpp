@@ -35,10 +35,17 @@ Game::Game(MainWindow& wnd)
 void Game::Go()
 {
 	gfx.BeginFrame();
-	std::thread one(&Game::UpdateModel, this);
-	//UpdateModel();
-	ComposeFrame();
-	one.join();
+	std::thread oneDrawTL(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektTL());
+	std::thread twoDrawTR(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektTR());
+	std::thread threeDrawBL(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektBL());
+	std::thread fourDrawBR(&Game::DrawPartScreen, std::ref(*this), Graphics::GetRektBR());
+	std::thread fiveUpdate(&Game::UpdateModel, std::ref(*this));
+	DrawHud();
+	fiveUpdate.join();
+	threeDrawBL.join();
+	fourDrawBR.join();
+	oneDrawTL.join();
+	twoDrawTR.join();
 	PrepareFrame();
 	gfx.EndFrame();
 }
@@ -246,28 +253,35 @@ void Game::PrepareFrame()
 			level.front().PrepareDrawEarth0();
 		}
 	}
+	else
+	{
+		menu.Draw(gfx);
+	}
 }
 
-void Game::ComposeFrame()
+void Game::DrawPartScreen(const RectI & curRect)
 {
 	if (menu.GetState() == Menu::State::Level)
 	{
-		hud.Draw(player0.GetHpMax(), player0.GetHpCur(), gfx);
-		player0.DrawBullets(gfx);
-		player0.Draw(gfx);
+		player0.DrawBullets(curRect, gfx);
+		player0.Draw(curRect, gfx);
 		if (multiplayer)
 		{
-			player1.DrawBullets(gfx);
-			player1.Draw(gfx);
+			player1.DrawBullets(curRect, gfx);
+			player1.Draw(curRect, gfx);
 		}
 		if (!level.empty()) // change based on cur lvl
 		{
 			assert(level.size() == 1);
-			level.front().DrawEarth0(gfx);
+			level.front().DrawEarth0(curRect, gfx);
 		}
 	}
-	else
+}
+
+void Game::DrawHud()
+{
+	if (menu.GetState() == Menu::State::Level)
 	{
-		menu.Draw(gfx);
+		hud.Draw(player0.GetHpMax(), player0.GetHpCur(), gfx);
 	}
 }

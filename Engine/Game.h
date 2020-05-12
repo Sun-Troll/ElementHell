@@ -38,7 +38,8 @@ public:
 	void Go();
 private:
 	void PrepareFrame();
-	void ComposeFrame();
+	void DrawPartScreen(const RectI& curRect);
+	void DrawHud();
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */

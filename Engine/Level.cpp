@@ -58,7 +58,7 @@ void Level::StartEarth0()
 void Level::SpawnEarth0(float dt)
 {
 	spawnTimer += dt;
-	while (spawnTimer > 0.41f)
+	while (spawnTimer > 0.44f)
 	{
 		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
 		enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 200.0f }, { -20.0f, 10.0f } });
@@ -80,7 +80,7 @@ void Level::SpawnEarth0(float dt)
 		enEarth0bTemp.emplace_back(Earth0b{ { 230.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
 		enEarth0bTemp.emplace_back(Earth0b{ { 330.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
 		enEarth0bTemp.emplace_back(Earth0b{ { 430.0f, movRegEarth0b.bottom }, { -1.0f, -10.0f } });
-		spawnTimer -= 0.41f; // multithread read between 0.08 0.07 a / 0.40 0.35 b // draw test single 0.42 0.41
+		spawnTimer -= 0.44f; // multithread read between 0.08 0.07 a / 0.40 0.35 b // draw test single 0.42 0.41
 	}
 	/*switch (curSpawn)
 	{
@@ -688,16 +688,16 @@ void Level::PrepareDrawEarth0()
 	}
 }
 
-void Level::DrawEarth0(Graphics& gfx) const
+void Level::DrawEarth0(const RectI& curRect, Graphics& gfx) const
 {
 	// Earth0a
 	for (const auto& e : enEarth0a)
 	{
 		if (!e.IsDead())
 		{
-			e.Draw(spritesEarth0a, gfx);
+			e.Draw(spritesEarth0a, curRect, gfx);
 		}
-		e.DrawBullets(spritesEarth0aBullet, gfx);
+		e.DrawBullets(spritesEarth0aBullet, curRect, gfx);
 	}
 
 	// Earth0b
@@ -705,9 +705,9 @@ void Level::DrawEarth0(Graphics& gfx) const
 	{
 		if (!e.IsDead())
 		{
-			e.Draw(spritesEarth0b, gfx);
+			e.Draw(spritesEarth0b, curRect, gfx);
 		}
-		e.DrawBullets(spritesEarth0bBulletCent, spritesEarth0bBulletSide, gfx);
+		e.DrawBullets(spritesEarth0bBulletCent, spritesEarth0bBulletSide, curRect, gfx);
 	}
 }
 

@@ -221,15 +221,15 @@ void Earth0b::DrawPosUpdate()
 	drawDamaged = drawDamageTimeCur <= drawDamageTimeMax;
 }
 
-void Earth0b::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
+void Earth0b::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const
 {
 	if (drawDamaged)
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[curDrawFrame], gfx.GetGameRect());
+		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[curDrawFrame], curRect);
 	}
 	else
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
 	}
 }
 
@@ -276,16 +276,16 @@ void Earth0b::DrawPosBulletsUpdate()
 }
 
 void Earth0b::DrawBullets(const std::vector<Surface>& spritesBulCentE,
-	const std::vector<Surface>& spritesBulSideE, Graphics& gfx) const
+	const std::vector<Surface>& spritesBulSideE, const RectI& curRect, Graphics& gfx) const
 {
 	for (const auto& bc : bulletsCentE)
 	{
-		bc.Draw(spritesBulCentE, gfx);
+		bc.Draw(spritesBulCentE, curRect, gfx);
 	}
 
 	for (const auto& bs : bulletsSideE)
 	{
-		bs.Draw(spritesBulSideE, gfx);
+		bs.Draw(spritesBulSideE, curRect, gfx);
 	}
 }
 
@@ -344,9 +344,9 @@ void Earth0b::BulletCentE::DrawPosUpdate()
 	curDrawFrame = int(curAnimTime * nSpritesBulletCentE / maxAnimTime);
 }
 
-void Earth0b::BulletCentE::Draw(const std::vector<Surface>& sprites, Graphics & gfx) const
+void Earth0b::BulletCentE::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const
 {
-	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
 }
 
 bool Earth0b::BulletCentE::GetActive() const
@@ -414,9 +414,9 @@ void Earth0b::BulletSideE::DrawPosUpdate()
 	curDrawFrame = int(curAnimTime * nSpritesBulletSideE / maxAnimTime);
 }
 
-void Earth0b::BulletSideE::Draw(const std::vector<Surface>& sprites, Graphics & gfx) const
+void Earth0b::BulletSideE::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const
 {
-	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
 }
 
 bool Earth0b::BulletSideE::GetActive() const

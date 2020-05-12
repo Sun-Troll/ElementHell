@@ -254,15 +254,15 @@ void Player::DrawPosUpdate()
 	drawDamaged = drawDamageTimeCur <= drawDamageTimeMax;
 }
 
-void Player::Draw(Graphics& gfx) const
+void Player::Draw(const RectI& curRect, Graphics& gfx) const
 {
 	if (drawDamaged)
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, spritesPlayer[curDrawFrame]);
+		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, spritesPlayer[curDrawFrame], curRect);
 	}
 	else
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, spritesPlayer[curDrawFrame]);
+		gfx.DrawSprite(drawPos.x, drawPos.y, spritesPlayer[curDrawFrame], curRect);
 	}
 }
 
@@ -308,15 +308,15 @@ void Player::DrawPosBulletsUpdate()
 	}
 }
 
-void Player::DrawBullets(Graphics& gfx) const
+void Player::DrawBullets(const RectI& curRect, Graphics& gfx) const
 {
 	for (const auto& bc : bulletsCenter)
 	{
-		bc.Draw(spritesBulletCenter, gfx);
+		bc.Draw(spritesBulletCenter, curRect, gfx);
 	}
 	for (const auto& bs : bulletsSide)
 	{
-		bs.Draw(spritesBulletSide, gfx);
+		bs.Draw(spritesBulletSide, curRect, gfx);
 	}
 }
 
@@ -369,9 +369,9 @@ void Player::BulletCenter::DrawPosUpdate()
 	curDrawFrame = int(curAnimTime * nSpritesBulletCenter / maxAnimTime);
 }
 
-void Player::BulletCenter::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
+void Player::BulletCenter::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const
 {
-	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
 }
 
 const CircF& Player::BulletCenter::GetCircF() const
@@ -462,9 +462,9 @@ void Player::BulletSide::DrawPosUpdate()
 	}
 }
 
-void Player::BulletSide::Draw(const std::vector<Surface>& sprites, Graphics & gfx) const
+void Player::BulletSide::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics & gfx) const
 {
-	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
 }
 
 const CircF& Player::BulletSide::GetCircF() const

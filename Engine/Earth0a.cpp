@@ -177,15 +177,15 @@ void Earth0a::DrawPosUpdate()
 	drawDamaged = drawDamageTimeCur <= drawDamageTimeMax;
 }
 
-void Earth0a::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
+void Earth0a::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const
 {
 	if (drawDamaged)
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[curDrawFrame], gfx.GetGameRect());
+		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[curDrawFrame], curRect);
 	}
 	else
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
 	}
 }
 
@@ -213,11 +213,11 @@ void Earth0a::DrawPosBulletsUpdate()
 	}
 }
 
-void Earth0a::DrawBullets(const std::vector<Surface>& spritesBullet, Graphics& gfx) const
+void Earth0a::DrawBullets(const std::vector<Surface>& spritesBullet, const RectI& curRect, Graphics& gfx) const
 {
 	for (const auto& bc : bullets)
 	{
-		bc.Draw(spritesBullet, gfx);
+		bc.Draw(spritesBullet, curRect, gfx);
 	}
 }
 
@@ -276,9 +276,9 @@ void Earth0a::Bullet::DrawPosUpdate()
 	curDrawFrame = int(curAnimTime * nSpritesBullet / maxAnimTime);
 }
 
-void Earth0a::Bullet::Draw(const std::vector<Surface>& sprites, Graphics& gfx) const
+void Earth0a::Bullet::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const
 {
-	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], gfx.GetGameRect());
+	gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
 }
 
 bool Earth0a::Bullet::GetActive() const

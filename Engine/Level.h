@@ -16,7 +16,7 @@ public:
 	void SpawnEarth0(float dt);
 	void UpdateEarth0(Player& player0, Player& player1, bool multiplayer, float dt);
 	void PrepareDrawEarth0();
-	void DrawEarth0(Graphics& gfx) const;
+	void DrawEarth0(const RectI& curRect, Graphics& gfx) const;
 	bool IsStarted() const;
 	bool SetFailed(const Player& player0, const Player& player1, bool multiplayer);
 	bool GetFailed() const;

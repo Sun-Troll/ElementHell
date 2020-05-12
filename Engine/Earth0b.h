@@ -14,7 +14,7 @@ private:
 		bool Clamp(const RectF& bulletCentERegion) const;
 		bool PlayerHit(const CircF& pCirc) const;
 		void DrawPosUpdate();
-		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		void Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const;
 		bool GetActive() const;
 		void Deactivate();
 	private:
@@ -36,7 +36,7 @@ private:
 		bool Clamp(const RectF& bulletSideERegion) const;
 		bool PlayerHit(const CircF& pCirc) const;
 		void DrawPosUpdate();
-		void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+		void Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const;
 		bool GetActive() const;
 		void Deactivate();
 	private:
@@ -60,10 +60,10 @@ public:
 	bool IsDead() const;
 	bool BulletsEmpty() const;
 	void DrawPosUpdate();
-	void Draw(const std::vector<Surface>& sprites, Graphics& gfx) const;
+	void Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const;
 	void DrawPosBulletsUpdate();
 	void DrawBullets(const std::vector<Surface>& spritesBulCentE,
-		const std::vector<Surface>& spritesBulSideE, Graphics& gfx) const;
+		const std::vector<Surface>& spritesBulSideE, const RectI& curRect, Graphics& gfx) const;
 private:
 	static constexpr float speed = 100.0f;
 	CircF hitbox;

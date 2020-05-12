@@ -254,12 +254,32 @@ Graphics::~Graphics()
 
 RectI Graphics::GetGameRect()
 {
-	return RectI(0, ScreenWidth, 0, 900);
+	return RectI(0, ScreenWidth, 0, GameHeight);
 }
 
 RectF Graphics::GetGameRectF()
 {
-	return RectF(0.0f, float(ScreenWidth), 0.0f, 900.0f);
+	return RectF(0.0f, float(ScreenWidth), 0.0f, GameHeightF);
+}
+
+RectI Graphics::GetRektTL()
+{
+	return RectI(0, ScreenWidth / 2, 0, GameHeight / 2);
+}
+
+RectI Graphics::GetRektTR()
+{
+	return RectI(ScreenWidth / 2, ScreenWidth, 0, GameHeight / 2);
+}
+
+RectI Graphics::GetRektBL()
+{
+	return RectI(0, ScreenWidth / 2, GameHeight / 2, GameHeight);
+}
+
+RectI Graphics::GetRektBR()
+{
+	return RectI(ScreenWidth / 2, ScreenWidth, GameHeight / 2, GameHeight);
 }
 
 void Graphics::EndFrame()
