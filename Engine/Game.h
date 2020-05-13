@@ -59,5 +59,6 @@ private:
 	std::vector<Level> level;
 	bool multiplayer = false;
 	int nSubrames = 12;
+	bool endLevel = false;
 	/********************************/
 };

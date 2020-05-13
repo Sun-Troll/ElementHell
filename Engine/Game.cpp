@@ -63,6 +63,7 @@ void Game::UpdateModel()
 		if (level.empty()) // change based on cur lvl
 		{
 			assert(level.empty());
+			assert(!endLevel);
 			player0.Respawn(spawnPosP0, menu.GetStats(false));
 			player1.Respawn(spawnPosP1, menu.GetStats(true));
 			level.push_back(Level());
@@ -72,6 +73,7 @@ void Game::UpdateModel()
 		else if (!level.front().GetFailed())
 		{
 			assert(level.size() == 1);
+			assert(!endLevel);
 			for (int n = 0; n < nSubrames; ++n)
 			{
 				bool left0 = false;
@@ -182,10 +184,9 @@ void Game::UpdateModel()
 		{
 			if (wnd.kbd.KeyIsPressed(VK_ESCAPE) || wnd.kbd.KeyIsPressed(VK_BACK))
 			{
-				level.pop_back();
-				assert(level.empty());
-				menu.LvlQuit();
-				wnd.kbd.Flush();
+				assert(level.size() == 1);
+				assert(!endLevel);
+				endLevel = true;
 			}
 		}
 	}
@@ -284,6 +285,15 @@ void Game::PrepareFrame()
 		{
 			assert(level.size() == 1);
 			level.front().PrepareDrawEarth0();
+		}
+		if (endLevel)
+		{
+			assert(level.size() == 1);
+			level.pop_back();
+			endLevel = false;
+			menu.LvlQuit();
+			wnd.kbd.Flush();
+			assert(level.empty());
 		}
 	}
 	else
