@@ -3,7 +3,7 @@
 struct Stats
 {
 public:
-	int points = 0;
+	int points = 20;
 	int hp = 0;
 	int rpm = 0;
 	int dmgCent = 0;

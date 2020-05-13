@@ -5,7 +5,7 @@
 class HUD
 {
 public:
-	void Draw(float PlHpMax, float PlHpCur, Graphics& gfx) const;
+	void Draw(float PlHpMax, float PlHpCur, int PlSideBulsN, Graphics& gfx) const;
 private:
 	Surface base = Surface("Sprites\\HUD\\HUDbase.bmp");
 	static constexpr int basePosX = 0;
@@ -14,6 +14,8 @@ private:
 	Surface hpCur = Surface("Sprites\\HUD\\HPCur.bmp");
 	const float hpCurWidth = float(hpCur.GetWidth());
 	static constexpr int hpBarPosY = basePosY + 8;
-	Surface StageBosCur = Surface("Sprites\\HUD\\StageBossCur.bmp");
-	static constexpr int LevelProgessBossLifePosY = hpBarPosY + 18 + 8;
+	Surface sideBullets = Surface("Sprites\\HUD\\SideBullets.bmp");
+	const int sideBulletsWidth = sideBullets.GetWidth();
+	static constexpr int sideBulletsPosY = hpBarPosY + 18 + 8;
+	static constexpr int sideBulletsNFull = 1000;
 };

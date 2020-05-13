@@ -81,6 +81,7 @@ void Game::UpdateModel()
 				bool abilityA0 = false; // slow
 				bool abilityB0 = false; // aimBullet
 				bool abilityC0 = false; // recall
+				bool abilityD0 = false; // rapid
 				if (wnd.kbd.KeyIsPressed('A') || wnd.kbd.KeyIsPressed(VK_LEFT))
 				{
 					left0 = true;
@@ -109,9 +110,13 @@ void Game::UpdateModel()
 				{
 					abilityC0 = true;
 				}
+				if (wnd.kbd.KeyIsPressed('Q'))
+				{
+					abilityD0 = true;
+				}
 				player0.Move(left0, right0, up0, down0, abilityA0, dt);
 				player0.Clamp();
-				player0.Fire(abilityB0, abilityC0, dt);
+				player0.Fire(abilityB0, abilityC0, abilityD0, dt);
 				player0.UpdateBullets(dt);
 
 				if (multiplayer)
@@ -123,6 +128,7 @@ void Game::UpdateModel()
 					bool abilityA1 = false; // slow
 					bool abilityB1 = false; // aimBullet
 					bool abilityC1 = false; // recall
+					bool abilityD1 = false; // rapid
 					if (wnd.kbd.KeyIsPressed(VK_NUMPAD4))
 					{
 						left1 = true;
@@ -151,9 +157,13 @@ void Game::UpdateModel()
 					{
 						abilityC1 = true;
 					}
+					if (wnd.kbd.KeyIsPressed(VK_NUMPAD1))
+					{
+						abilityD1 = true;
+					}
 					player1.Move(left1, right1, up1, down1, abilityA1, dt);
 					player1.Clamp();
-					player1.Fire(abilityB1, abilityC1, dt);
+					player1.Fire(abilityB1, abilityC1, abilityD1, dt);
 					player1.UpdateBullets(dt);
 				}
 
@@ -305,6 +315,6 @@ void Game::DrawHud()
 {
 	if (menu.GetState() == Menu::State::Level)
 	{
-		hud.Draw(player0.GetHpMax(), player0.GetHpCur(), gfx);
+		hud.Draw(player0.GetHpMax(), player0.GetHpCur(), player0.GetSideBulletsN(), gfx);
 	}
 }

@@ -49,14 +49,23 @@ void Player::Respawn(const VecF& pos_in, const Stats& stats)
 {
 	drawDamageTimeCur = drawDamageTimeMax + 1.0f;
 	hitbox.pos = pos_in;
-	hpMax = hpBase * float(stats.hp + 1);
+	hpMax = hpBase * (float(stats.hp + 6) / 6.0f);
 	hpCur = hpMax;
-	maxFireTimePlayerAnim = baseFireTimePlayerAnim / float(stats.rpm + 1);
+	maxFireTimePlayerAnim = baseFireTimePlayerAnim / (float(stats.rpm + 10) / 10.0f);
 	curFireBasePlayerAnim = 0.0f;
-	bulletCenterDamage = baseBulletCenterDamage * float(stats.dmgCent + 1);
+	bulletCenterDamage = baseBulletCenterDamage * (float(stats.dmgCent + 2) / 2.0f);
+	sideFiring = false;
 	bulletsCenter.clear();
-	bulletSideDamage = baseBulletSideDamage * float(stats.dmgSide + 1);
+	bulletsCenterTemp.clear();
+	bulletSideDamage = baseBulletSideDamage * (float(stats.dmgSide + 5) / 5.0f);
 	bulletsSide.clear();
+	bulletsSideTemp.clear();
+	FireRateAim = maxFireTimePlayerAnim * 2.0f;
+	curFireTimeAim = 0.0f;
+	bulletsAim.clear();
+	bulletsAimTemp.clear();
+	recallCurCool = 0.0f;
+	curRapidFireDur = maxRapidFireDur + 1.0f;
 }
 
 void Player::Move(bool left, bool right, bool up, bool down, bool slow, float dt)
@@ -108,30 +117,52 @@ void Player::Clamp()
 	}
 }
 
-void Player::Fire(bool fireAim, bool recall, float dt)
+void Player::Fire(bool fireAim, bool recall, bool rapid, float dt)
 {
 	curFireBasePlayerAnim += dt;
 	curFireTimeAim += dt;
 	recallCurCool += dt;
+	curRapidFireDur += dt;
+	if (rapid && curRapidFireDur > maxRapidFireDur)
+	{
+		curRapidFireDur = 0.0f;
+		hpCur -= hpMax * 0.49f;
+	}
 	while (curFireBasePlayerAnim >= maxFireTimePlayerAnim)
 	{
 		curFireBasePlayerAnim -= maxFireTimePlayerAnim;
 		bulletsCenterTemp.emplace_back(BulletCenter{ { hitbox.pos }, { 0.0f, -bulletCenterSpeed } });
 
-		if (sideFiring)
+		if (curRapidFireDur <= maxRapidFireDur)
 		{
 			for (int i = 0; i < nBulletsSideFired; ++i)
 			{
-				bulletsSideTemp.emplace_back(BulletSide{
-					{ hitbox.pos.x + bulletSidePosVel[i].x * bulletSideSpawnDist,
-					hitbox.pos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
-					{ bulletSidePosVel[i].x * bulletSideSpeed, bulletSidePosVel[i].y * bulletSideSpeed } });
+				for (int n = 0; n < nBulletsSideFired; ++n)
+				{
+					bulletsSideTemp.emplace_back(BulletSide{
+						{ hitbox.pos.x + bulletSidePosVel[i].x * bulletSideSpawnDist,
+						hitbox.pos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
+						{ bulletSidePosVel[n].x * bulletSideSpeed, bulletSidePosVel[n].y * bulletSideSpeed } });
+				}
 			}
-			sideFiring = false;
 		}
 		else
 		{
-			sideFiring = true;
+			if (sideFiring)
+			{
+				for (int i = 0; i < nBulletsSideFired; ++i)
+				{
+					bulletsSideTemp.emplace_back(BulletSide{
+						{ hitbox.pos.x + bulletSidePosVel[i].x * bulletSideSpawnDist,
+						hitbox.pos.y + bulletSidePosVel[i].y * bulletSideSpawnDist },
+						{ bulletSidePosVel[i].x * bulletSideSpeed, bulletSidePosVel[i].y * bulletSideSpeed } });
+				}
+				sideFiring = false;
+			}
+			else
+			{
+				sideFiring = true;
+			}
 		}
 	}
 	if (drawDamageTimeCur <= drawDamageTimeMax)
@@ -146,7 +177,7 @@ void Player::Fire(bool fireAim, bool recall, float dt)
 	if (recall && recallCurCool >= recallCooldown)
 	{
 		AimBullets(hitbox.pos);
-		hpCur -= hpBase * 0.24f;
+		hpCur -= hpMax * 0.24f;
 		recallCurCool = 0.0f;
 	}
 }
@@ -253,6 +284,11 @@ float Player::GetSideBulletDamage() const
 	return bulletSideDamage;
 }
 
+int Player::GetSideBulletsN() const
+{
+	return int(bulletsSide.size() + bulletsSideTemp.size());
+}
+
 std::vector<Player::BulletAim>& Player::GetAimBullets()
 {
 	return bulletsAim;
@@ -282,6 +318,15 @@ void Player::Damaged(float damage)
 {
 	hpCur -= damage;
 	drawDamageTimeCur = 0.0f;
+}
+
+void Player::Heal(float percent)
+{
+	hpCur += hpMax * percent;
+	if (hpCur > hpMax)
+	{
+		hpCur = hpMax;
+	}
 }
 
 const VecF& Player::GetCenter() const
@@ -367,9 +412,9 @@ void Player::DrawPosBulletsUpdate()
 	{
 		bs.DrawPosUpdate();
 	}
-	for (auto& bs : bulletsAim)
+	for (auto& ba : bulletsAim)
 	{
-		bs.DrawPosUpdate();
+		ba.DrawPosUpdate();
 	}
 }
 
@@ -596,7 +641,7 @@ bool Player::BulletAim::Clamp(const RectF& bulletCenterRegion) const
 
 void Player::BulletAim::DrawPosUpdate()
 {
-	drawPos = { int(hitbox.pos.x) - bulCentOff, int(hitbox.pos.y) - bulCentOff };
+	drawPos = { int(hitbox.pos.x) - bulAimOff, int(hitbox.pos.y) - bulAimOff };
 	curDrawFrame = int(curAnimTime * nSpritesBulletCenter / maxAnimTime);
 }
 

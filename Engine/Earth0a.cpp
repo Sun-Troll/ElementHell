@@ -113,6 +113,11 @@ void Earth0a::GetHit(Player& player, float dt)
 {
 	for (auto& bc : player.GetCenterBullets())
 	{
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.02f);
+			break;
+		}
 		if (bc.GetActive())
 		{
 			if (hitbox.Coliding(bc.GetCircF()))
@@ -127,6 +132,7 @@ void Earth0a::GetHit(Player& player, float dt)
 	{
 		if (hpCur <= 0.0f)
 		{
+			player.Heal(0.01f);
 			break;
 		}
 		if (bs.GetActive() && hitbox.Coliding(bs.GetCircF()))
@@ -143,7 +149,7 @@ void Earth0a::GetHit(Player& player, float dt)
 			const CircF curAimBul = ba.GetCircF();
 			if (hitbox.Coliding(curAimBul))
 			{
-				player.AimBullets(curAimBul.pos);
+				player.AimBullets((curAimBul.pos + hitbox.pos) * 0.5f);
 				ba.Deactivate();
 			}
 		}
@@ -151,6 +157,11 @@ void Earth0a::GetHit(Player& player, float dt)
 
 	for (auto& bct : player.GetCenterBulletsTemp())
 	{
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.02f);
+			break;
+		}
 		if (bct.GetActive())
 		{
 			if (hitbox.Coliding(bct.GetCircF()))
@@ -163,6 +174,11 @@ void Earth0a::GetHit(Player& player, float dt)
 	}
 	for (auto& bst : player.GetSideBulletsTemp())
 	{
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.01f);
+			break;
+		}
 		if (hpCur <= 0.0f)
 		{
 			break;
@@ -181,7 +197,7 @@ void Earth0a::GetHit(Player& player, float dt)
 			const CircF curAimBul = bat.GetCircF();
 			if (hitbox.Coliding(curAimBul))
 			{
-				player.AimBullets(curAimBul.pos);
+				player.AimBullets((curAimBul.pos + hitbox.pos) * 0.5f);
 				bat.Deactivate();
 			}
 		}
