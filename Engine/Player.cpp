@@ -137,7 +137,7 @@ void Player::Fire(bool fireAim, bool recall, bool rapid, bool pierce, float dt)
 		bulletsPierceTemp.emplace_back(BulletPierce{ { hitbox.pos }, { 0.0f, -bulletPierceSpeed} });
 		hpCur -= hpMax * 0.999f;
 	}
-	if (rapid && curRapidFireDur > maxRapidFireDur)
+	if (rapid && curRapidFireDur > maxRapidFireDur && hpCur >= hpMax * 0.5f)
 	{
 		curRapidFireDur = 0.0f;
 		hpCur -= hpMax * 0.499f;
@@ -188,7 +188,7 @@ void Player::Fire(bool fireAim, bool recall, bool rapid, bool pierce, float dt)
 		bulletsAimTemp.emplace_back(BulletAim{ { hitbox.pos }, { 0.0f, -bulletAimSpeed } });
 		curFireTimeAim = 0.0f;
 	}
-	if (recall && recallCurCool >= recallCooldown)
+	if (recall && recallCurCool >= recallCooldown && hpCur >= hpMax * 0.25f)
 	{
 		AimBullets(hitbox.pos);
 		hpCur -= hpMax * 0.249f;
