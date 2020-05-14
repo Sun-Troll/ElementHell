@@ -111,13 +111,9 @@ void Earth0a::HitPlayer(Player& player)
 
 void Earth0a::GetHit(Player& player, float dt)
 {
+	assert(hpCur > 0.0f);
 	for (auto& bc : player.GetCenterBullets())
 	{
-		if (hpCur <= 0.0f)
-		{
-			player.Heal(0.02f);
-			break;
-		}
 		if (bc.GetActive())
 		{
 			if (hitbox.Coliding(bc.GetCircF()))
@@ -127,19 +123,38 @@ void Earth0a::GetHit(Player& player, float dt)
 				drawDamageTimeCur = 0.0f;
 			}
 		}
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.04f);
+			return;
+		}
+	}
+	for (auto& bp : player.GetPierceBullets())
+	{
+		if (bp.GetActive() && bp.GetCharged() && hitbox.Coliding(bp.GetCircF()))
+		{
+			hpCur -= player.GetPierceBulletDamage();
+			bp.Discharge();
+			drawDamageTimeCur = 0.0f;
+		}
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.03f);
+			return;
+		}
 	}
 	for (auto& bs : player.GetSideBullets())
 	{
-		if (hpCur <= 0.0f)
-		{
-			player.Heal(0.01f);
-			break;
-		}
 		if (bs.GetActive() && hitbox.Coliding(bs.GetCircF()))
 		{
 			hpCur -= player.GetSideBulletDamage();
 			bs.Deactivate();
 			drawDamageTimeCur = 0.0f;
+		}
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.02f);
+			return;
 		}
 	}
 	for (auto& ba : player.GetAimBullets())
@@ -157,11 +172,6 @@ void Earth0a::GetHit(Player& player, float dt)
 
 	for (auto& bct : player.GetCenterBulletsTemp())
 	{
-		if (hpCur <= 0.0f)
-		{
-			player.Heal(0.02f);
-			break;
-		}
 		if (bct.GetActive())
 		{
 			if (hitbox.Coliding(bct.GetCircF()))
@@ -171,23 +181,42 @@ void Earth0a::GetHit(Player& player, float dt)
 				drawDamageTimeCur = 0.0f;
 			}
 		}
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.04f);
+			return;
+		}
+	}
+	for (auto& bpt : player.GetPierceBulletsTemp())
+	{
+		if (bpt.GetActive() && bpt.GetCharged() && hitbox.Coliding(bpt.GetCircF()))
+		{
+			hpCur -= player.GetPierceBulletDamage();
+			bpt.Discharge();
+			drawDamageTimeCur = 0.0f;
+		}
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.03f);
+			return;
+		}
 	}
 	for (auto& bst : player.GetSideBulletsTemp())
 	{
 		if (hpCur <= 0.0f)
 		{
-			player.Heal(0.01f);
-			break;
-		}
-		if (hpCur <= 0.0f)
-		{
-			break;
+			return;
 		}
 		if (bst.GetActive() && hitbox.Coliding(bst.GetCircF()))
 		{
 			hpCur -= player.GetSideBulletDamage();
 			bst.Deactivate();
 			drawDamageTimeCur = 0.0f;
+		}
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.02f);
+			return;
 		}
 	}
 	for (auto& bat : player.GetAimBulletsTemp())

@@ -51,6 +51,7 @@ private:
 		VecI drawPos;
 		static constexpr float radius = 9.0f;
 		static constexpr float maxAnimTime = 0.4f;
+		static constexpr float trgSpeedUp = 64.0f;
 		float curAnimTime = 0.0f;
 		int curDrawFrame = 0;
 		bool targeting = false;
@@ -78,12 +79,40 @@ private:
 		int curDrawFrame = 0;
 		bool active = true;
 	};
+	class BulletPierce
+	{
+	public:
+		BulletPierce(const VecF& pos, const VecF& vel);
+		void Move(float dt);
+		void SetTarget(const VecF& target);
+		void Animate(float dt);
+		bool Clamp(const RectF& bulletCenterRegion) const;
+		void DrawPosUpdate();
+		void Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const;
+		const CircF& GetCircF() const;
+		bool GetActive() const;
+		void Deactivate();
+		bool GetCharged() const;
+		void Discharge();
+	private:
+		CircF hitbox;
+		VecF vel;
+		VecF curTarget;
+		VecI drawPos;
+		static constexpr float radius = 25.0f;
+		static constexpr float maxAnimTime = 2.0f;
+		static constexpr float trgSpeedUp = 128.0f;
+		float curAnimTime = 0.0f;
+		int curDrawFrame = 0;
+		bool targeting = false;
+		bool active = true;
+	};
 public:
 	Player(const VecF& pos);
 	void Respawn(const VecF& pos_in, const Stats& stats);
 	void Move(bool left, bool right, bool up, bool down, bool slow, float dt);
 	void Clamp();
-	void Fire(bool fireAim, bool recall, bool rapid, float dt);
+	void Fire(bool fireAim, bool recall, bool rapid, bool pierce, float dt);
 	void UpdateBullets(float dt);
 	void AimBullets(const VecF& target);
 	std::vector<BulletCenter>& GetCenterBullets();
@@ -95,6 +124,9 @@ public:
 	int GetSideBulletsN() const;
 	std::vector<BulletAim>& GetAimBullets();
 	std::vector<BulletAim>& GetAimBulletsTemp();
+	std::vector<BulletPierce>& GetPierceBullets();
+	std::vector<BulletPierce>& GetPierceBulletsTemp();
+	float GetPierceBulletDamage() const;
 	float GetHpMax() const;
 	float GetHpCur() const;
 	bool IsAlive() const;
@@ -155,7 +187,6 @@ private:
 	static constexpr float baseBulletSideDamage = 10.0f;
 	float bulletSideDamage = baseBulletSideDamage;
 	static constexpr float bulletSideSpeed = 40.0f;
-	static constexpr float trgSpeedUp = 64.0f;
 	static constexpr float bulletSideSpawnDist = 40.0f;
 	static constexpr int nSpritesBulletSide = 8;
 	static constexpr int spriteBulletSideDim = 16; // assumes same width/height
@@ -183,4 +214,18 @@ private:
 	std::vector<Surface> spritesBulletAim;
 	std::vector<BulletAim> bulletsAim;
 	std::vector<BulletAim> bulletsAimTemp;
+
+	//BulletPierce
+	static constexpr float baseBulletPierceDamage = 20.0f;
+	float bulletPierceDamage = baseBulletPierceDamage;
+	static constexpr float bulletPierceSpeed = 30.0f;
+	static constexpr int nSpritesBulletPierce = 7;
+	static constexpr int spriteBulletPierceDim = 48; // assumes same width/height
+	static constexpr int bulPierOff = spriteBulletPierceDim / 2;
+	static constexpr float bulletPierceRadius = float(spriteBulletPierceDim) / 2.0f;
+	const RectF movementRegionBulletPierce{ float(-bulPierOff), float(Graphics::ScreenWidth + bulPierOff),
+		float(-bulPierOff), float(Graphics::GameHeight + bulPierOff) };
+	std::vector<Surface> spritesBulletPierce;
+	std::vector<BulletPierce> bulletsPierce;
+	std::vector<BulletPierce> bulletsPierceTemp;
 };
