@@ -99,9 +99,9 @@ private:
 		VecF vel;
 		VecF curTarget;
 		VecI drawPos;
-		static constexpr float radius = 25.0f;
+		static constexpr float radius = 26.0f;
 		static constexpr float maxAnimTime = 2.0f;
-		static constexpr float trgSpeedUp = 128.0f;
+		static constexpr float trgSpeedUp = 256.0f;
 		float curAnimTime = 0.0f;
 		int curDrawFrame = 0;
 		bool targeting = false;
@@ -218,7 +218,7 @@ private:
 	//BulletPierce
 	static constexpr float baseBulletPierceDamage = 20.0f;
 	float bulletPierceDamage = baseBulletPierceDamage;
-	static constexpr float bulletPierceSpeed = 30.0f;
+	static constexpr float bulletPierceSpeed = 20.0f;
 	static constexpr int nSpritesBulletPierce = 7;
 	static constexpr int spriteBulletPierceDim = 48; // assumes same width/height
 	static constexpr int bulPierOff = spriteBulletPierceDim / 2;

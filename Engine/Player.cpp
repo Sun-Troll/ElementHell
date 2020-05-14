@@ -803,8 +803,8 @@ bool Player::BulletPierce::Clamp(const RectF& bulletPierceRegion) const
 
 void Player::BulletPierce::DrawPosUpdate()
 {
-	drawPos = { int(hitbox.pos.x) - bulSideOff, int(hitbox.pos.y) - bulSideOff };
-	curDrawFrame = std::min(int(curAnimTime * nSpritesBulletSide / maxAnimTime / 2), nSpritesBulletPierce - 1);
+	drawPos = { int(hitbox.pos.x) - bulPierOff, int(hitbox.pos.y) - bulPierOff };
+	curDrawFrame = std::min(int(curAnimTime * nSpritesBulletPierce / maxAnimTime / 2), nSpritesBulletPierce - 1);
 }
 
 void Player::BulletPierce::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const
