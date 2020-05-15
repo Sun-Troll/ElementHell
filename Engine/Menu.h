@@ -38,9 +38,13 @@ public:
 	enum class SelectionStats
 	{
 		Hp,
+		LifeSteal,
 		Rpm,
 		DmgCent,
 		DmgSide,
+		RapidFire,
+		Temp,
+		PierceShot,
 		End
 	};
 	enum class SelectionSaveLoad
