@@ -160,11 +160,11 @@ void Level::SpawnEarth0(float dt)
 			repeat(11);
 			if (repeatCount % 2 == 0)
 			{
-				enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 100.0f }, { 20.0f, 10.0f } });
+				enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
 			}
 			else
 			{
-				enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -20.0f, 10.0f } });
+				enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 100.0f }, { 20.0f, 10.0f } });
 			}
 		}
 		break;
