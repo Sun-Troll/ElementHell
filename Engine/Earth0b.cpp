@@ -175,7 +175,8 @@ void Earth0b::GetHit(Player& player, float dt)
 	}
 	for (auto& bp : player.GetPierceBullets())
 	{
-		if (bp.GetActive() && bp.GetCharged() && hitbox.Coliding(bp.GetCircF()))
+		const float chargeTime = player.GetPierBulCharTime();
+		if (bp.GetActive() && bp.GetCharged(chargeTime) && hitbox.Coliding(bp.GetCircF()))
 		{
 			hpCur -= player.GetPierceBulletDamage();
 			bp.Discharge();
@@ -233,7 +234,8 @@ void Earth0b::GetHit(Player& player, float dt)
 	}
 	for (auto& bpt : player.GetPierceBulletsTemp())
 	{
-		if (bpt.GetActive() && bpt.GetCharged() && hitbox.Coliding(bpt.GetCircF()))
+		const float chargeTime = player.GetPierBulCharTime();
+		if (bpt.GetActive() && bpt.GetCharged(chargeTime) && hitbox.Coliding(bpt.GetCircF()))
 		{
 			hpCur -= player.GetPierceBulletDamage();
 			bpt.Discharge();

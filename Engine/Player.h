@@ -87,12 +87,12 @@ private:
 		void SetTarget(const VecF& target);
 		void Animate(float dt);
 		bool Clamp(const RectF& bulletCenterRegion) const;
-		void DrawPosUpdate();
+		void DrawPosUpdate(float chargeTime);
 		void Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const;
 		const CircF& GetCircF() const;
 		bool GetActive() const;
 		void Deactivate();
-		bool GetCharged() const;
+		bool GetCharged(float chargeTime) const;
 		void Discharge();
 	private:
 		CircF hitbox;
@@ -100,7 +100,6 @@ private:
 		VecF curTarget;
 		VecI drawPos;
 		static constexpr float radius = 26.0f;
-		static constexpr float maxAnimTime = 2.0f;
 		static constexpr float trgSpeedUp = 256.0f;
 		float curAnimTime = 0.0f;
 		int curDrawFrame = 0;
@@ -127,6 +126,7 @@ public:
 	std::vector<BulletPierce>& GetPierceBullets();
 	std::vector<BulletPierce>& GetPierceBulletsTemp();
 	float GetPierceBulletDamage() const;
+	float GetPierBulCharTime() const;
 	float GetHpMax() const;
 	float GetHpCur() const;
 	bool IsAlive() const;
@@ -145,6 +145,7 @@ private:
 	static constexpr float hpBase = 1000.0f;
 	float hpMax = hpBase;
 	float hpCur = hpMax;
+	float heal = 1.0f;
 	static constexpr float radius = 5.0f;
 	static constexpr float baseFireTimePlayerAnim = 0.3f; // starts lagging at 0.001f normal 0.12f
 	float maxFireTimePlayerAnim = baseFireTimePlayerAnim;
@@ -216,8 +217,9 @@ private:
 	std::vector<BulletAim> bulletsAimTemp;
 
 	//BulletPierce
-	static constexpr float baseBulletPierceDamage = 20.0f;
-	float bulletPierceDamage = baseBulletPierceDamage;
+	static constexpr float baseAnimTimePierce = 2.0f;
+	float maxAnimTimePierce = baseAnimTimePierce;
+	static constexpr float bulletPierceDamage = 20.0f;
 	static constexpr float bulletPierceSpeed = 20.0f;
 	static constexpr int nSpritesBulletPierce = 7;
 	static constexpr int spriteBulletPierceDim = 48; // assumes same width/height

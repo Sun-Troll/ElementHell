@@ -58,8 +58,9 @@ void Player::Respawn(const VecF& pos_in, const Stats& stats)
 {
 	drawDamageTimeCur = drawDamageTimeMax + 1.0f;
 	hitbox.pos = pos_in;
-	hpMax = hpBase * (float(stats.hp + 6) / 6.0f);
+	hpMax = hpBase * (float(stats.hp + 5) / 5.0f);
 	hpCur = hpMax;
+	heal = 1.0f + stats.lifeSteal / 10.0f;
 	maxFireTimePlayerAnim = baseFireTimePlayerAnim / (float(stats.rpm + 10) / 10.0f);
 	curFireBasePlayerAnim = 0.0f;
 	bulletCenterDamage = baseBulletCenterDamage * (float(stats.dmgCent + 2) / 2.0f);
@@ -74,7 +75,9 @@ void Player::Respawn(const VecF& pos_in, const Stats& stats)
 	bulletsAim.clear();
 	bulletsAimTemp.clear();
 	recallCurCool = 0.0f;
+	maxRapidFireDur = baseRapidFireDur * (float(stats.rapidFire + 5) / 5.0f);
 	curRapidFireDur = maxRapidFireDur + 1.0f;
+	maxAnimTimePierce = baseAnimTimePierce / (float(stats.pierceShot + 5) / 5.0f);
 }
 
 void Player::Move(bool left, bool right, bool up, bool down, bool slow, float dt)
@@ -354,6 +357,11 @@ float Player::GetPierceBulletDamage() const
 	return bulletPierceDamage;
 }
 
+float Player::GetPierBulCharTime() const
+{
+	return maxAnimTimePierce;
+}
+
 float Player::GetHpMax() const
 {
 	return hpMax;
@@ -377,7 +385,7 @@ void Player::Damaged(float damage)
 
 void Player::Heal(float percent)
 {
-	hpCur += hpMax * percent;
+	hpCur += hpMax * percent * heal;
 	if (hpCur > hpMax)
 	{
 		hpCur = hpMax;
@@ -479,7 +487,7 @@ void Player::DrawPosBulletsUpdate()
 	}
 	for (auto& bp : bulletsPierce)
 	{
-		bp.DrawPosUpdate();
+		bp.DrawPosUpdate(maxAnimTimePierce);
 	}
 	for (auto& bs : bulletsSide)
 	{
@@ -801,10 +809,10 @@ bool Player::BulletPierce::Clamp(const RectF& bulletPierceRegion) const
 	return false;
 }
 
-void Player::BulletPierce::DrawPosUpdate()
+void Player::BulletPierce::DrawPosUpdate(float chargeTime)
 {
 	drawPos = { int(hitbox.pos.x) - bulPierOff, int(hitbox.pos.y) - bulPierOff };
-	curDrawFrame = std::min(int(curAnimTime * nSpritesBulletPierce / maxAnimTime / 2), nSpritesBulletPierce - 1);
+	curDrawFrame = std::min(int(curAnimTime * nSpritesBulletPierce / chargeTime), nSpritesBulletPierce - 1);
 }
 
 void Player::BulletPierce::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const
@@ -827,9 +835,9 @@ void Player::BulletPierce::Deactivate()
 	active = false;
 }
 
-bool Player::BulletPierce::GetCharged() const
+bool Player::BulletPierce::GetCharged(float chargeTime) const
 {
-	return curAnimTime >= maxAnimTime;
+	return curAnimTime >= chargeTime;
 }
 
 void Player::BulletPierce::Discharge()
