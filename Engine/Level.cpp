@@ -224,8 +224,8 @@ void Level::SpawnEarth0(float dt)
 		if (spawnTimer > 0.6f)
 		{
 			repeat(6);
-			enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -10.0f, 20.0f } });
-			enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 100.0f }, { 10.0f, 20.0f } });
+			enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.right, 100.0f }, { -10.0f, 10.0f } });
+			enEarth0aTemp.emplace_back(Earth0a{ { movRegEarth0a.left, 100.0f }, { 10.0f, 10.0f } });
 		}
 		break;
 	default:
