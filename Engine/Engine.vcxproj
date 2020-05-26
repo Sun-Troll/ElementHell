@@ -161,8 +161,7 @@
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="Stats.h" />
     <ClInclude Include="Surface.h" />
-    <ClInclude Include="VecF.h" />
-    <ClInclude Include="VecI.h" />
+    <ClInclude Include="Vec.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CircF.cpp" />
@@ -185,8 +184,6 @@
     <ClCompile Include="RectI.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Surface.cpp" />
-    <ClCompile Include="VecF.cpp" />
-    <ClCompile Include="VecI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FramebufferPS.hlsl">

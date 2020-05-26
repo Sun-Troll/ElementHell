@@ -60,12 +60,6 @@
     <ClInclude Include="FrameTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="VecF.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VecI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RectI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -99,6 +93,9 @@
     <ClInclude Include="Earth0b.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Vec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">
@@ -129,12 +126,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FrameTimer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VecF.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VecI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RectI.cpp">
