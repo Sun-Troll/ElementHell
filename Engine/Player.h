@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Graphics.h"
-#include "RectF.h"
+#include "Rect.h"
 #include "CircF.h"
 #include "Stats.h"
 #include <vector>
