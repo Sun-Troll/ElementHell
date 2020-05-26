@@ -63,6 +63,7 @@ void Game::UpdateModel()
 		if (level.empty()) // change based on cur lvl
 		{
 			assert(level.empty());
+			assert(!endLevel);
 			player0.Respawn(spawnPosP0, menu.GetStats(false));
 			player1.Respawn(spawnPosP1, menu.GetStats(true));
 			level.push_back(Level());
@@ -72,13 +73,18 @@ void Game::UpdateModel()
 		else if (!level.front().GetFailed())
 		{
 			assert(level.size() == 1);
+			assert(!endLevel);
 			for (int n = 0; n < nSubrames; ++n)
 			{
 				bool left0 = false;
 				bool right0 = false;
 				bool up0 = false;
 				bool down0 = false;
-				bool slow0 = false;
+				bool abilityA0 = false; // slow
+				bool abilityB0 = false; // aimBullet
+				bool abilityC0 = false; // recall
+				bool abilityD0 = false; // rapid
+				bool abilityF0 = false; // pierce
 				if (wnd.kbd.KeyIsPressed('A') || wnd.kbd.KeyIsPressed(VK_LEFT))
 				{
 					left0 = true;
@@ -97,11 +103,27 @@ void Game::UpdateModel()
 				}
 				if (wnd.kbd.KeyIsPressed(VK_SHIFT))
 				{
-					slow0 = true;
+					abilityA0 = true;
 				}
-				player0.Move(left0, right0, up0, down0, slow0, dt);
+				if (wnd.kbd.KeyIsPressed(VK_SPACE))
+				{
+					abilityB0 = true;
+				}
+				if (wnd.kbd.KeyIsPressed(VK_CONTROL))
+				{
+					abilityC0 = true;
+				}
+				if (wnd.kbd.KeyIsPressed(VK_CAPITAL))
+				{
+					abilityD0 = true;
+				}
+				if (wnd.kbd.KeyIsPressed('E'))
+				{
+					abilityF0 = true;
+				}
+				player0.Move(left0, right0, up0, down0, abilityA0, dt);
 				player0.Clamp();
-				player0.Fire(dt);
+				player0.Fire(abilityB0, abilityC0, abilityD0, abilityF0, dt);
 				player0.UpdateBullets(dt);
 
 				if (multiplayer)
@@ -110,7 +132,11 @@ void Game::UpdateModel()
 					bool right1 = false;
 					bool up1 = false;
 					bool down1 = false;
-					bool slow1 = false;
+					bool abilityA1 = false; // slow
+					bool abilityB1 = false; // aimBullet
+					bool abilityC1 = false; // recall
+					bool abilityD1 = false; // rapid
+					bool abilityF1 = false; // pierce
 					if (wnd.kbd.KeyIsPressed(VK_NUMPAD4))
 					{
 						left1 = true;
@@ -129,11 +155,27 @@ void Game::UpdateModel()
 					}
 					if (wnd.kbd.KeyIsPressed(VK_NUMPAD0))
 					{
-						slow1 = true;
+						abilityA1 = true;
 					}
-					player1.Move(left1, right1, up1, down1, slow1, dt);
+					if (wnd.kbd.KeyIsPressed(VK_ADD))
+					{
+						abilityB1 = true;
+					}
+					if (wnd.kbd.KeyIsPressed(VK_DECIMAL))
+					{
+						abilityC1 = true;
+					}
+					if (wnd.kbd.KeyIsPressed(VK_NUMPAD1))
+					{
+						abilityD1 = true;
+					}
+					if (wnd.kbd.KeyIsPressed(VK_NUMPAD9))
+					{
+						abilityF1 = true;
+					}
+					player1.Move(left1, right1, up1, down1, abilityA1, dt);
 					player1.Clamp();
-					player1.Fire(dt);
+					player1.Fire(abilityB1, abilityC1, abilityD1, abilityF1, dt);
 					player1.UpdateBullets(dt);
 				}
 
@@ -152,10 +194,9 @@ void Game::UpdateModel()
 		{
 			if (wnd.kbd.KeyIsPressed(VK_ESCAPE) || wnd.kbd.KeyIsPressed(VK_BACK))
 			{
-				level.pop_back();
-				assert(level.empty());
-				menu.LvlQuit();
-				wnd.kbd.Flush();
+				assert(level.size() == 1);
+				assert(!endLevel);
+				endLevel = true;
 			}
 		}
 	}
@@ -255,10 +296,15 @@ void Game::PrepareFrame()
 			assert(level.size() == 1);
 			level.front().PrepareDrawEarth0();
 		}
-	}
-	else
-	{
-		menu.Draw(gfx);
+		if (endLevel)
+		{
+			assert(level.size() == 1);
+			level.pop_back();
+			endLevel = false;
+			menu.LvlQuit();
+			wnd.kbd.Flush();
+			assert(level.empty());
+		}
 	}
 }
 
@@ -285,6 +331,10 @@ void Game::DrawHud()
 {
 	if (menu.GetState() == Menu::State::Level)
 	{
-		hud.Draw(player0.GetHpMax(), player0.GetHpCur(), gfx);
+		hud.Draw(player0.GetHpMax(), player0.GetHpCur(), player0.GetSideBulletsN(), gfx);
+	}
+	else
+	{
+		menu.Draw(gfx);
 	}
 }

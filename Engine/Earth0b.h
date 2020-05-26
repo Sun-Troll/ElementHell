@@ -68,15 +68,16 @@ private:
 	static constexpr float speed = 100.0f;
 	CircF hitbox;
 	VecF vel;
-	static constexpr float hpMax = 1000.0f;
+	static constexpr float hpMax = 250.0f;
 	float hpCur = hpMax;
-	static constexpr float maxFireTimeEarth0bAnim = 0.2f; // normal 0.3
+	static constexpr float maxFireTimeEarth0bAnim = 0.4f; // normal 0.4
 	float curFireBaseEarth0bAnim = 0.0f;
 	static constexpr float drawDamageTimeMax = 0.1f;
 	float drawDamageTimeCur = drawDamageTimeMax;
 	VecI drawPos;
 	int curDrawFrame = 0;
 	bool drawDamaged = false;
+	bool drawIsDead = false;
 	static constexpr float earth0bRadius = 48.0f;
 	static constexpr float pi = 3.141592741f;
 public:

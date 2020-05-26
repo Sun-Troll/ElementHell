@@ -149,6 +149,14 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 						statDown.Play();
 					}
 					break;
+				case Menu::SelectionStats::LifeSteal:
+					if (statsTemp.lifeSteal > 0)
+					{
+						--statsTemp.lifeSteal;
+						++statsTemp.points;
+						statDown.Play();
+					}
+					break;
 				case Menu::SelectionStats::Rpm:
 					if (statsTemp.rpm > 0)
 					{
@@ -173,6 +181,22 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 						statDown.Play();
 					}
 					break;
+				case Menu::SelectionStats::RapidFire:
+					if (statsTemp.rapidFire > 0)
+					{
+						--statsTemp.rapidFire;
+						++statsTemp.points;
+						statDown.Play();
+					}
+					break;
+				case Menu::SelectionStats::PierceShot:
+					if (statsTemp.pierceShot > 0)
+					{
+						--statsTemp.pierceShot;
+						++statsTemp.points;
+						statDown.Play();
+					}
+					break;
 				default:
 					break;
 				}
@@ -188,6 +212,14 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 					if (statsTemp.hp < 5)
 					{
 						++statsTemp.hp;
+						--statsTemp.points;
+						statUp.Play();
+					}
+					break;
+				case Menu::SelectionStats::LifeSteal:
+					if (statsTemp.lifeSteal < 5)
+					{
+						++statsTemp.lifeSteal;
 						--statsTemp.points;
 						statUp.Play();
 					}
@@ -212,6 +244,22 @@ void Menu::Select(bool up, bool down, bool left, bool right, bool confirm, bool 
 					if (statsTemp.dmgSide < 5)
 					{
 						++statsTemp.dmgSide;
+						--statsTemp.points;
+						statUp.Play();
+					}
+					break;
+				case Menu::SelectionStats::RapidFire:
+					if (statsTemp.rapidFire < 5)
+					{
+						++statsTemp.rapidFire;
+						--statsTemp.points;
+						statUp.Play();
+					}
+					break;
+				case Menu::SelectionStats::PierceShot:
+					if (statsTemp.pierceShot < 5)
+					{
+						++statsTemp.pierceShot;
 						--statsTemp.points;
 						statUp.Play();
 					}
@@ -352,6 +400,14 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 						statDown.Play();
 					}
 					break;
+				case Menu::SelectionStats::LifeSteal:
+					if (statsTemp.lifeSteal > 0)
+					{
+						--statsTemp.lifeSteal;
+						++statsTemp.points;
+						statDown.Play();
+					}
+					break;
 				case Menu::SelectionStats::Rpm:
 					if (statsTemp.rpm > 0)
 					{
@@ -376,6 +432,22 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 						statDown.Play();
 					}
 					break;
+				case Menu::SelectionStats::RapidFire:
+					if (statsTemp.rapidFire > 0)
+					{
+						--statsTemp.rapidFire;
+						++statsTemp.points;
+						statDown.Play();
+					}
+					break;
+				case Menu::SelectionStats::PierceShot:
+					if (statsTemp.pierceShot > 0)
+					{
+						--statsTemp.pierceShot;
+						++statsTemp.points;
+						statDown.Play();
+					}
+					break;
 				default:
 					break;
 				}
@@ -391,6 +463,14 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 					if (statsTemp.hp < 5)
 					{
 						++statsTemp.hp;
+						--statsTemp.points;
+						statUp.Play();
+					}
+					break;
+				case Menu::SelectionStats::LifeSteal:
+					if (statsTemp.lifeSteal < 5)
+					{
+						++statsTemp.lifeSteal;
 						--statsTemp.points;
 						statUp.Play();
 					}
@@ -415,6 +495,22 @@ void Menu::SelectMultiplayer(bool up, bool down, bool left, bool right, bool con
 					if (statsTemp.dmgSide < 5)
 					{
 						++statsTemp.dmgSide;
+						--statsTemp.points;
+						statUp.Play();
+					}
+					break;
+				case Menu::SelectionStats::RapidFire:
+					if (statsTemp.rapidFire < 5)
+					{
+						++statsTemp.rapidFire;
+						--statsTemp.points;
+						statUp.Play();
+					}
+					break;
+				case Menu::SelectionStats::PierceShot:
+					if (statsTemp.pierceShot < 5)
+					{
+						++statsTemp.pierceShot;
 						--statsTemp.points;
 						statUp.Play();
 					}
@@ -476,17 +572,29 @@ void Menu::Draw(Graphics& gfx) const
 		{
 			gfx.DrawSpriteNonChroma(230 + n * 60, 130, statsUpgr);
 		}
-		for (int n = 0; n < statsTemp.rpm; ++n)
+		for (int n = 0; n < statsTemp.lifeSteal; ++n)
 		{
 			gfx.DrawSpriteNonChroma(230 + n * 60, 230, statsUpgr);
 		}
-		for (int n = 0; n < statsTemp.dmgCent; ++n)
+		for (int n = 0; n < statsTemp.rpm; ++n)
 		{
 			gfx.DrawSpriteNonChroma(230 + n * 60, 330, statsUpgr);
 		}
-		for (int n = 0; n < statsTemp.dmgSide; ++n)
+		for (int n = 0; n < statsTemp.dmgCent; ++n)
 		{
 			gfx.DrawSpriteNonChroma(230 + n * 60, 430, statsUpgr);
+		}
+		for (int n = 0; n < statsTemp.dmgSide; ++n)
+		{
+			gfx.DrawSpriteNonChroma(230 + n * 60, 530, statsUpgr);
+		}
+		for (int n = 0; n < statsTemp.rapidFire; ++n)
+		{
+			gfx.DrawSpriteNonChroma(230 + n * 60, 630, statsUpgr);
+		}
+		for (int n = 0; n < statsTemp.pierceShot; ++n)
+		{
+			gfx.DrawSpriteNonChroma(230 + n * 60, 830, statsUpgr);
 		}
 	}
 	else if (curState == State::Save || curState == State::Load)

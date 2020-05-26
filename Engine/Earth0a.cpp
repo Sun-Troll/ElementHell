@@ -96,7 +96,7 @@ void Earth0a::HitPlayer(Player& player)
 		if (bc.GetActive() && bc.PlayerHit(player.GetCircF()))
 		{
 			bc.Deactivate();
-			//player.Damaged(bulletDamage);
+			player.Damaged(bulletDamage);
 		}
 	}
 	for (auto& bct : bulletsTemp)
@@ -104,25 +104,44 @@ void Earth0a::HitPlayer(Player& player)
 		if (bct.GetActive() && bct.PlayerHit(player.GetCircF()))
 		{
 			bct.Deactivate();
-			//player.Damaged(bulletDamage);
+			player.Damaged(bulletDamage);
 		}
 	}
 }
 
 void Earth0a::GetHit(Player& player, float dt)
 {
+	assert(hpCur > 0.0f);
 	for (auto& bc : player.GetCenterBullets())
 	{
 		if (bc.GetActive())
 		{
-			const CircF curCentBul = bc.GetCircF();
-			if (hitbox.Coliding(curCentBul))
+			if (hitbox.Coliding(bc.GetCircF()))
 			{
 				hpCur -= player.GetCenterBulletDamage();
-				player.AimBullets(curCentBul.pos);
 				bc.Deactivate();
 				drawDamageTimeCur = 0.0f;
 			}
+		}
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.04f);
+			return;
+		}
+	}
+	for (auto& bp : player.GetPierceBullets())
+	{
+		const float chargeTime = player.GetPierBulCharTime();
+		if (bp.GetActive() && bp.GetCharged(chargeTime) && hitbox.Coliding(bp.GetCircF()))
+		{
+			hpCur -= player.GetPierceBulletDamage();
+			bp.Discharge();
+			drawDamageTimeCur = 0.0f;
+		}
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.03f);
+			return;
 		}
 	}
 	for (auto& bs : player.GetSideBullets())
@@ -133,29 +152,85 @@ void Earth0a::GetHit(Player& player, float dt)
 			bs.Deactivate();
 			drawDamageTimeCur = 0.0f;
 		}
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.02f);
+			return;
+		}
+	}
+	for (auto& ba : player.GetAimBullets())
+	{
+		if (ba.GetActive())
+		{
+			const CircF curAimBul = ba.GetCircF();
+			if (hitbox.Coliding(curAimBul))
+			{
+				player.AimBullets((curAimBul.pos + hitbox.pos) * 0.5f);
+				ba.Deactivate();
+			}
+		}
 	}
 
 	for (auto& bct : player.GetCenterBulletsTemp())
 	{
 		if (bct.GetActive())
 		{
-			const CircF curCentBul = bct.GetCircF();
-			if (hitbox.Coliding(curCentBul))
+			if (hitbox.Coliding(bct.GetCircF()))
 			{
 				hpCur -= player.GetCenterBulletDamage();
-				player.AimBullets(curCentBul.pos);
 				bct.Deactivate();
 				drawDamageTimeCur = 0.0f;
 			}
 		}
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.04f);
+			return;
+		}
+	}
+	for (auto& bpt : player.GetPierceBulletsTemp())
+	{
+		const float chargeTime = player.GetPierBulCharTime();
+		if (bpt.GetActive() && bpt.GetCharged(chargeTime) && hitbox.Coliding(bpt.GetCircF()))
+		{
+			hpCur -= player.GetPierceBulletDamage();
+			bpt.Discharge();
+			drawDamageTimeCur = 0.0f;
+		}
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.03f);
+			return;
+		}
 	}
 	for (auto& bst : player.GetSideBulletsTemp())
 	{
+		if (hpCur <= 0.0f)
+		{
+			return;
+		}
 		if (bst.GetActive() && hitbox.Coliding(bst.GetCircF()))
 		{
 			hpCur -= player.GetSideBulletDamage();
 			bst.Deactivate();
 			drawDamageTimeCur = 0.0f;
+		}
+		if (hpCur <= 0.0f)
+		{
+			player.Heal(0.02f);
+			return;
+		}
+	}
+	for (auto& bat : player.GetAimBulletsTemp())
+	{
+		if (bat.GetActive())
+		{
+			const CircF curAimBul = bat.GetCircF();
+			if (hitbox.Coliding(curAimBul))
+			{
+				player.AimBullets((curAimBul.pos + hitbox.pos) * 0.5f);
+				bat.Deactivate();
+			}
 		}
 	}
 }
@@ -175,17 +250,21 @@ void Earth0a::DrawPosUpdate()
 	drawPos = { int(hitbox.pos.x) - xOffset, int(hitbox.pos.y) - yOffset };
 	curDrawFrame = int(curFireBaseEarth0aAnim * nSpritesEarth0a / maxFireTimeEarth0aAnim);
 	drawDamaged = drawDamageTimeCur <= drawDamageTimeMax;
+	drawIsDead = IsDead();
 }
 
 void Earth0a::Draw(const std::vector<Surface>& sprites, const RectI& curRect, Graphics& gfx) const
 {
-	if (drawDamaged)
+	if (!drawIsDead)
 	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[curDrawFrame], curRect);
-	}
-	else
-	{
-		gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
+		if (drawDamaged)
+		{
+			gfx.DrawSprite(drawPos.x, drawPos.y, Colors::Red, sprites[curDrawFrame], curRect);
+		}
+		else
+		{
+			gfx.DrawSprite(drawPos.x, drawPos.y, sprites[curDrawFrame], curRect);
+		}
 	}
 }
 
