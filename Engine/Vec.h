@@ -49,12 +49,12 @@ public:
 	}
 	T GetLength() const
 	{
-		return std::sqrt(GetLengthSq());
+		return T(std::sqrt(GetLengthSq()));
 	}
 	Vec_ GetNormalized() const
 	{
 		const T length = GetLength();
-		if (length != 0.0f)
+		if (length != T(0))
 		{
 			return *this / length;
 		}
