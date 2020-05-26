@@ -2,7 +2,7 @@
 
 #include "Graphics.h"
 #include "Rect.h"
-#include "CircF.h"
+#include "Circ.h"
 #include "Stats.h"
 #include <vector>
 
