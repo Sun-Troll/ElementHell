@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Graphics.h"
-#include "RectF.h"
-#include "CircF.h"
+#include "Rect.h"
+#include "Circ.h"
 #include "Stats.h"
 #include <vector>
 

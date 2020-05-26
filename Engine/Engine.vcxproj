@@ -138,7 +138,7 @@
   <ItemGroup>
     <ClInclude Include="ChiliException.h" />
     <ClInclude Include="ChiliWin.h" />
-    <ClInclude Include="CircF.h" />
+    <ClInclude Include="Circ.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="COMInitializer.h" />
     <ClInclude Include="DXErr.h" />
@@ -154,18 +154,15 @@
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="RectF.h" />
-    <ClInclude Include="RectI.h" />
+    <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundEffect.h" />
     <ClInclude Include="Stats.h" />
     <ClInclude Include="Surface.h" />
-    <ClInclude Include="VecF.h" />
-    <ClInclude Include="VecI.h" />
+    <ClInclude Include="Vec.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CircF.cpp" />
     <ClCompile Include="COMInitializer.cpp" />
     <ClCompile Include="DXErr.cpp" />
     <ClCompile Include="Earth0a.cpp" />
@@ -181,12 +178,8 @@
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="RectF.cpp" />
-    <ClCompile Include="RectI.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Surface.cpp" />
-    <ClCompile Include="VecF.cpp" />
-    <ClCompile Include="VecI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FramebufferPS.hlsl">
