@@ -86,6 +86,8 @@ void Player::Respawn(const VecF& pos_in, const Stats& stats)
 	maxRapidFireDur = baseRapidFireDur * (float(stats.rapidFire + 5) / 5.0f);
 	curRapidFireDur = maxRapidFireDur + 1.0f;
 	maxAnimTimePierce = baseAnimTimePierce / (float(stats.pierceShot + 5) / 5.0f);
+	bulletsPierce.clear();
+	bulletsPierceTemp.clear();
 }
 
 void Player::Move(bool left, bool right, bool up, bool down, bool slow, float dt)
