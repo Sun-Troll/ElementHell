@@ -164,6 +164,7 @@ void Earth0b::GetHit(Player& player, float dt)
 			{
 				hpCur -= player.GetCenterBulletDamage();
 				bc.Deactivate();
+				player.SpawnEffect(bc.GetCircF().pos, Effect::EffectType::PlayerBulCent);
 				drawDamageTimeCur = 0.0f;
 			}
 		}
@@ -180,6 +181,7 @@ void Earth0b::GetHit(Player& player, float dt)
 		{
 			hpCur -= player.GetPierceBulletDamage();
 			bp.Discharge();
+			player.SpawnEffect(bp.GetCircF().pos, Effect::EffectType::PlayerBulPier);
 			drawDamageTimeCur = 0.0f;
 		}
 		if (hpCur <= 0.0f)
@@ -194,6 +196,7 @@ void Earth0b::GetHit(Player& player, float dt)
 		{
 			hpCur -= player.GetSideBulletDamage();
 			bs.Deactivate();
+			player.SpawnEffect(bs.GetCircF().pos, Effect::EffectType::PlayerBulSide);
 			drawDamageTimeCur = 0.0f;
 		}
 		if (hpCur <= 0.0f)
@@ -206,11 +209,12 @@ void Earth0b::GetHit(Player& player, float dt)
 	{
 		if (ba.GetActive())
 		{
-			const CircF curAimBul = ba.GetCircF();
+			const CircF curAimBul = ba.GetCircF(); // reference?
 			if (hitbox.Coliding(curAimBul))
 			{
 				player.AimBullets((curAimBul.pos + hitbox.pos) * 0.5f);
 				ba.Deactivate();
+				player.SpawnEffect(ba.GetCircF().pos, Effect::EffectType::PlayerBulAim);
 			}
 		}
 	}
@@ -223,6 +227,7 @@ void Earth0b::GetHit(Player& player, float dt)
 			{
 				hpCur -= player.GetCenterBulletDamage();
 				bct.Deactivate();
+				player.SpawnEffect(bct.GetCircF().pos, Effect::EffectType::PlayerBulCent);
 				drawDamageTimeCur = 0.0f;
 			}
 		}
@@ -239,6 +244,7 @@ void Earth0b::GetHit(Player& player, float dt)
 		{
 			hpCur -= player.GetPierceBulletDamage();
 			bpt.Discharge();
+			player.SpawnEffect(bpt.GetCircF().pos, Effect::EffectType::PlayerBulPier);
 			drawDamageTimeCur = 0.0f;
 		}
 		if (hpCur <= 0.0f)
@@ -257,6 +263,7 @@ void Earth0b::GetHit(Player& player, float dt)
 		{
 			hpCur -= player.GetSideBulletDamage();
 			bst.Deactivate();
+			player.SpawnEffect(bst.GetCircF().pos, Effect::EffectType::PlayerBulSide);
 			drawDamageTimeCur = 0.0f;
 		}
 		if (hpCur <= 0.0f)
@@ -274,6 +281,7 @@ void Earth0b::GetHit(Player& player, float dt)
 			{
 				player.AimBullets((curAimBul.pos + hitbox.pos) * 0.5f);
 				bat.Deactivate();
+				player.SpawnEffect(bat.GetCircF().pos, Effect::EffectType::PlayerBulAim);
 			}
 		}
 	}

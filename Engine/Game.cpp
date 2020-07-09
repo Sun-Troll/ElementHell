@@ -74,6 +74,11 @@ void Game::UpdateModel()
 		{
 			assert(level.size() == 1);
 			assert(!endLevel);
+			player0.EffectUpdate(frameTime);
+			if (multiplayer)
+			{
+				player1.EffectUpdate(frameTime);
+			}
 			for (int n = 0; n < nSubrames; ++n)
 			{
 				bool left0 = false;
@@ -121,6 +126,7 @@ void Game::UpdateModel()
 				{
 					abilityF0 = true;
 				}
+				player0.EffectTempUpdate(dt);
 				player0.Move(left0, right0, up0, down0, abilityA0, dt);
 				player0.Clamp();
 				player0.Fire(abilityB0, abilityC0, abilityD0, abilityF0, dt);
@@ -173,6 +179,7 @@ void Game::UpdateModel()
 					{
 						abilityF1 = true;
 					}
+					player1.EffectTempUpdate(dt);
 					player1.Move(left1, right1, up1, down1, abilityA1, dt);
 					player1.Clamp();
 					player1.Fire(abilityB1, abilityC1, abilityD1, abilityF1, dt);
@@ -284,10 +291,12 @@ void Game::PrepareFrame()
 {
 	if (menu.GetState() == Menu::State::Level)
 	{
+		player0.EffectDrawUpdate();
 		player0.DrawPosUpdate();
 		player0.DrawPosBulletsUpdate();
 		if (multiplayer)
 		{
+			player1.EffectDrawUpdate();
 			player1.DrawPosUpdate();
 			player1.DrawPosBulletsUpdate();
 		}
@@ -308,14 +317,16 @@ void Game::PrepareFrame()
 	}
 }
 
-void Game::DrawPartScreen(const RectI & curRect)
+void Game::DrawPartScreen(const RectI& curRect)
 {
 	if (menu.GetState() == Menu::State::Level)
 	{
+		player0.EffectDraw(curRect, gfx);
 		player0.DrawBullets(curRect, gfx);
 		player0.Draw(curRect, gfx);
 		if (multiplayer)
 		{
+			player1.EffectDraw(curRect, gfx);
 			player1.DrawBullets(curRect, gfx);
 			player1.Draw(curRect, gfx);
 		}

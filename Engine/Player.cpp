@@ -15,6 +15,14 @@ Player::Player(const VecF& pos)
 		assert(spritesPlayer[i].GetWidth() == spritePlayerWidth
 			&& spritesPlayer[i].GetHeight() == spritePlayerHeight);
 	}
+	effectsPlayer.resize(nEffectsPlayer);
+	for (int i = 0; i < nEffectsPlayer; ++i)
+	{
+		const std::string bitmapFile = "Sprites\\Effects\\Player\\PlayerEf" + std::to_string(i) + ".bmp";
+		effectsPlayer[i] = Surface(bitmapFile);
+		assert(effectsPlayer[i].GetWidth() == efWidthsHalf[i] * 2
+			&& effectsPlayer[i].GetHeight() == efHeightsHalf[i] * 2);
+	}
 	spritesBulletCenter.resize(nSpritesBulletCenter);
 	for (int i = 0; i < nSpritesBulletCenter; ++i)
 	{
@@ -400,6 +408,54 @@ const VecF& Player::GetCenter() const
 const CircF& Player::GetCircF() const
 {
 	return hitbox;
+}
+
+void Player::SpawnEffect(const VecF& pos, Effect::EffectType type)
+{
+	const int i = int(type);
+	effectsTemp.emplace_back(efDurations[i], VecI(int(pos.x) - efWidthsHalf[i], int(pos.y) - efHeightsHalf[i]), type);
+}
+
+void Player::EffectTempUpdate(float dt)
+{
+	for (auto& pet : effectsTemp)
+	{
+		pet.Update(dt);
+	}
+}
+
+void Player::EffectUpdate(float time)
+{
+	for (auto& pe : effects)
+	{
+		pe.Update(time);
+	}
+}
+
+void Player::EffectDrawUpdate()
+{
+	for (const auto& pet : effectsTemp)
+	{
+		effects.emplace_back(pet);
+	}
+	effectsTemp.clear();
+	for (int i = 0; i < effects.size(); ++i)
+	{
+		if (effects[i].Expired())
+		{
+			std::swap(effects[i], effects.back());
+			effects.pop_back();
+			--i;
+		}
+	}
+}
+
+void Player::EffectDraw(const RectI& curRect, Graphics& gfx) const
+{
+	for (const auto& pe : effects)
+	{
+		gfx.DrawSprite(pe.GetPosX(), pe.GetPosY(), effectsPlayer[pe.GetCurEffInt()], curRect);
+	}
 }
 
 void Player::DrawPosUpdate()

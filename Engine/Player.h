@@ -4,6 +4,7 @@
 #include "Rect.h"
 #include "Circ.h"
 #include "Stats.h"
+#include "Effect.h"
 #include <vector>
 
 class Player
@@ -134,6 +135,11 @@ public:
 	void Heal(float percent);
 	const VecF& GetCenter() const;
 	const CircF& GetCircF() const;
+	void SpawnEffect(const VecF& pos, Effect::EffectType type);
+	void EffectTempUpdate(float dt);
+	void EffectUpdate(float time);
+	void EffectDrawUpdate();
+	void EffectDraw(const RectI& curRect, Graphics& gfx) const;
 	void DrawPosUpdate();
 	void Draw(const RectI& curRect, Graphics& gfx) const;
 	void DrawPosBulletsUpdate();
@@ -169,6 +175,15 @@ private:
 	const RectF movementRegionPlayer{ xOffset, float(Graphics::ScreenWidth - xOffset),
 		yOffset, float(Graphics::GameHeight - yOffset) };
 	static constexpr float pi = 3.141592741f;
+
+	//Effects
+	std::vector<int> efWidthsHalf{ 32, 12, 16, 32 };
+	std::vector<int> efHeightsHalf{ 25, 12, 16, 32 };
+	std::vector<float> efDurations{ 0.07f, 0.04f ,0.1f, 0.2f };
+	std::vector<Effect> effects;
+	std::vector<Effect> effectsTemp;
+	static constexpr int nEffectsPlayer = 4;
+	std::vector<Surface> effectsPlayer;
 
 	//BulletCenter
 	static constexpr float baseBulletCenterDamage = 40.0f;
